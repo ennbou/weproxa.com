@@ -1,0 +1,72 @@
+---
+title: Weproxa — HTTP/HTTPS Proxy Debugger
+description: A powerful HTTP/HTTPS proxy debugger for macOS. Inspect, modify, and replay network requests with an intuitive interface.
+template: splash
+hero:
+  tagline: A powerful HTTP/HTTPS proxy debugger for macOS. Inspect, modify, and replay network requests with an intuitive native interface.
+  image:
+    file: ../../assets/weproxa-hero.png
+  actions:
+    - text: Download for macOS
+      link: https://files.weproxa.com/1.0.0/WePROXA_1.0.0_aarch64.dmg
+      icon: download
+      variant: primary
+    - text: Get Started
+      link: /guide/getting-started/installation/
+      icon: right-arrow
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Why Weproxa?
+
+Weproxa is a **native macOS proxy debugger** built with Tauri, React, and Rust — designed for speed, clarity, and developer experience. Whether you're debugging API calls, testing mobile apps, or building integrations, Weproxa gives you full visibility into your HTTP traffic.
+
+<CardGrid stagger>
+  <Card title="Inspect Requests" icon="magnifier">
+    View detailed request and response information including headers, body, timing, and more — all in a clean, responsive interface.
+  </Card>
+  <Card title="Modify Traffic" icon="pencil">
+    Set breakpoints to intercept and modify requests or responses before they're sent to the server or back to the client.
+  </Card>
+  <Card title="Replay Requests" icon="rocket">
+    Easily repeat any captured request with modifications to test different scenarios and edge cases.
+  </Card>
+  <Card title="HTTPS Support" icon="approve-check">
+    Full SSL/TLS interception with automatic certificate generation and one-click trust management on macOS.
+  </Card>
+  <Card title="Map Local Files" icon="document">
+    Replace remote resources with local files for rapid development and testing without modifying your server.
+  </Card>
+  <Card title="Advanced Filtering" icon="seti:config">
+    Powerful query builder to filter and find exactly the requests you're looking for — by method, status, host, path, and more.
+  </Card>
+</CardGrid>
+
+---
+
+## Get Started in Minutes
+
+<CardGrid>
+  <LinkCard
+    title="Installation"
+    description="Download and install Weproxa on your Mac."
+    href="/guide/getting-started/installation/"
+  />
+  <LinkCard
+    title="Quick Start"
+    description="Start capturing HTTP traffic in under 2 minutes."
+    href="/guide/getting-started/quick-start/"
+  />
+  <LinkCard
+    title="Features Overview"
+    description="Explore everything Weproxa can do."
+    href="/guide/features/inspect-requests/"
+  />
+  <LinkCard
+    title="FAQ"
+    description="Common questions and troubleshooting tips."
+    href="/guide/faq/"
+  />
+</CardGrid>

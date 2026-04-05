@@ -1,0 +1,39 @@
+---
+title: Quick Start
+description: Start capturing HTTP traffic with Weproxa in under 2 minutes.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Get up and running with Weproxa in just a few steps.
+
+<Steps>
+
+1. **Launch Weproxa** from your Applications folder.
+
+   ![Weproxa startup screen](@assets/guide/getting-started/launch_weproxa.png)
+
+2. **Start the proxy** by clicking the play button in the toolbar or pressing `⌘ + P`.
+
+   ![Weproxa with requests](@assets/guide/getting-started/start_with_request.png)
+
+3. **Enable the system proxy** — Weproxa can automatically configure your Mac's system proxy settings. Click the network icon in the toolbar to toggle it on.
+
+4. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **Certificates** and click **Install to macOS Keychain**. This is a one-time setup. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+
+5. **Enable SSL for a host** — click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
+
+6. **Browse the web** — open your browser or app and make some requests. They'll appear in the request list in real time.
+
+7. **Inspect a request** — click on any request in the list to see its full details: headers, body, timing, and more.
+
+</Steps>
+
+## What's Next?
+
+Now that you're capturing traffic, explore Weproxa's powerful features:
+
+- [Set breakpoints](/guide/features/breakpoints/) to intercept and modify requests
+- [Map local files](/guide/features/map-local/) to replace remote resources
+- [Repeat requests](/guide/features/repeat-requests/) to test different scenarios
+- [Use advanced filters](/guide/features/advanced-filtering/) to find specific requests

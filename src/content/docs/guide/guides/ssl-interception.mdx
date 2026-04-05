@@ -1,0 +1,78 @@
+---
+title: SSL Interception
+description: How to enable HTTPS inspection for specific hosts in Weproxa.
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Weproxa intercepts HTTPS traffic on a **per-host basis**. After [installing the CA certificate](/guide/guides/certificate-trust/), you need to tell Weproxa which hosts to decrypt by adding them to the **SSL Interception Hosts** list.
+
+## Why Per-Host?
+
+Instead of blindly decrypting all HTTPS traffic, Weproxa lets you choose exactly which hosts to inspect. This gives you:
+
+- **Better performance** — only decrypt the traffic you care about
+- **Less noise** — your request list stays focused on relevant hosts
+- **More control** — easily toggle interception on/off per host
+
+## Adding SSL Hosts
+
+There are two ways to enable SSL interception for a host:
+
+<Tabs>
+<TabItem label="Certificate Menu (Toolbar)">
+
+<Steps>
+
+1. Click the **lock icon** (Certificate) in the toolbar
+2. Type a hostname in the input field (e.g., `api.example.com`)
+3. Press **Enter** or click the **+** button
+4. The host is added and SSL interception is enabled immediately
+
+</Steps>
+
+You can also use **wildcard patterns** like `*.example.com` to match all subdomains.
+
+</TabItem>
+<TabItem label="Right-Click a Request">
+
+<Steps>
+
+1. Find a request in the request list from the host you want to inspect
+2. **Right-click** the request to open the context menu
+3. Click **Enable SSL for \{host\}**
+4. SSL interception is enabled immediately for that host
+
+</Steps>
+
+This is the quickest way to enable SSL for a host you're already seeing traffic from.
+
+</TabItem>
+</Tabs>
+
+## Managing SSL Hosts
+
+Open the **Certificate Menu** (lock icon in the toolbar) to see all your configured SSL hosts. From here you can:
+
+- **Toggle** a host on/off using the checkbox
+- **Remove** a host by clicking the trash icon
+- **Add** new hosts using the input field
+
+To disable SSL for a host via the context menu, right-click a request from that host and select **Disable SSL for \{host\}**.
+
+SSL host configurations are saved automatically and persist between sessions.
+
+## Prerequisites
+
+Before SSL interception can work, you must install and trust the WePROXA Root CA certificate. See [Certificate Trust](/guide/guides/certificate-trust/) for instructions.
+
+## Troubleshooting
+
+### HTTPS requests show as CONNECT tunnels
+The host is not in your SSL Interception Hosts list. Add the host using one of the methods above.
+
+### Certificate errors after enabling SSL
+Make sure the WePROXA Root CA is installed and trusted in your macOS Keychain. See [Certificate Trust](/guide/guides/certificate-trust/).
+
+### Wildcard patterns
+Use `*.example.com` to match all subdomains (e.g., `api.example.com`, `cdn.example.com`). The exact host `example.com` itself is not matched by a wildcard — add it separately if needed.

@@ -1,0 +1,14 @@
+{
+  "name": "weproxadocs",
+  "compatibility_date": "2026-02-19",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    {
+      "pattern": "weproxa.com",
+      "custom_domain": true
+    }
+  ]
+}

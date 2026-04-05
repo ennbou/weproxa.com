@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://weproxa.com/sitemap-index.xml

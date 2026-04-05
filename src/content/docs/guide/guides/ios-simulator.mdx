@@ -1,0 +1,32 @@
+---
+title: iOS Simulator
+description: Debug HTTP traffic from iOS Simulator with Weproxa.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Weproxa can capture HTTP/HTTPS traffic from iOS Simulator, making it easy to debug your iOS app's network requests during development.
+
+## Setup
+
+<Steps>
+
+1. **Start Weproxa** and ensure the proxy is running.
+
+2. **Install the CA certificate** on the simulator — Weproxa provides a one-click option to install its certificate on the iOS Simulator. Look for the iOS Simulator option in the certificate menu.
+
+3. **Configure the simulator proxy** — iOS Simulator respects the macOS system proxy settings. When Weproxa's system proxy is enabled, simulator traffic will flow through Weproxa automatically.
+
+4. **Launch your app** in the simulator and start making network requests.
+
+</Steps>
+
+## Viewing Simulator Traffic
+
+Traffic from iOS Simulator appears in the request list alongside regular traffic. You can use the source view or filters to identify simulator requests.
+
+## Tips
+
+- Make sure the system proxy is enabled in Weproxa for automatic routing
+- If using a custom proxy configuration in your iOS app, point it to Weproxa's proxy address (shown in Settings)
+- All Weproxa features (breakpoints, map local, repeat, etc.) work with simulator traffic

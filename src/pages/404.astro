@@ -1,0 +1,239 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+---
+
+<StarlightPage
+  frontmatter={{
+    title: '404 — Page Not Found',
+    template: 'splash',
+    hero: { title: '', tagline: '' },
+  }}
+  hasSidebar={false}
+>
+  <section class="nf-wrap" aria-labelledby="nf-title">
+    <div class="nf-orb nf-orb-one" aria-hidden="true"></div>
+    <div class="nf-orb nf-orb-two" aria-hidden="true"></div>
+
+    <div class="nf-card">
+      <p class="nf-kicker">Lost in the proxy haze</p>
+      <h1 id="nf-title" class="nf-code">404</h1>
+      <p class="nf-message">
+        This page drifted out of route range. It might have moved, been renamed, or never
+        existed.
+      </p>
+
+      <div class="nf-actions">
+        <a href="/" class="nf-btn nf-btn-primary">Go to homepage</a>
+        <a href="/guide/getting-started/installation/" class="nf-btn nf-btn-ghost">
+          Open getting started
+        </a>
+      </div>
+    </div>
+  </section>
+  <div slot="hero"></div>
+  <div slot="sidebar"></div>
+  <div slot="toc"></div>
+  <div slot="banner"></div>
+  <div slot="pagination"></div>
+  <div slot="edit-link"></div>
+  <div slot="footer"></div>
+</StarlightPage>
+
+<style>
+  :global(.hero [data-page-title]) {
+    display: none;
+  }
+
+  :global(.hero .copy) {
+    padding-block: 0;
+  }
+
+  .nf-wrap {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: clamp(26rem, 70vh, 42rem);
+    padding: clamp(1rem, 4vw, 3rem);
+    overflow: hidden;
+    border: 1px solid color-mix(in oklab, var(--sl-color-accent), transparent 78%);
+    border-radius: 1.5rem;
+    background:
+      radial-gradient(1200px 460px at 50% -90%, color-mix(in oklab, var(--sl-color-accent-high), transparent 76%), transparent),
+      linear-gradient(145deg, color-mix(in oklab, var(--sl-color-black), transparent 8%), color-mix(in oklab, var(--sl-color-black), transparent 0%));
+    box-shadow:
+      0 28px 70px -36px color-mix(in oklab, var(--sl-color-black), transparent 40%),
+      inset 0 1px 0 color-mix(in oklab, var(--sl-color-white), transparent 90%);
+  }
+
+  .nf-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(color-mix(in oklab, var(--sl-color-white), transparent 95%) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--sl-color-white), transparent 95%) 1px, transparent 1px);
+    background-size: 30px 30px;
+    mask-image: radial-gradient(circle at center, black 50%, transparent 90%);
+    pointer-events: none;
+  }
+
+  .nf-card {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 52rem);
+    padding: clamp(1.1rem, 3vw, 2.2rem);
+    text-align: center;
+    border-radius: 1.25rem;
+    background: color-mix(in oklab, var(--sl-color-black), transparent 26%);
+    border: 1px solid color-mix(in oklab, var(--sl-color-white), transparent 88%);
+    backdrop-filter: blur(4px);
+    animation: card-in 620ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .nf-kicker {
+    margin: 0;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font: 700 0.72rem/1.2 'Avenir Next Condensed', 'Segoe UI', sans-serif;
+    color: color-mix(in oklab, var(--sl-color-accent-high), white 15%);
+  }
+
+  .nf-code {
+    margin: 0.35rem 0 0;
+    font-family: 'Avenir Next Condensed', 'Arial Narrow', 'Segoe UI', sans-serif;
+    font-weight: 900;
+    font-size: clamp(5.8rem, 22vw, 12rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--sl-color-white), white 12%),
+      color-mix(in oklab, var(--sl-color-accent-high), white 14%) 45%,
+      color-mix(in oklab, var(--sl-color-accent), white 10%)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 16px 34px color-mix(in oklab, var(--sl-color-accent), transparent 78%));
+  }
+
+  .nf-message {
+    margin: 0.35rem auto 0;
+    max-width: 38ch;
+    color: color-mix(in oklab, var(--sl-color-gray-2), white 18%);
+    font: 500 clamp(1rem, 1.9vw, 1.12rem)/1.55 'Avenir Next', 'Segoe UI', sans-serif;
+  }
+
+  .nf-actions {
+    margin-top: 1.35rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .nf-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.65rem 1.05rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+  }
+
+  .nf-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .nf-btn-primary {
+    color: var(--sl-color-black);
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--sl-color-accent-high), white 24%),
+        color-mix(in oklab, var(--sl-color-accent), white 18%)
+      );
+    box-shadow: 0 12px 30px -16px color-mix(in oklab, var(--sl-color-accent), transparent 30%);
+  }
+
+  .nf-btn-ghost {
+    color: color-mix(in oklab, var(--sl-color-gray-1), white 26%);
+    border: 1px solid color-mix(in oklab, var(--sl-color-gray-2), transparent 68%);
+    background: color-mix(in oklab, var(--sl-color-black), transparent 22%);
+  }
+
+  .nf-orb {
+    position: absolute;
+    z-index: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(2px);
+    animation: float 9s ease-in-out infinite;
+  }
+
+  .nf-orb-one {
+    width: clamp(8rem, 22vw, 14rem);
+    aspect-ratio: 1;
+    left: max(-2rem, -4vw);
+    top: max(-1.5rem, -3vw);
+    background: radial-gradient(circle at 30% 30%, color-mix(in oklab, var(--sl-color-accent-high), white 22%), transparent 68%);
+  }
+
+  .nf-orb-two {
+    width: clamp(10rem, 26vw, 16rem);
+    aspect-ratio: 1;
+    right: max(-3rem, -6vw);
+    bottom: max(-3.5rem, -6vw);
+    animation-delay: -2.4s;
+    background: radial-gradient(circle at 60% 40%, color-mix(in oklab, var(--sl-color-accent), white 18%), transparent 72%);
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) translateX(0);
+    }
+
+    50% {
+      transform: translateY(-8px) translateX(5px);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .nf-wrap {
+      min-height: 22rem;
+      border-radius: 1rem;
+    }
+
+    .nf-card {
+      padding: 1rem;
+    }
+
+    .nf-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .nf-btn {
+      width: 100%;
+    }
+  }
+</style>

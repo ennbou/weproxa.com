@@ -1,0 +1,46 @@
+---
+title: Installation
+description: How to download and install Weproxa on macOS.
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## System Requirements
+
+- **macOS 11.0** (Big Sur) or later
+- Apple Silicon (M1/M2/M3) or Intel Mac
+
+## Download
+
+Download the latest version of Weproxa:
+
+<Tabs>
+  <TabItem label="Apple Silicon (M1+)">
+    [Download Weproxa for Apple Silicon](https://files.weproxa.com/1.0.0/WePROXA_1.0.0_aarch64.dmg)
+  </TabItem>
+  <TabItem label="Intel">
+    Intel builds coming soon. Stay tuned!
+  </TabItem>
+</Tabs>
+
+## Install
+
+<Steps>
+
+1. **Open the DMG file** you downloaded.
+
+2. **Drag Weproxa** into your Applications folder.
+
+3. **Launch Weproxa** from your Applications folder or Spotlight.
+
+4. **Trust the certificate** — on first launch, Weproxa will ask to install a root CA certificate. This is required for HTTPS interception. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+
+</Steps>
+
+## Uninstall
+
+To uninstall Weproxa:
+
+1. Quit Weproxa if it's running.
+2. Drag Weproxa from your Applications folder to the Trash.
+3. Optionally, remove the CA certificate from your Keychain (search for "Weproxa" in Keychain Access).
