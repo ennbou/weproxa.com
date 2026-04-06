@@ -13,6 +13,9 @@ export default defineConfig({
 		starlight({
 			title: 'Weproxa',
 			disable404Route: true,
+			components: {
+				Footer: './src/components/Footer.astro',
+			},
 			logo: {
 				src: '/public/favicon.svg',
 			},
@@ -99,6 +102,15 @@ export default defineConfig({
 						icon: 'pen',
 						id: 'blog',
 						items: [],
+					},
+					{
+						label: 'Legal',
+						link: '/legal/privacy-policy/',
+						icon: 'information',
+						items: [
+							{ label: 'Privacy Policy', slug: 'legal/privacy-policy' },
+							{ label: 'Terms of Service', slug: 'legal/terms-of-service' },
+						],
 					},
 				], {
 					topics: {

@@ -1,0 +1,47 @@
+---
+import type { Props } from '@astrojs/starlight/props';
+import Default from '@astrojs/starlight/components/Footer.astro';
+---
+
+<Default {...Astro.props}><slot /></Default>
+
+<footer class="legal-footer">
+  <div class="legal-footer-inner">
+    <span>&copy; {new Date().getFullYear()} Weproxa. All rights reserved.</span>
+    <nav class="legal-footer-links">
+      <a href="/legal/privacy-policy/">Privacy Policy</a>
+      <a href="/legal/terms-of-service/">Terms of Service</a>
+      <a href="mailto:contact@weproxa.com">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .legal-footer {
+    border-top: 1px solid var(--sl-color-gray-5);
+    padding: 1.5rem var(--sl-content-pad-x);
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+  .legal-footer-inner {
+    max-width: var(--sl-content-width);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .legal-footer-links {
+    display: flex;
+    gap: 1.25rem;
+  }
+  .legal-footer-links a {
+    color: var(--sl-color-gray-3);
+    text-decoration: none;
+  }
+  .legal-footer-links a:hover {
+    color: var(--sl-color-white);
+    text-decoration: underline;
+  }
+</style>
