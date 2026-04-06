@@ -25,6 +25,7 @@ export default defineConfig({
 				{ tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
 				{ tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
 				{ tag: 'meta', attrs: { name: 'twitter:image', content: 'https://weproxa.com/og-image.jpeg' } },
+				{ tag: 'script', attrs: { defer: true, src: 'https://cloud.umami.is/script.js', 'data-website-id': '0aff05b2-b5a0-4142-ad4f-6d1d4239afd4' } },
 			],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/ennbou/weproxa.com' },
