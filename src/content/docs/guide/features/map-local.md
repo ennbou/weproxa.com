@@ -42,6 +42,22 @@ You can also create a Map Local rule by **right-clicking a request** in the requ
 Free accounts are limited to **5 Map Local rules**. Upgrade to Pro for unlimited rules.
 :::
 
+### Exporting & Importing Rules
+
+:::note
+Export & Import is a **Pro feature**. Free users will see a prompt to upgrade when clicking export or import.
+:::
+
+You can export and import Map Local rules to share configurations across devices or with your team.
+
+- **Export** — click the download icon on any rule card to save it as a `.weproxa-map-local.json` file. The export includes the rule settings (name, URL pattern, method) and the full response file content.
+- **Import** — click the **Import** button in the toolbar to load a previously exported rule file. Weproxa recreates the rule and its mock file automatically.
+
+This is useful for:
+- Sharing API mocks with teammates
+- Backing up your rules before switching machines
+- Distributing pre-configured mock setups for a project
+
 ## Pattern Matching
 
 Map Local rules support flexible URL matching with glob patterns:
