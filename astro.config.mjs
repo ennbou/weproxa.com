@@ -67,6 +67,7 @@ export default defineConfig({
 									{ label: 'Repeat Requests', slug: 'guide/features/repeat-requests' },
 									{ label: 'Block List', slug: 'guide/features/block-list' },
 									{ label: 'Network Conditioning', slug: 'guide/features/network-conditioning' },
+									{ label: 'Network Performance Metrics', slug: 'guide/features/network-performance-metrics' },
 									{ label: 'Advanced Filtering', slug: 'guide/features/advanced-filtering' },
 								],
 							},
