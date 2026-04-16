@@ -1,0 +1,39 @@
+---
+title: Weproxa 2.0.0 Release Notes
+description: What's new in Weproxa 2.0.0 — new features, improvements, and bug fixes since v1.0.0.
+date: 2026-04-16
+authors: [weproxa]
+excerpt: Weproxa 2.0.0 ships universal macOS builds, network timing metrics, custom proxy port, map local import/export, and more.
+tags:
+  - release
+  - changelog
+---
+
+Weproxa **2.0.0** is here! This release brings major improvements to debugging, performance visibility, and developer ergonomics.
+
+## New Features
+
+- **Universal macOS build** — single release supports both Apple Silicon (aarch64) and Intel (x86_64).
+- **Custom proxy port** — configure and persist your preferred proxy port.
+- **Network timing metrics** — per-request and per-response timing breakdowns (Pro).
+- **Remote address & HTTP version** — now captured and displayed for each request.
+- **Copy as cURL** — new context menu action to copy any request as a `curl` command.
+- **Map Local import/export** — share and back up your Map Local rules (Pro).
+- **Duplicate rule** action available across tools.
+- **Column visibility picker** for the request list.
+- **Deep linking to settings sections** with improved licensing UX.
+- **More keyboard shortcuts** surfaced in the settings panel.
+- **Native platform certificate trust** with a cached TLS connector for faster HTTPS.
+- **Dev-mode tracking off by default** — analytics and error tracking disabled unless explicitly opted in.
+
+## Fixes & Improvements
+
+- Fixed column visibility state not persisting correctly.
+- Map Local: preserve the original HTTP method when creating a rule from a request.
+- Map Local: show a saved indicator after a file is written.
+- Editor: suppress the unusual line terminators warning in Monaco.
+- Error tracking: resolved the noisy "Script error." reports in Sentry.
+
+---
+
+Thanks to everyone who reported issues and shared feedback. Download Weproxa 2.0.0 and let us know what you think!
