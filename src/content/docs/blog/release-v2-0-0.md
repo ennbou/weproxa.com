@@ -1,12 +1,12 @@
 ---
 title: Weproxa 2.0.0 Release Notes
-description: What's new in Weproxa 2.0.0 — new features, improvements, and bug fixes since v1.0.0.
 date: 2026-04-16
-authors: [weproxa]
-excerpt: Weproxa 2.0.0 ships universal macOS builds, network timing metrics, custom proxy port, map local import/export, and more.
+authors:
+  - weproxa
 tags:
   - release
   - changelog
+excerpt: Weproxa 2.0.0 ships universal macOS builds, network timing metrics, custom proxy port, map local import/export, and more.
 ---
 
 Weproxa **2.0.0** is here! This release brings major improvements to debugging, performance visibility, and developer ergonomics.
