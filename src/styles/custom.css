@@ -49,12 +49,6 @@
   width: 2rem;
 }
 
-.starlight-sidebar-topics a[href='/blog/'] {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.5; /* Optional: to make it look disabled */
-}
-
 
 /* --- Pricing Page Styles --- */
 
