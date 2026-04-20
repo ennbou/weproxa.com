@@ -11,15 +11,22 @@ The main view shows all captured requests in a sortable table with columns for:
 
 - **ID** — Numeric request identifier
 - **Method** — GET, POST, PUT, DELETE, etc. (shows "BLOCKED" for blocked requests)
-- **Status** — HTTP status code with color coding (green for 2xx, blue for 3xx, orange for 4xx, red for 5xx)
+- **Code** — HTTP status code with color coding (green for 2xx, blue for 3xx, orange for 4xx, red for 5xx)
+- **Scheme** — `HTTP` or `HTTPS` (https shown in green)
 - **Tools** — Indicates which tools modified the request or response (e.g., Breakpoint, Map Local)
-- **URL** — Host and path displayed together (host in muted color, path in primary color)
+- **Host** — The server hostname
+- **URL** — The full request URL
+- **Path** — The URL path
+- **Query** — The URL query string
+- **Remote Address** — Resolved IP address and port of the server
+- **HTTP Version** — Negotiated protocol (HTTP/1.1, HTTP/2, etc.)
 - **Client** — The application or browser that made the request
-- **Size** — Response body size
+- **Request Size** — Request body size
+- **Response Size** — Response body size
 - **Time** — Timestamp of the request (HH:MM:SS)
 - **Duration** — Time from request to response
 
-Columns are sortable (click headers), draggable (reorder by dragging), and resizable.
+Columns are sortable (click headers), draggable (reorder by dragging), resizable, and can be shown or hidden via the column visibility picker.
 
 ### Keyboard Navigation
 
@@ -34,17 +41,20 @@ Quick-filter buttons above the list let you narrow results by content type: All,
 
 A search bar lets you filter requests across three scopes:
 
-- **URL** — Match against the full URL, host, or path
-- **Request** — Search request headers and body
-- **Response** — Search response headers and body
+- **URL** — Match against the full URL (host and path)
+- **Request** — Search the HTTP method, URL, client/app name, and request body
+- **Response** — Search the status code, content type, and response body
+
+Body-heavy searches run on the backend with a short debounce; everything else filters instantly.
 
 ### Context Menu
 
 Right-click any request to access quick actions:
 
-- **Toggle SSL** — Enable or disable HTTPS interception for the host
+- **Copy as cURL** — Copy the request as a `curl` command
+- **Enable / Disable SSL for {host}** — Toggle HTTPS interception for the request's host
 - **Repeat Now** — Re-execute the same request immediately
-- **Repeat With Edit** — Open the repeat editor to modify the request before sending
+- **Repeat with Edit...** — Open the repeat editor to modify the request before sending
 - **Add to Diff** — Select requests to compare side by side
 - **Map Local** — Create a Map Local rule pre-filled with the request's URL
 - **Add Breakpoint** — Create a breakpoint rule for the request's URL pattern

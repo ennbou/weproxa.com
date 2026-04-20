@@ -47,7 +47,7 @@ The advanced query builder is a **Pro** feature. Free accounts can use the quick
 - **URL** — the full request URL
 - **Host** — the server hostname
 - **Path** — the URL path
-- **Content Type** — response MIME type
+- **Query String** — the URL query string (e.g., `id=42&sort=asc`)
 - **Client/Source** — the application that made the request
 - **Request Body** — the request payload content
 - **Response Body** — the response payload content
@@ -59,8 +59,9 @@ The advanced query builder is a **Pro** feature. Free accounts can use the quick
 ### Enum fields
 
 - **Method** — HTTP method (GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS, CONNECT, TRACE)
-- **Protocol** — HTTP version (HTTP/1.0, HTTP/1.1, HTTP/2, HTTP/3, WebSocket)
+- **Protocol** — HTTP version (HTTP/0.9, HTTP/1.0, HTTP/1.1, HTTP/2.0, HTTP/3.0)
 - **Status Code** — HTTP status code, with wildcard support (e.g., `2xx` for any 200-level, `4xx` for any 400-level)
+- **Content Type** — response MIME type with common values (JSON, HTML, CSS, images, etc.)
 
 ### Numeric fields
 

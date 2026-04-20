@@ -5,6 +5,10 @@ description: Use Weproxa's Model Context Protocol server for AI-powered debuggin
 
 Weproxa includes an embedded [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that exposes proxy tools to external AI clients, enabling AI-assisted HTTP debugging.
 
+:::note
+Starting the MCP server is a **Pro** feature. Free accounts can view the configuration but cannot start the server.
+:::
+
 ## What is MCP?
 
 MCP is an open protocol that allows AI models to interact with tools and data sources. Weproxa's MCP server lets AI assistants access your captured HTTP traffic and proxy tools.
@@ -20,7 +24,7 @@ MCP is an open protocol that allows AI models to interact with tools and data so
 
 Configure your MCP-compatible AI client with:
 
-- **Server URL** — the local HTTP endpoint (e.g., `http://127.0.0.1:<port>`)
+- **Server URL** — the local HTTP endpoint (e.g., `http://127.0.0.1:<port>/mcp`)
 - **Authentication** — Bearer token (shown in Weproxa settings)
 
 ## Available Tools
