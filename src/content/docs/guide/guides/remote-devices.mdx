@@ -1,0 +1,124 @@
+---
+title: Remote Devices
+description: Route HTTP/HTTPS traffic from iPhone, iPad, or Android devices through Weproxa over your local network.
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Weproxa can act as a proxy for any device on your local network — including physical iPhones, iPads, and Android phones — so you can inspect real app traffic the same way you inspect browser traffic on your Mac.
+
+## Prerequisites
+
+- Your Mac and the mobile device must be on the **same Wi-Fi network**.
+- Weproxa's proxy must be **running**.
+- **LAN access** must be enabled (it's disabled by default so the proxy only listens on `127.0.0.1`).
+
+:::note
+LAN access exposes the proxy port on your Mac's local IP. Only enable it on trusted networks.
+:::
+
+## 1. Enable LAN Access
+
+<Steps>
+
+1. Open **Settings** → **Remote Access** in Weproxa.
+2. Toggle **Allow LAN access** on. (You may need to stop the proxy to change this setting; Weproxa will prompt you if so.)
+3. Optionally enable **Auto-start LAN access** so the proxy listens on the network automatically on every launch.
+
+</Steps>
+
+When LAN access is on, the Remote Access panel shows your Mac's proxy address, for example `192.168.1.42:8888`.
+
+## 2. Install the CA Certificate on the Device
+
+To inspect HTTPS traffic from the device, the Weproxa root CA must be installed and trusted on that device.
+
+Weproxa ships a temporary local certificate server with a QR code so you don't have to email or AirDrop the certificate.
+
+<Steps>
+
+1. In **Settings** → **Remote Access**, click **Show QR Code for Certificate**.
+2. On your device, scan the QR code (camera app on iOS, a QR scanner on Android) or open the URL shown below the QR code in the device's browser.
+3. Download and install the certificate, then trust it (see platform-specific steps below).
+4. Click **Close** in Weproxa when you're done — this stops the temporary certificate server.
+
+</Steps>
+
+<Tabs>
+
+<TabItem label="iOS / iPadOS">
+
+<Steps>
+
+1. Open the URL in **Safari** (other browsers don't install profiles correctly).
+2. Tap **Allow** when prompted to download the configuration profile.
+3. Open **Settings** → **General** → **VPN & Device Management** and install the **WePROXA Root CA** profile.
+4. Open **Settings** → **General** → **About** → **Certificate Trust Settings** and enable full trust for the WePROXA Root CA.
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="Android">
+
+<Steps>
+
+1. Download the certificate from the URL shown in Weproxa.
+2. Open **Settings** → **Security & privacy** → **More security settings** → **Encryption & credentials** → **Install a certificate** → **CA certificate**. (Menus differ slightly by vendor.)
+3. Select the downloaded file and confirm. Android will warn about third-party CAs — this is expected for proxy debugging tools.
+
+</Steps>
+
+:::note
+Android 7+ apps ignore user-installed CAs by default. For app traffic you usually need either a debug build that opts in via `networkSecurityConfig`, or a rooted device where the CA can be added to the system store.
+:::
+
+</TabItem>
+
+</Tabs>
+
+## 3. Point the Device at Weproxa
+
+Configure the device's Wi-Fi network to use the proxy address shown in Weproxa.
+
+<Tabs>
+
+<TabItem label="iOS / iPadOS">
+
+<Steps>
+
+1. **Settings** → **Wi-Fi** → tap the **ⓘ** next to the connected network.
+2. Scroll to **HTTP Proxy** and select **Manual**.
+3. Set **Server** to your Mac's local IP (e.g. `192.168.1.42`) and **Port** to the Weproxa port (default `8888`).
+4. Leave authentication off.
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="Android">
+
+<Steps>
+
+1. **Settings** → **Network & internet** → **Internet** → tap the gear next to the connected network → **Advanced**.
+2. Change **Proxy** to **Manual**.
+3. Set **Proxy hostname** to your Mac's local IP and **Proxy port** to the Weproxa port (default `8888`).
+
+</Steps>
+
+</TabItem>
+
+</Tabs>
+
+Open a browser on the device and visit any site — you should see traffic flowing into Weproxa's request list.
+
+## Finding Remote Traffic
+
+Requests from remote devices appear in the main request list and are also grouped under **Devices** in the sidebar source view, keyed by device IP. This makes it easy to isolate a single device's traffic while other apps keep streaming.
+
+## Troubleshooting
+
+- **Nothing shows up** — verify the Mac's IP is reachable (try `http://<mac-ip>:<port>` in the device's browser). A firewall on the Mac may be blocking incoming connections.
+- **HTTPS errors on the device** — the CA profile isn't installed or isn't fully trusted. On iOS, check **Certificate Trust Settings**.
+- **App traffic not captured (Android)** — app uses its own CA pinning or ignores user CAs. Use a debug build or run against an emulator. See [iOS Simulator](/guide/guides/ios-simulator/) for simulator-based debugging.
+- **Certificate QR code won't load** — the local cert server uses a short-lived port. Close the dialog and click **Show QR Code** again to restart it.

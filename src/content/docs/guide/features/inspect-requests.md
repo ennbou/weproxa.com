@@ -65,7 +65,7 @@ Right-click any request to access quick actions:
 
 Click on any request to open the details panel with full information:
 
-   ![Weproxa startup screen](@assets/guide/features/inspect-requests/request_details.png)
+   ![Request details panel](@assets/guide/features/inspect-requests/request_details.png)
 
 The details panel can be positioned as a right sidebar or a bottom panel, and can be collapsed when not needed.
 

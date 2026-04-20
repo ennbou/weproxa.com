@@ -104,7 +104,7 @@ Retry-After: 30
 { "error": "Service temporarily unavailable" }
 ```
 
-supports autocompletion for HTTP headers — just start typing a header name and press **Ctrl+Space** to see suggestions based on common headers and the headers from the original response.
+The editor supports **autocompletion for HTTP headers** — just start typing a header name and press **Ctrl+Space** to see suggestions based on common headers and the headers from the original response.
 
 ![Editor autocomplete for headers](@assets/guide/features/maplocal/maplocal_editor_autocomplete.png)
 

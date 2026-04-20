@@ -65,6 +65,7 @@ export default defineConfig({
 									{ label: 'Breakpoints', slug: 'guide/features/breakpoints' },
 									{ label: 'Map Local', slug: 'guide/features/map-local' },
 									{ label: 'Repeat Requests', slug: 'guide/features/repeat-requests' },
+									{ label: 'Diff Requests', slug: 'guide/features/diff-requests' },
 									{ label: 'Block List', slug: 'guide/features/block-list' },
 									{ label: 'Network Conditioning', slug: 'guide/features/network-conditioning' },
 									{ label: 'Network Performance Metrics', slug: 'guide/features/network-performance-metrics' },
@@ -78,7 +79,10 @@ export default defineConfig({
 									{ label: 'SSL Interception', slug: 'guide/guides/ssl-interception' },
 									{ label: 'HTTPS Debugging', slug: 'guide/guides/https-debugging' },
 									{ label: 'iOS Simulator', slug: 'guide/guides/ios-simulator' },
+									{ label: 'Remote Devices', slug: 'guide/guides/remote-devices' },
 									{ label: 'MCP Integration', slug: 'guide/guides/mcp-integration' },
+									{ label: 'Keyboard Shortcuts', slug: 'guide/guides/keyboard-shortcuts' },
+									{ label: 'Troubleshooting', slug: 'guide/guides/troubleshooting' },
 								],
 							},
 							{
