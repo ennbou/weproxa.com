@@ -1,9 +1,9 @@
 ---
 title: Keyboard Shortcuts
-description: Full list of keyboard shortcuts available in Weproxa.
+description: Full list of keyboard shortcuts available in WePROXA.
 ---
 
-Weproxa ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS.
+WePROXA ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS.
 
 ## Proxy & Capture
 

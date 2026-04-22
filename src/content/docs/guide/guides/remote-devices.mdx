@@ -1,16 +1,16 @@
 ---
 title: Remote Devices
-description: Route HTTP/HTTPS traffic from iPhone, iPad, or Android devices through Weproxa over your local network.
+description: Route HTTP/HTTPS traffic from iPhone, iPad, or Android devices through WePROXA over your local network.
 ---
 
 import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
-Weproxa can act as a proxy for any device on your local network — including physical iPhones, iPads, and Android phones — so you can inspect real app traffic the same way you inspect browser traffic on your Mac.
+WePROXA can act as a proxy for any device on your local network — including physical iPhones, iPads, and Android phones — so you can inspect real app traffic the same way you inspect browser traffic on your Mac.
 
 ## Prerequisites
 
 - Your Mac and the mobile device must be on the **same Wi-Fi network**.
-- Weproxa's proxy must be **running**.
+- WePROXA's proxy must be **running**.
 - **LAN access** must be enabled (it's disabled by default so the proxy only listens on `127.0.0.1`).
 
 :::note
@@ -21,8 +21,8 @@ LAN access exposes the proxy port on your Mac's local IP. Only enable it on trus
 
 <Steps>
 
-1. Open **Settings** → **Remote Access** in Weproxa.
-2. Toggle **Allow LAN access** on. (You may need to stop the proxy to change this setting; Weproxa will prompt you if so.)
+1. Open **Settings** → **Remote Access** in WePROXA.
+2. Toggle **Allow LAN access** on. (You may need to stop the proxy to change this setting; WePROXA will prompt you if so.)
 3. Optionally enable **Auto-start LAN access** so the proxy listens on the network automatically on every launch.
 
 </Steps>
@@ -31,16 +31,16 @@ When LAN access is on, the Remote Access panel shows your Mac's proxy address, f
 
 ## 2. Install the CA Certificate on the Device
 
-To inspect HTTPS traffic from the device, the Weproxa root CA must be installed and trusted on that device.
+To inspect HTTPS traffic from the device, the WePROXA root CA must be installed and trusted on that device.
 
-Weproxa ships a temporary local certificate server with a QR code so you don't have to email or AirDrop the certificate.
+WePROXA ships a temporary local certificate server with a QR code so you don't have to email or AirDrop the certificate.
 
 <Steps>
 
 1. In **Settings** → **Remote Access**, click **Show QR Code for Certificate**.
 2. On your device, scan the QR code (camera app on iOS, a QR scanner on Android) or open the URL shown below the QR code in the device's browser.
 3. Download and install the certificate, then trust it (see platform-specific steps below).
-4. Click **Close** in Weproxa when you're done — this stops the temporary certificate server.
+4. Click **Close** in WePROXA when you're done — this stops the temporary certificate server.
 
 </Steps>
 
@@ -63,7 +63,7 @@ Weproxa ships a temporary local certificate server with a QR code so you don't h
 
 <Steps>
 
-1. Download the certificate from the URL shown in Weproxa.
+1. Download the certificate from the URL shown in WePROXA.
 2. Open **Settings** → **Security & privacy** → **More security settings** → **Encryption & credentials** → **Install a certificate** → **CA certificate**. (Menus differ slightly by vendor.)
 3. Select the downloaded file and confirm. Android will warn about third-party CAs — this is expected for proxy debugging tools.
 
@@ -77,9 +77,9 @@ Android 7+ apps ignore user-installed CAs by default. For app traffic you usuall
 
 </Tabs>
 
-## 3. Point the Device at Weproxa
+## 3. Point the Device at WePROXA
 
-Configure the device's Wi-Fi network to use the proxy address shown in Weproxa.
+Configure the device's Wi-Fi network to use the proxy address shown in WePROXA.
 
 <Tabs>
 
@@ -89,7 +89,7 @@ Configure the device's Wi-Fi network to use the proxy address shown in Weproxa.
 
 1. **Settings** → **Wi-Fi** → tap the **ⓘ** next to the connected network.
 2. Scroll to **HTTP Proxy** and select **Manual**.
-3. Set **Server** to your Mac's local IP (e.g. `192.168.1.42`) and **Port** to the Weproxa port (default `8888`).
+3. Set **Server** to your Mac's local IP (e.g. `192.168.1.42`) and **Port** to the WePROXA port (default `8888`).
 4. Leave authentication off.
 
 </Steps>
@@ -102,7 +102,7 @@ Configure the device's Wi-Fi network to use the proxy address shown in Weproxa.
 
 1. **Settings** → **Network & internet** → **Internet** → tap the gear next to the connected network → **Advanced**.
 2. Change **Proxy** to **Manual**.
-3. Set **Proxy hostname** to your Mac's local IP and **Proxy port** to the Weproxa port (default `8888`).
+3. Set **Proxy hostname** to your Mac's local IP and **Proxy port** to the WePROXA port (default `8888`).
 
 </Steps>
 
@@ -110,7 +110,7 @@ Configure the device's Wi-Fi network to use the proxy address shown in Weproxa.
 
 </Tabs>
 
-Open a browser on the device and visit any site — you should see traffic flowing into Weproxa's request list.
+Open a browser on the device and visit any site — you should see traffic flowing into WePROXA's request list.
 
 ## Finding Remote Traffic
 

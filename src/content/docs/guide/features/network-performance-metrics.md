@@ -11,7 +11,7 @@ Network Performance Metrics is a **Pro feature**. Free users can see the Timing 
 
 ## How It Works
 
-When Weproxa intercepts a request, it measures each phase of the network lifecycle and records precise timing data. This data is displayed as an interactive waterfall chart inside the request details panel.
+When WePROXA intercepts a request, it measures each phase of the network lifecycle and records precise timing data. This data is displayed as an interactive waterfall chart inside the request details panel.
 
 The following phases are measured:
 

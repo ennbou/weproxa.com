@@ -1,17 +1,17 @@
 ---
-title: Introducing Weproxa
+title: Introducing WePROXA
 date: 2025-01-15
 authors:
   - weproxa
 tags:
   - announcement
   - release
-excerpt: Meet Weproxa — a powerful, native HTTP/HTTPS proxy debugger built for macOS with Tauri, React, and Rust.
+excerpt: Meet WePROXA — a powerful, native HTTP/HTTPS proxy debugger built for macOS with Tauri, React, and Rust.
 ---
 
-We're excited to introduce **Weproxa** — a powerful HTTP/HTTPS proxy debugger built from the ground up for macOS.
+We're excited to introduce **WePROXA** — a powerful HTTP/HTTPS proxy debugger built from the ground up for macOS.
 
-## Why We Built Weproxa
+## Why We Built WePROXA
 
 Debugging network traffic is a fundamental part of modern development. Whether you're building web apps, mobile apps, or APIs, understanding what's happening at the network level is crucial. We wanted a tool that's:
 
@@ -30,6 +30,6 @@ Debugging network traffic is a fundamental part of modern development. Whether y
 
 ## Try It Today
 
-[Download Weproxa](https://files.weproxa.com/1.0.0/WePROXA_1.0.0_aarch64.dmg) and start debugging your HTTP traffic in minutes. Check out our [Quick Start guide](/guide/getting-started/quick-start/) to get up and running.
+[Download WePROXA](https://files.weproxa.com/1.0.0/WePROXA_1.0.0_aarch64.dmg) and start debugging your HTTP traffic in minutes. Check out our [Quick Start guide](/guide/getting-started/quick-start/) to get up and running.
 
 We'd love to hear your feedback — [open an issue on GitHub](https://github.com/ennbou/weproxa.com/issues) or reach out to us!

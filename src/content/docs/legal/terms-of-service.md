@@ -1,6 +1,6 @@
 ---
 title: Terms of Service
-description: Weproxa terms of service — conditions for using the app and website.
+description: WePROXA terms of service — conditions for using the app and website.
 tableOfContents: false
 lastUpdated: 2026-04-06
 ---
@@ -9,21 +9,21 @@ lastUpdated: 2026-04-06
 
 ## 1. Acceptance of Terms
 
-By downloading, installing, or using Weproxa ("the App"), you agree to these Terms of Service ("Terms"). If you do not agree, do not use the App.
+By downloading, installing, or using WePROXA ("the App"), you agree to these Terms of Service ("Terms"). If you do not agree, do not use the App.
 
 ## 2. Description of Service
 
-Weproxa is a native macOS HTTP/HTTPS proxy debugger that allows you to capture, inspect, modify, and replay network traffic on your local machine. The App is provided as a desktop application for macOS.
+WePROXA is a native macOS HTTP/HTTPS proxy debugger that allows you to capture, inspect, modify, and replay network traffic on your local machine. The App is provided as a desktop application for macOS.
 
 ## 3. License
 
 ### Free Tier
 
-Weproxa is available for free with core features and usage limits as described on our [Pricing](/pricing/) page. The free tier grants you a personal, non-exclusive, non-transferable license to use the App.
+WePROXA is available for free with core features and usage limits as described on our [Pricing](/pricing/) page. The free tier grants you a personal, non-exclusive, non-transferable license to use the App.
 
 ### Pro License
 
-A Weproxa Pro license removes all usage limits and unlocks additional features. The Pro license is:
+A WePROXA Pro license removes all usage limits and unlocks additional features. The Pro license is:
 
 - A **one-time purchase** of $25 USD.
 - Includes **1 year of updates** from the date of purchase.
@@ -49,7 +49,7 @@ Refund requests may be made within **14 days** of purchase by contacting us at [
 
 ## 5. Intellectual Property
 
-The App, including its code, design, documentation, and branding, is the intellectual property of Weproxa and its creator. All rights not expressly granted in these Terms are reserved.
+The App, including its code, design, documentation, and branding, is the intellectual property of WePROXA and its creator. All rights not expressly granted in these Terms are reserved.
 
 ## 6. User Responsibilities
 
@@ -67,7 +67,7 @@ We do not warrant that the App will be error-free, uninterrupted, or free of har
 
 ## 8. Limitation of Liability
 
-To the maximum extent permitted by applicable law, in no event shall Weproxa or its creator be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from:
+To the maximum extent permitted by applicable law, in no event shall WePROXA or its creator be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from:
 
 - Your use or inability to use the App.
 - Any unauthorized access to or alteration of your data.

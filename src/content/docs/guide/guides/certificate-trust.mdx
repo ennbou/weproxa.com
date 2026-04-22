@@ -1,19 +1,19 @@
 ---
 title: Certificate Trust
-description: How Weproxa's HTTPS certificate trust works on macOS.
+description: How WePROXA's HTTPS certificate trust works on macOS.
 ---
 
 import { Steps } from '@astrojs/starlight/components';
 
-To intercept HTTPS traffic, Weproxa generates a local root Certificate Authority (CA) and installs it in your macOS Keychain. This lets Weproxa decrypt, inspect, and re-encrypt HTTPS traffic transparently.
+To intercept HTTPS traffic, WePROXA generates a local root Certificate Authority (CA) and installs it in your macOS Keychain. This lets WePROXA decrypt, inspect, and re-encrypt HTTPS traffic transparently.
 
 ## Setup Process
 
-When you first start Weproxa, it automatically generates a root CA certificate unique to your machine. However, to intercept HTTPS traffic, you must install and trust this certificate.
+When you first start WePROXA, it automatically generates a root CA certificate unique to your machine. However, to intercept HTTPS traffic, you must install and trust this certificate.
 
 <Steps>
 
-1. Open Weproxa and go to **Settings** → **Certificates**.
+1. Open WePROXA and go to **Settings** → **Certificates**.
 2. Click **Install to macOS Keychain**.
 3. Enter your macOS password when prompted — the certificate is installed in the System keychain and marked as trusted for SSL/TLS connections.
 
@@ -33,7 +33,7 @@ If you need to manually trust the certificate:
 
 ## Removing the Certificate
 
-To remove Weproxa's CA certificate:
+To remove WePROXA's CA certificate:
 
 1. Open **Keychain Access**
 2. Search for "WePROXA"
@@ -44,4 +44,4 @@ To remove Weproxa's CA certificate:
 - The CA certificate is generated locally and never leaves your machine
 - The private key is stored securely in the app's data directory
 - Each installation generates a unique certificate
-- Removing Weproxa also removes the ability to impersonate any site
+- Removing WePROXA also removes the ability to impersonate any site

@@ -11,7 +11,7 @@ export default defineConfig({
 	integrations: [
 		sitemap(),
 		starlight({
-			title: 'Weproxa',
+			title: 'WePROXA',
 			disable404Route: true,
 			components: {
 				Footer: './src/components/Footer.astro',
@@ -21,7 +21,7 @@ export default defineConfig({
 			},
 			favicon: '/favicon.svg',
 			head: [
-				{ tag: 'meta', attrs: { property: 'og:site_name', content: 'Weproxa' } },
+				{ tag: 'meta', attrs: { property: 'og:site_name', content: 'WePROXA' } },
 				{ tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
 				{ tag: 'meta', attrs: { property: 'og:image', content: 'https://weproxa.com/og-image.jpeg' } },
 				{ tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
@@ -41,7 +41,7 @@ export default defineConfig({
 					rss: false,
 					authors: {
 						weproxa: {
-							name: 'Weproxa Team',
+							name: 'WePROXA Team',
 						},
 					},
 				}),

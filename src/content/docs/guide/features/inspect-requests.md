@@ -1,9 +1,9 @@
 ---
 title: Inspect Requests
-description: View detailed request and response information in Weproxa.
+description: View detailed request and response information in WePROXA.
 ---
 
-Weproxa captures all HTTP and HTTPS traffic flowing through the proxy and displays it in a clean, real-time request list.
+WePROXA captures all HTTP and HTTPS traffic flowing through the proxy and displays it in a clean, real-time request list.
 
 ## Request List
 

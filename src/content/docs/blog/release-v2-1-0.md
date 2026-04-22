@@ -1,15 +1,15 @@
 ---
-title: Weproxa 2.1.0 Release Notes
+title: WePROXA 2.1.0 Release Notes
 date: 2026-04-20
 authors:
   - weproxa
 tags:
   - release
   - changelog
-excerpt: Weproxa 2.1.0 brings faster HTTPS connections with Happy Eyeballs, auto-start options, a query string filter, and several UI refinements.
+excerpt: WePROXA 2.1.0 brings faster HTTPS connections with Happy Eyeballs, auto-start options, a query string filter, and several UI refinements.
 ---
 
-Weproxa **2.1.0** focuses on faster connections, better proxy ergonomics, and a more polished request list and details view.
+WePROXA **2.1.0** focuses on faster connections, better proxy ergonomics, and a more polished request list and details view.
 
 ## New Features
 
@@ -28,4 +28,4 @@ Weproxa **2.1.0** focuses on faster connections, better proxy ergonomics, and a 
 
 ---
 
-Thanks to everyone who reported issues and shared feedback. Download Weproxa 2.1.0 and let us know what you think!
+Thanks to everyone who reported issues and shared feedback. Download WePROXA 2.1.0 and let us know what you think!

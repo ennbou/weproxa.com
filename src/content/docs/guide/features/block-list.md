@@ -7,7 +7,7 @@ The Block List feature lets you prevent specific requests from being sent to the
 
 ## How It Works
 
-When a request matches a Block List rule, Weproxa intercepts it and returns an **HTTP 403 Forbidden** response instead of forwarding the request to the server. The blocked request still appears in the request list, marked with a "blocked" status, so you can see exactly which requests were caught.
+When a request matches a Block List rule, WePROXA intercepts it and returns an **HTTP 403 Forbidden** response instead of forwarding the request to the server. The blocked request still appears in the request list, marked with a "blocked" status, so you can see exactly which requests were caught.
 
 ![Blocked request in request list](@assets/guide/features/block-list/blocked_request.png)
 

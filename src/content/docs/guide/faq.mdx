@@ -1,32 +1,32 @@
 ---
 title: Frequently Asked Questions
-description: Common questions about Weproxa.
+description: Common questions about WePROXA.
 ---
 
 import { LinkCard } from '@astrojs/starlight/components';
 
 ## General
 
-### What is Weproxa?
-Weproxa is a native macOS HTTP/HTTPS proxy debugger. It lets you capture, inspect, modify, and replay network traffic from any app on your Mac.
+### What is WePROXA?
+WePROXA is a native macOS HTTP/HTTPS proxy debugger. It lets you capture, inspect, modify, and replay network traffic from any app on your Mac.
 
-### What platforms does Weproxa support?
-Currently, Weproxa is available for **macOS 11.0+** (Big Sur and later) on both Apple Silicon and Intel Macs.
+### What platforms does WePROXA support?
+Currently, WePROXA is available for **macOS 11.0+** (Big Sur and later) on both Apple Silicon and Intel Macs.
 
-### Is Weproxa free?
-Weproxa offers a free tier with core features. Advanced features are available with a Pro license. See [Pricing](/pricing/) for details.
+### Is WePROXA free?
+WePROXA offers a free tier with core features. Advanced features are available with a Pro license. See [Pricing](/pricing/) for details.
 
 ---
 
 ## Setup & Configuration
 
-### Why does Weproxa need to install a certificate?
-To inspect HTTPS (encrypted) traffic, Weproxa needs to generate and trust a local Certificate Authority. This is standard practice for proxy debugging tools. The certificate is generated locally and never leaves your machine. See [Certificate Trust](/guide/guides/certificate-trust/).
+### Why does WePROXA need to install a certificate?
+To inspect HTTPS (encrypted) traffic, WePROXA needs to generate and trust a local Certificate Authority. This is standard practice for proxy debugging tools. The certificate is generated locally and never leaves your machine. See [Certificate Trust](/guide/guides/certificate-trust/).
 
 ### How do I enable the system proxy?
-Click the network icon in the toolbar. Weproxa will configure your Mac's system proxy settings automatically. When you stop the proxy or quit the app, the settings are restored.
+Click the network icon in the toolbar. WePROXA will configure your Mac's system proxy settings automatically. When you stop the proxy or quit the app, the settings are restored.
 
-### Does Weproxa work with all apps?
+### Does WePROXA work with all apps?
 Most apps that respect macOS system proxy settings will work automatically. Some apps (like those using custom proxy configurations or certificate pinning) may need additional setup.
 
 ---
@@ -34,13 +34,13 @@ Most apps that respect macOS system proxy settings will work automatically. Some
 ## HTTPS & Security
 
 ### Is my data safe?
-Yes. Weproxa runs entirely on your local machine. No traffic data is ever sent to external servers. The CA certificate and private key are stored locally in the app's data directory.
+Yes. WePROXA runs entirely on your local machine. No traffic data is ever sent to external servers. The CA certificate and private key are stored locally in the app's data directory.
 
-### Can Weproxa decrypt HTTPS traffic?
-Yes, when the Weproxa CA certificate is trusted. This is a standard man-in-the-middle (MITM) technique used by all proxy debugging tools.
+### Can WePROXA decrypt HTTPS traffic?
+Yes, when the WePROXA CA certificate is trusted. This is a standard man-in-the-middle (MITM) technique used by all proxy debugging tools.
 
 ### What about certificate pinning?
-Apps with certificate pinning will reject Weproxa's generated certificates. This is by design — it's a security feature of those apps.
+Apps with certificate pinning will reject WePROXA's generated certificates. This is by design — it's a security feature of those apps.
 
 ---
 
@@ -52,10 +52,10 @@ Apps with certificate pinning will reject Weproxa's generated certificates. This
 3. Try opening a website in Safari — it uses system proxy settings
 
 ### HTTPS requests show certificate errors
-The Weproxa CA certificate may not be trusted. See [Certificate Trust](/guide/guides/certificate-trust/) for setup instructions.
+The WePROXA CA certificate may not be trusted. See [Certificate Trust](/guide/guides/certificate-trust/) for setup instructions.
 
 ### The app is slow with many requests
-Weproxa keeps up to 10,000 requests in memory. Use the **Clear** button in the toolbar to remove old requests, or use filters to focus on relevant traffic.
+WePROXA keeps up to 10,000 requests in memory. Use the **Clear** button in the toolbar to remove old requests, or use filters to focus on relevant traffic.
 
 ---
 

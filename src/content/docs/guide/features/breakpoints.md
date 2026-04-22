@@ -8,7 +8,7 @@ Breakpoints let you pause requests or responses mid-flight, inspect them, make c
 ## How Breakpoints Work
 
 1. **Create a rule** that matches specific requests (by URL pattern, method, etc.)
-2. When a matching request is made, Weproxa **pauses** it before sending
+2. When a matching request is made, WePROXA **pauses** it before sending
 3. You can **inspect and edit** the request URL, headers, and body
 4. **Resume** the request to send it (modified or unchanged) to the server
 5. Optionally, also break on the **response** to modify the status code, headers, and body before it reaches the client

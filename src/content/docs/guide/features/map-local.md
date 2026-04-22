@@ -7,7 +7,7 @@ Map Local lets you serve local files in place of remote resources — without ch
 
 ## How It Works
 
-When a request matches a Map Local rule, Weproxa intercepts it and responds with the contents of a local file instead of forwarding the request to the remote server. The request never reaches the origin — the response is served entirely from disk.
+When a request matches a Map Local rule, WePROXA intercepts it and responds with the contents of a local file instead of forwarding the request to the remote server. The request never reaches the origin — the response is served entirely from disk.
 
 If the local file is not found, the request falls through and is forwarded to the origin server as normal.
 
@@ -24,7 +24,7 @@ If the local file is not found, the request falls through and is forwarded to th
    - **Create File** to generate a new mock file (saved to `~/.weproxa/tools/mocks/`)
 5. Enable the rule
 
-    ![Weproxa Map Local window](@assets/guide/features/maplocal/maplocal_window.png)
+    ![WePROXA Map Local window](@assets/guide/features/maplocal/maplocal_window.png)
 
 :::tip
 You can also create a Map Local rule by **right-clicking a request** in the request list and selecting **Map Local**. The URL pattern and response content will be pre-filled from the selected request.
@@ -51,7 +51,7 @@ Export & Import is a **Pro feature**. Free users will see a prompt to upgrade wh
 You can export and import Map Local rules to share configurations across devices or with your team.
 
 - **Export** — click the download icon on any rule card to save it as a `.weproxa-map-local.json` file. The export includes the rule settings (name, URL pattern, method) and the full response file content.
-- **Import** — click the **Import** button in the toolbar to load a previously exported rule file. Weproxa recreates the rule and its mock file automatically.
+- **Import** — click the **Import** button in the toolbar to load a previously exported rule file. WePROXA recreates the rule and its mock file automatically.
 
 This is useful for:
 - Sharing API mocks with teammates
@@ -72,7 +72,7 @@ The local file can be a **plain file** or a **full HTTP response** with custom s
 
 ### Plain File
 
-If the file contains just the response body, Weproxa serves it with a `200` status code and a default `Content-Type` of `application/octet-stream`:
+If the file contains just the response body, WePROXA serves it with a `200` status code and a default `Content-Type` of `application/octet-stream`:
 
 ```json
 { "message": "Hello from local file" }
@@ -116,7 +116,7 @@ Press **Cmd+S** (macOS) or **Ctrl+S** (Windows/Linux) to save changes to the fil
 
 ## File Watching
 
-Weproxa **automatically watches** your local files for changes. When you edit a mapped file in an external editor, the updated content is picked up immediately — no need to restart or reload rules.
+WePROXA **automatically watches** your local files for changes. When you edit a mapped file in an external editor, the updated content is picked up immediately — no need to restart or reload rules.
 
 ## Use Cases
 

@@ -1,15 +1,15 @@
 ---
 title: SSL Interception
-description: How to enable HTTPS inspection for specific hosts in Weproxa.
+description: How to enable HTTPS inspection for specific hosts in WePROXA.
 ---
 
 import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
-Weproxa intercepts HTTPS traffic on a **per-host basis**. After [installing the CA certificate](/guide/guides/certificate-trust/), you need to tell Weproxa which hosts to decrypt by adding them to the **SSL Interception Hosts** list.
+WePROXA intercepts HTTPS traffic on a **per-host basis**. After [installing the CA certificate](/guide/guides/certificate-trust/), you need to tell WePROXA which hosts to decrypt by adding them to the **SSL Interception Hosts** list.
 
 ## Why Per-Host?
 
-Instead of blindly decrypting all HTTPS traffic, Weproxa lets you choose exactly which hosts to inspect. This gives you:
+Instead of blindly decrypting all HTTPS traffic, WePROXA lets you choose exactly which hosts to inspect. This gives you:
 
 - **Better performance** — only decrypt the traffic you care about
 - **Less noise** — your request list stays focused on relevant hosts

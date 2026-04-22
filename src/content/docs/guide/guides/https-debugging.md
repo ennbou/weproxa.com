@@ -1,21 +1,21 @@
 ---
 title: HTTPS Debugging
-description: How to debug HTTPS/SSL traffic with Weproxa.
+description: How to debug HTTPS/SSL traffic with WePROXA.
 ---
 
-Weproxa provides full HTTPS interception (MITM) so you can inspect encrypted traffic just like plain HTTP.
+WePROXA provides full HTTPS interception (MITM) so you can inspect encrypted traffic just like plain HTTP.
 
 ## How It Works
 
 When HTTPS interception is enabled:
 
-1. Your client connects to Weproxa's proxy
-2. Weproxa establishes a secure connection with the real server
-3. Weproxa dynamically generates a certificate for the target domain
-4. Your client connects to Weproxa using that certificate
-5. Weproxa decrypts, inspects, and re-encrypts all traffic
+1. Your client connects to WePROXA's proxy
+2. WePROXA establishes a secure connection with the real server
+3. WePROXA dynamically generates a certificate for the target domain
+4. Your client connects to WePROXA using that certificate
+5. WePROXA decrypts, inspects, and re-encrypts all traffic
 
-This is fully transparent — your app sees valid HTTPS responses as long as the Weproxa CA is trusted.
+This is fully transparent — your app sees valid HTTPS responses as long as the WePROXA CA is trusted.
 
 ## Enabling HTTPS Interception
 
@@ -36,10 +36,10 @@ HTTPS requests appear in the request list just like HTTP requests. You can:
 ## Troubleshooting
 
 ### Certificate errors in browser
-Make sure the Weproxa CA certificate is trusted in your macOS Keychain. See [Certificate Trust](/guide/guides/certificate-trust/).
+Make sure the WePROXA CA certificate is trusted in your macOS Keychain. See [Certificate Trust](/guide/guides/certificate-trust/).
 
 ### Some apps ignore system proxy
-Some applications use their own proxy settings or certificate stores. You may need to configure them manually to use the Weproxa proxy address.
+Some applications use their own proxy settings or certificate stores. You may need to configure them manually to use the WePROXA proxy address.
 
 ### Certificate pinning
-Apps with certificate pinning will reject Weproxa's generated certificates. This is a security feature of those apps and cannot be bypassed through Weproxa.
+Apps with certificate pinning will reject WePROXA's generated certificates. This is a security feature of those apps and cannot be bypassed through WePROXA.

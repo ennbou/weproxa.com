@@ -3,7 +3,7 @@ title: Advanced Filtering
 description: Powerful query builder to find specific requests.
 ---
 
-Weproxa includes a multi-layered filtering system that lets you quickly find the exact requests you're looking for among thousands of captured entries.
+WePROXA includes a multi-layered filtering system that lets you quickly find the exact requests you're looking for among thousands of captured entries.
 
 ## Quick Filter
 
@@ -91,7 +91,7 @@ Different field types support different operators:
 
 ## How Filtering Works
 
-Weproxa uses a split filtering strategy for performance:
+WePROXA uses a split filtering strategy for performance:
 
 - **Simple queries** (URL, host, path, method, status, etc.) are evaluated **client-side** for instant results
 - **Body and header queries** (request/response body, headers, cookies) are sent to the **backend** for evaluation, with a 300ms debounce to avoid excessive searches

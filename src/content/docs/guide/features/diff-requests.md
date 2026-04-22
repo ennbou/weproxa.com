@@ -7,7 +7,7 @@ Diff Requests lets you compare two captured requests side by side. It's the fast
 
 ## How It Works
 
-Each side of the diff holds one captured request. Weproxa pairs the two and renders a four-part diff:
+Each side of the diff holds one captured request. WePROXA pairs the two and renders a four-part diff:
 
 - **Request headers** — added, removed, and changed headers
 - **Request body** — payload differences (JSON is pretty-printed automatically)
