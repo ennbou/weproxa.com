@@ -47,6 +47,8 @@ A search bar lets you filter requests across three scopes:
 
 Body-heavy searches run on the backend with a short debounce; everything else filters instantly.
 
+When you're viewing **Saved Requests**, request and response body search is unavailable. That view filters saved snapshots by metadata only.
+
 ### Context Menu
 
 Right-click any request to access quick actions:
@@ -69,11 +71,23 @@ Click on any request to open the details panel with full information:
 
 The details panel can be positioned as a right sidebar or a bottom panel, and can be collapsed when not needed.
 
+### Detail Actions
+
+The header above the details tabs includes contextual actions:
+
+- **Save** — store the currently selected live HTTPS request as a persistent snapshot for later inspection
+- **Delete** — remove a saved snapshot when you're viewing an item from **Saved Requests**
+- **Download** — save the current response body to your macOS **Downloads** folder
+
+Saved snapshots are available from the sidebar even after the original live request scrolls out of the session.
+
 ### Request Section
 
 - **Headers** — All request headers in a key-value table (count shown in the tab label)
 - **Body** — Request body with syntax highlighting (JSON, XML, HTML, etc.), or media preview for binary content
 - **Raw** — Full HTTP/1.1 request format (method, path, headers, and body)
+
+Large request bodies load on demand so selecting a request stays responsive even when the payload is big.
 
 If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" indicator is shown.
 
@@ -83,6 +97,8 @@ If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" i
 - **Body** — Response body with auto-formatting and syntax highlighting. JSON is pretty-printed. Images, video, and audio are previewed inline with file metadata (content type, size, dimensions)
 - **Raw** — Full HTTP/1.1 response format (status line, headers, and body)
 
+For large text or media responses, WePROXA shows the response metadata first and lets you click **Load body** only when you actually need the full content. The response **Download** action is available from both the body and raw views.
+
 If a tool modified the response (e.g., Map Local, Breakpoint), a "Modified By" indicator is shown.
 
 ## Source View
@@ -90,9 +106,11 @@ If a tool modified the response (e.g., Map Local, Breakpoint), a "Modified By" i
 Toggle to the source/tree view in the sidebar to see requests organized into sections:
 
 - **All** — Every captured request
+- **Saved Requests** — Persistent HTTPS request snapshots you explicitly saved from the details panel
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)
 - **SSL** — Hosts with SSL interception enabled (toggle via right-click)
+- **SSL Enabled Apps** — Apps with SSL interception enabled, grouped as app → host → path
 - **Apps** — Requests grouped by the client application or browser
 - **Devices** — Requests from remote devices, grouped by IP address
 
-Each host shows its request count and can be expanded into a domain/path hierarchy. A search field at the top filters hosts and apps in real time.
+Each section can be expanded into host and path hierarchies. Saved requests get their own host/path tree, and app-based SSL rules expand as app → host → path so you can isolate one client quickly. A search field at the top filters hosts and app names in real time.

@@ -77,7 +77,54 @@ Android 7+ apps ignore user-installed CAs by default. For app traffic you usuall
 
 </Tabs>
 
-## 3. Point the Device at WePROXA
+## 3. Choose a Proxy Setup Method
+
+After you open **Show QR Code for Certificate**, WePROXA gives you two ways to point a device at the proxy:
+
+- **Manual proxy** — enter your Mac's IP and proxy port yourself.
+- **Automatic proxy (PAC)** — paste the PAC URL shown in the Remote Access panel.
+
+### Automatic Proxy Setup (PAC)
+
+When the certificate panel is open and **LAN access** is enabled, WePROXA shows a **Proxy Auto-Config (PAC) URL** below the QR code.
+
+Use this when you want the device to fetch proxy settings automatically instead of typing the host and port by hand.
+
+<Tabs>
+
+<TabItem label="iOS / iPadOS">
+
+<Steps>
+
+1. In **Settings** → **Wi-Fi**, tap the **ⓘ** next to the connected network.
+2. Scroll to **HTTP Proxy** and choose **Automatic**.
+3. Paste the PAC URL shown in WePROXA.
+4. Return to the app and keep the certificate panel available if you need to copy the PAC URL again later.
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="Android">
+
+<Steps>
+
+1. Open the connected Wi-Fi network's proxy settings.
+2. Choose **Proxy Auto-Config** if your device offers it.
+3. Paste the PAC URL shown in WePROXA.
+4. If your Android build does not support PAC, use the manual setup below instead.
+
+</Steps>
+
+</TabItem>
+
+</Tabs>
+
+:::note
+The PAC URL is served by the same temporary local server as the certificate QR flow. If you close that panel, the PAC URL is no longer available until you open **Show QR Code for Certificate** again.
+:::
+
+### Manual Proxy Setup
 
 Configure the device's Wi-Fi network to use the proxy address shown in WePROXA.
 
@@ -122,3 +169,5 @@ Requests from remote devices appear in the main request list and are also groupe
 - **HTTPS errors on the device** — the CA profile isn't installed or isn't fully trusted. On iOS, check **Certificate Trust Settings**.
 - **App traffic not captured (Android)** — app uses its own CA pinning or ignores user CAs. Use a debug build or run against an emulator. See [iOS Simulator](/guide/guides/ios-simulator/) for simulator-based debugging.
 - **Certificate QR code won't load** — the local cert server uses a short-lived port. Close the dialog and click **Show QR Code** again to restart it.
+- **PAC URL missing** — PAC is only shown while the certificate panel is open and **LAN access** is enabled.
+- **Automatic proxy stops working later** — reopen **Show QR Code for Certificate** to bring the PAC URL back if the temporary cert server was closed.

@@ -10,8 +10,8 @@ WePROXA includes a multi-layered filtering system that lets you quickly find the
 The filter bar at the top of the request list lets you search with three modes:
 
 - **URL** — searches across the full URL, host, and path
-- **Request** — searches the HTTP method, URL, and client/app name
-- **Response** — searches the status code and content type
+- **Request** — searches the HTTP method, URL, client/app name, and request body
+- **Response** — searches the status code, content type, and response body
 
 Select the mode from the dropdown next to the filter input. Search is instant and case-insensitive.
 
@@ -39,6 +39,16 @@ Use **Cmd+Click** (macOS) or **Ctrl+Click** (Windows/Linux) on the filter icon t
 :::note
 The advanced query builder is a **Pro** feature. Free accounts can use the quick filter and content-type filters.
 :::
+
+## Saved Requests Limitations
+
+When the sidebar selection is inside **Saved Requests**, filtering is intentionally narrower than live traffic filtering:
+
+- URL and other metadata filters still work
+- **Request** and **Response** search modes do not search saved request or response bodies
+- Backend-only advanced filters such as body, header, and cookie matching are not applied in that view
+
+WePROXA shows an in-app warning whenever part of the active filter cannot run against saved snapshots.
 
 ## Available Fields
 
@@ -94,9 +104,11 @@ Different field types support different operators:
 WePROXA uses a split filtering strategy for performance:
 
 - **Simple queries** (URL, host, path, method, status, etc.) are evaluated **client-side** for instant results
-- **Body and header queries** (request/response body, headers, cookies) are sent to the **backend** for evaluation, with a 300ms debounce to avoid excessive searches
+- **Body and header queries** (request/response body, headers, cookies) are sent to the **backend** for evaluation on live captured traffic, with a 300ms debounce to avoid excessive searches
 
 This split happens automatically — you don't need to choose. The query builder routes each query to the appropriate engine based on the fields used.
+
+Saved request snapshots are filtered client-side by metadata only.
 
 ## Tips
 
@@ -106,3 +118,4 @@ This split happens automatically — you don't need to choose. The query builder
 - Use `matches regex` for complex pattern matching (e.g., `/api/v[0-9]+/users`)
 - Use `duration > 1000` to find slow requests (over 1 second)
 - Use `response body contains error` to search inside response payloads
+- When working in **Saved Requests**, prefer host, path, method, status, size, and timestamp filters over body or header filters
