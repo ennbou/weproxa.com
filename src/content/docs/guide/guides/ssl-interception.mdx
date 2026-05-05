@@ -70,6 +70,21 @@ Use an app rule when you want to inspect HTTPS traffic from one specific client 
 
 App rules match the exact app name shown in the sidebar. They do not support wildcard patterns.
 
+## SSL Manager Window
+
+For longer rule lists, open the standalone **SSL Manager** window from the certificate menu. The SSL Manager gives you a larger workspace for the same host and app interception rules.
+
+From the SSL Manager you can:
+
+- Add host rules such as `api.example.com` or `*.example.com`.
+- Add app rules by application name or bundle identifier.
+- Search across configured hosts and apps.
+- Filter the list to **All**, **Host**, or **App** rules.
+- Toggle or remove individual rules.
+- Open certificate installation settings from the title bar.
+
+The SSL Manager uses the same saved SSL rules as the toolbar certificate menu, so changes appear immediately across open windows.
+
 ## Managing SSL Rules
 
 Open the **Certificate Menu** (lock icon in the toolbar) to see all your configured SSL rules. From here you can:
@@ -77,6 +92,7 @@ Open the **Certificate Menu** (lock icon in the toolbar) to see all your configu
 - **Toggle** a host or app rule on/off using the checkbox
 - **Remove** a host or app rule by clicking the trash icon
 - **Add** new host rules using the input field
+- **Open SSL Manager** when you want search, filters, or a larger detached window
 
 To disable SSL for a host via the context menu, right-click a request from that host and select **Disable SSL for \{host\}**.
 

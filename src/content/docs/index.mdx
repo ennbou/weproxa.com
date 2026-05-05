@@ -8,7 +8,7 @@ hero:
     file: ../../assets/weproxa-hero.png
   actions:
     - text: Download for macOS
-      link: https://files.weproxa.com/2.x.x/2.1.0/WePROXA_2.1.0_universal.dmg
+      link: https://files.weproxa.com/2.x.x/2.3.0/WePROXA_2.3.0_universal.dmg
       icon: download
       variant: primary
     - text: Get Started
@@ -45,6 +45,9 @@ WePROXA is a **native macOS proxy debugger** built with Tauri, React, and Rust â
   <Card title="Map Local Files" icon="document">
     Replace remote resources with local files for rapid development and testing without modifying your server.
   </Card>
+  <Card title="Script Traffic" icon="seti:config">
+    Automate request and response changes with Scripting rules that run as traffic passes through the proxy.
+  </Card>
   <Card title="Advanced Filtering" icon="seti:config">
     Powerful query builder to filter and find exactly the requests you're looking for â€” by method, status, host, path, and more.
   </Card>
@@ -72,6 +75,11 @@ WePROXA is a **native macOS proxy debugger** built with Tauri, React, and Rust â
     title="Inspect Requests"
     description="Explore WePROXA's request list, details panel, and source view."
     href="/guide/features/inspect-requests/"
+  />
+  <LinkCard
+    title="Scripting"
+    description="Modify matching requests and responses automatically."
+    href="/guide/features/scripting/"
   />
   <LinkCard
     title="Remote Devices"

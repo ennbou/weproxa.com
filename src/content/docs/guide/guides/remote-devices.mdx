@@ -163,11 +163,14 @@ Open a browser on the device and visit any site — you should see traffic flowi
 
 Requests from remote devices appear in the main request list and are also grouped under **Devices** in the sidebar source view, keyed by device IP. This makes it easy to isolate a single device's traffic while other apps keep streaming.
 
+The device row and each nested host row show live request counts from the current capture, so expanding a device gives you a quick view of where its traffic is going.
+
 ## Troubleshooting
 
 - **Nothing shows up** — verify the Mac's IP is reachable (try `http://<mac-ip>:<port>` in the device's browser). A firewall on the Mac may be blocking incoming connections.
 - **HTTPS errors on the device** — the CA profile isn't installed or isn't fully trusted. On iOS, check **Certificate Trust Settings**.
 - **App traffic not captured (Android)** — app uses its own CA pinning or ignores user CAs. Use a debug build or run against an emulator. See [iOS Simulator](/guide/guides/ios-simulator/) for simulator-based debugging.
 - **Certificate QR code won't load** — the local cert server uses a short-lived port. Close the dialog and click **Show QR Code** again to restart it.
+- **Certificate QR code port is already in use** — reopen **Show QR Code**. WePROXA automatically falls back to an available port when the default certificate server port is busy.
 - **PAC URL missing** — PAC is only shown while the certificate panel is open and **LAN access** is enabled.
 - **Automatic proxy stops working later** — reopen **Show QR Code for Certificate** to bring the PAC URL back if the temporary cert server was closed.

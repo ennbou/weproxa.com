@@ -25,7 +25,9 @@ The diff editor uses the same engine as Monaco, with side-by-side rendering, syn
 
 The Diff panel can be used inline (as a detail view) or opened in its own window — useful for comparing on a second monitor while you keep capturing traffic.
 
-Use the **swap** button to flip left and right, or the trash icon to clear either side.
+Added requests appear in a pool at the top of the Diff panel. Click a pooled request to assign it to a side, or drag it into the **Left** or **Right** slot. You can keep more than two requests in the pool, swap the active left/right selection, remove a single pooled request, clear either side, or clear the whole pool.
+
+Use the **swap** button to flip left and right, or the trash icon to clear either side. Detached Diff windows include the same swap and clear controls in their title bar.
 
 ## Content Handling
 
@@ -44,5 +46,6 @@ Use the **swap** button to flip left and right, or the trash icon to clear eithe
 ## Tips
 
 - Requests can come from any source — live capture, repeated requests, or even different apps — as long as they appear in the request list.
+- Keep several candidates in the request pool while narrowing down the two captures you want to compare.
 - Collapse sections you're not interested in to focus the diff on headers or bodies only.
 - Combine Diff with the [Advanced Filtering](/guide/features/advanced-filtering/) query builder to quickly locate the two requests you want to compare among thousands of captured entries.

@@ -34,7 +34,11 @@ WePROXA ships with keyboard shortcuts for every common action so you can drive t
 | Open Map Local | `⌘ ⇧ M` |
 | Open Breakpoints | `⌘ ⇧ B` |
 | Open Block List | `⌘ ⇧ K` |
+| Open Network Conditioning | `⌘ ⇧ N` |
+| Open Scripting | `⌘ ⇧ J` |
 | Open Diff | `⌘ ⇧ D` |
+
+Tool shortcuts open the matching tool window. Use the toolbar, tray, or tool panel toggle to enable or disable a tool's rules.
 
 ## Settings
 

@@ -21,13 +21,14 @@ If the local file is not found, the request falls through and is forwarded to th
    - **Method** — optionally restrict to a specific HTTP method (GET, POST, PUT, etc.), or leave as "Any" to match all methods
 4. Choose the local file to serve:
    - **Browse** to select an existing file
-   - **Create File** to generate a new mock file (saved to `~/.weproxa/tools/mocks/`)
+   - **Create File** to save the current editor content as a new mock file
+   - Or let WePROXA create a managed mock file automatically when you add a new rule
 5. Enable the rule
 
     ![WePROXA Map Local window](@assets/guide/features/maplocal/maplocal_window.png)
 
 :::tip
-You can also create a Map Local rule by **right-clicking a request** in the request list and selecting **Map Local**. The URL pattern and response content will be pre-filled from the selected request.
+You can also create a Map Local rule by **right-clicking a request** in the request list and selecting **Map Local**. The URL pattern, HTTP method, status, headers, and response content are pre-filled from the selected request. WePROXA creates an editable mock response file for you so you can save the rule immediately or adjust the payload first.
 ![Map Local from requests list](@assets/guide/features/maplocal/maplocal_from_request.png)
 :::
 
@@ -37,6 +38,8 @@ You can also create a Map Local rule by **right-clicking a request** in the requ
 - **Toggle all rules** at once using the global enable/disable button
 - **Sort rules** by name, creation date, or last updated date
 - **Edit** or **delete** rules at any time
+- **Duplicate** a rule to reuse an existing pattern or mock file
+- **Export** and **import** rule files when you need to share mocks with a team
 
 :::note
 Free accounts are limited to **5 Map Local rules**. Upgrade to Pro for unlimited rules.
@@ -112,7 +115,9 @@ The editor supports **autocompletion for HTTP headers** — just start typing a 
 
 The Map Local panel includes a built-in **Monaco editor** with syntax highlighting for editing your response files directly. The editor auto-detects the language (JSON, HTML, etc.) from the file content.
 
-Press **Cmd+S** (macOS) or **Ctrl+S** (Windows/Linux) to save changes to the file.
+Press **Cmd+S** (macOS) or **Ctrl+S** (Windows/Linux) to save changes to the file. The save button and inline saved indicator confirm when the file has been written.
+
+If you open Map Local in a detached window, the title bar includes **Import** and **Add Mapping** actions so you can manage mocks without returning to the main window.
 
 ## File Watching
 
