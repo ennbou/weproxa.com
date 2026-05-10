@@ -12,17 +12,17 @@ The main view shows all captured requests in a sortable table with columns for:
 - **ID** — Numeric request identifier
 - **Method** — GET, POST, PUT, DELETE, etc. (shows "BLOCKED" for blocked requests)
 - **Code** — HTTP status code with color coding (green for 2xx, blue for 3xx, orange for 4xx, red for 5xx)
-- **Scheme** — `HTTP` or `HTTPS` (https shown in green)
-- **Tools** — Indicates which tools modified the request or response (e.g., Breakpoint, Map Local)
+- **Scheme** — `HTTP`, `HTTPS`, `WS`, or `WSS` (secure traffic shown in green)
+- **Tools** — Indicates which user-facing tools modified the request or response (e.g., Breakpoint, Map Local)
 - **Host** — The server hostname
 - **URL** — The full request URL
 - **Path** — The URL path
 - **Query** — The URL query string
 - **Remote Address** — Resolved IP address and port of the server
-- **HTTP Version** — Negotiated protocol (HTTP/1.1, HTTP/2, etc.)
+- **HTTP Version** — Negotiated protocol (HTTP/1.1, HTTP/2.0, etc.)
 - **Client** — The application or browser that made the request
 - **Request Size** — Request body size
-- **Response Size** — Response body size
+- **Response Size** — Response body size, or tunnel byte totals after an upgraded connection closes
 - **Time** — Timestamp of the request (HH:MM:SS)
 - **Duration** — Time from request to response
 
@@ -63,6 +63,8 @@ Right-click any request to access quick actions:
 - **Add Block Rule** — Block requests matching this URL
 - **Add Throttle Rule** — Add a network conditioning rule for this URL
 
+The context menu only shows actions that apply to the selected request. Internal lifecycle markers, such as upgraded tunnel handling, are kept out of tool labels so the list focuses on rules you configured.
+
 ## Request Details
 
 Click on any request to open the details panel with full information:
@@ -87,7 +89,7 @@ Saved snapshots are available from the sidebar even after the original live requ
 - **Body** — Request body with syntax highlighting (JSON, XML, HTML, etc.), or media preview for binary content
 - **Raw** — Full HTTP/1.1 request format (method, path, headers, and body)
 
-Large request bodies load on demand so selecting a request stays responsive even when the payload is big.
+Large request bodies load on demand so selecting a request stays responsive even when the payload is big. Body buffering is bounded so unusually large uploads cannot force WePROXA to keep unlimited data in memory.
 
 If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" indicator is shown.
 
@@ -96,8 +98,11 @@ If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" i
 - **Headers** — All response headers in a key-value table (count shown in the tab label)
 - **Body** — Response body with auto-formatting and syntax highlighting. JSON is pretty-printed. Images, video, and audio are previewed inline with file metadata (content type, size, dimensions)
 - **Raw** — Full HTTP/1.1 response format (status line, headers, and body)
+- **Frames** — WebSocket frames for successful `101 Switching Protocols` responses, with sent/received filters, payload search, opcodes, sizes, and timestamps
 
 For large text or media responses, WePROXA shows the response metadata first and lets you click **Load body** only when you actually need the full content. The response **Download** action is available from both the body and raw views.
+
+When a WebSocket connection is captured, WePROXA displays the request as `ws://` or `wss://` and opens the Frames tab automatically. See [WebSocket Inspection](/guide/features/websocket-inspection/) for details.
 
 If a tool modified the response (e.g., Map Local, Breakpoint), a "Modified By" indicator is shown.
 

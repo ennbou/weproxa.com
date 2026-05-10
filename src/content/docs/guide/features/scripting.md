@@ -72,6 +72,20 @@ Request scripts can read and update these fields:
 
 If you change `body`, WePROXA updates `Content-Length` automatically.
 
+### URL Rewrites and Default Ports
+
+Changing `url` directly is the most explicit way to route a request somewhere else. You can also update `scheme`, `host`, `port`, `path`, or `query` independently.
+
+When a script changes only the scheme, WePROXA uses the new scheme's default port instead of carrying over the old one. For example, changing `http` to `https` routes to 443 unless you set `port` yourself.
+
+```txt
+fn on_request() {
+    this.scheme = "https";
+}
+```
+
+Set `this.port` explicitly whenever you need a non-default destination port.
+
 ## Response Fields
 
 Response scripts can read and update these fields:
@@ -83,6 +97,8 @@ Response scripts can read and update these fields:
 | `body` | string | Response body decoded as text. |
 
 If an upstream response is compressed, scripts see the plaintext body. When a script changes the body, WePROXA removes stale content-encoding headers and sends the updated plaintext body.
+
+Response scripts run only when the response body can be safely buffered for scripting. Very large or long-lived streaming responses continue through the proxy without forcing unbounded buffering.
 
 ## Examples
 
@@ -131,6 +147,6 @@ fn on_response() {
 
 ## Safety Limits
 
-Scripting is designed for fast request and response edits. WePROXA limits script operations, call depth, string size, and collection size so accidental infinite loops or very large generated data cannot stall capture indefinitely.
+Scripting is designed for fast request and response edits. WePROXA limits script operations, call depth, string size, collection size, and scriptable response body size so accidental infinite loops or very large generated data cannot stall capture indefinitely.
 
 If a script has a syntax error, WePROXA rejects the rule before saving it. If a saved script throws at runtime, that invocation is skipped and traffic continues with the last valid state.

@@ -40,6 +40,17 @@ WePROXA ships with keyboard shortcuts for every common action so you can drive t
 
 Tool shortcuts open the matching tool window. Use the toolbar, tray, or tool panel toggle to enable or disable a tool's rules.
 
+## Tool Rule Forms
+
+These shortcuts work while an add/edit form is open in Breakpoints, Block List, Network Conditioning, or Scripting:
+
+| Action | Shortcut |
+|---|---|
+| Save the rule | `⌘ S` |
+| Cancel and close the form | `Escape` |
+
+After a rule saves successfully, the action button briefly changes to a saved confirmation so you can keep editing without losing track of the last save.
+
 ## Settings
 
 | Action | Shortcut |

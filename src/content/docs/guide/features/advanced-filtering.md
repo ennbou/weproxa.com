@@ -114,6 +114,7 @@ Saved request snapshots are filtered client-side by metadata only.
 
 - Use `status code` → `is one of` → `4xx, 5xx` to find all error responses
 - Combine `host contains api` AND `method equals POST` to find API mutations
+- Use `protocol equals HTTP/2.0` to focus on traffic that negotiated HTTP/2
 - Filter by `content type contains json` to see only JSON responses
 - Use `matches regex` for complex pattern matching (e.g., `/api/v[0-9]+/users`)
 - Use `duration > 1000` to find slow requests (over 1 second)

@@ -70,6 +70,21 @@ Use an app rule when you want to inspect HTTPS traffic from one specific client 
 
 App rules match the exact app name shown in the sidebar. They do not support wildcard patterns.
 
+## TLS Passthrough Hosts
+
+Use TLS passthrough when an app-wide SSL rule is useful, but certain domains should stay tunneled instead of decrypted. This is common for certificate-pinned hosts, identity providers, or services where you only need connection visibility.
+
+<Steps>
+
+1. Open **Settings**.
+2. Go to **Proxy Status**.
+3. Add hosts under **TLS passthrough hosts**, one per line or separated by commas.
+4. Leave the field or press **Cmd/Ctrl + Enter** to save.
+
+</Steps>
+
+Bare domains include their subdomains: `example.com` matches `example.com` and `api.example.com`. Wildcards such as `*.example.org` are also accepted. Passthrough applies to app-wide SSL interception; an explicit host SSL rule still decrypts that host.
+
 ## SSL Manager Window
 
 For longer rule lists, open the standalone **SSL Manager** window from the certificate menu. The SSL Manager gives you a larger workspace for the same host and app interception rules.

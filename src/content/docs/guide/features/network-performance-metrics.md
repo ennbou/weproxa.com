@@ -13,7 +13,7 @@ Network Performance Metrics is a **Pro feature**. Free users can see the Timing 
 
 When WePROXA intercepts a request, it measures each phase of the network lifecycle and records precise timing data. This data is displayed as an interactive waterfall chart inside the request details panel.
 
-The following phases are measured:
+The following phases are measured when they apply:
 
 | Phase | Description |
 |-------|-------------|
@@ -21,6 +21,14 @@ The following phases are measured:
 | **TCP Connect** | Time to establish a TCP connection to the server |
 | **TLS Handshake** | Time to complete the TLS/SSL handshake (HTTPS only) |
 | **TTFB** | Time to First Byte — time from sending the request to receiving the first byte of the response |
+
+Some requests reuse an already-open pooled connection, so DNS, TCP, or TLS phases may be absent. In that case, the request has skipped those setup costs and usually shows only the response-side timing that happened for that specific request.
+
+## HTTP/2 and Pooled Connections
+
+WePROXA can reuse HTTP/1.1 keep-alive connections and multiplex HTTP/2 requests over a shared upstream session. The first request to an origin may show DNS, TCP, and TLS setup time, while later requests to the same origin can reuse the warm connection.
+
+Connection prewarming and TLS session reuse reduce cold-start latency for HTTPS captures. During very large bursts, WePROXA also limits how many fresh connections are opened at once so one busy origin cannot overwhelm the proxy or the upstream server.
 
 ## Viewing Timing Data
 
@@ -53,6 +61,7 @@ If a request feels slow, the timing breakdown helps you pinpoint the bottleneck:
 - **High TCP Connect** — The server may be geographically distant or experiencing connection issues.
 - **High TLS Handshake** — Certificate chain verification or key exchange may be slow. Check if the server supports TLS session resumption.
 - **High TTFB** — The server is taking a long time to generate the response. This usually points to backend processing delays.
+- **Missing setup phases** — The request likely reused a pooled connection, especially for HTTP/2 traffic where many requests share one TLS session.
 
 ### Comparing Endpoints
 
