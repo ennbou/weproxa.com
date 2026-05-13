@@ -21,6 +21,8 @@ This is fully transparent — your app sees valid HTTPS responses as long as the
 
 Modern browsers and APIs often negotiate HTTP/2 over TLS. WePROXA advertises HTTP/2 and HTTP/1.1 to HTTPS clients, records the negotiated protocol in the request list, and uses HTTP/2 upstream connections when the origin supports them.
 
+Cookie-heavy browser sessions are supported with a larger bounded HTTP/2 header limit. When HTTP/2 clients split `Cookie` headers and the origin is reached over HTTP/1.1, WePROXA combines them into a single `Cookie` header so session cookies keep working with servers that only read the first cookie field.
+
 If the upstream server does not support HTTP/2, WePROXA falls back to HTTP/1.1 automatically. WebSocket-over-HTTP/2 handshakes are translated into the compatible upstream shape when needed, and successful WebSocket upgrades can be inspected in the [WebSocket Inspection](/guide/features/websocket-inspection/) Frames tab.
 
 ## Enabling HTTPS Interception

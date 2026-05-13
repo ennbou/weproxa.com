@@ -20,6 +20,12 @@ Clicking a tool button opens the tool. Holding `Command` while clicking a toggle
 
 When space is tight, the toolbar automatically switches to a compact icon layout while keeping counts and status indicators visible.
 
+## Detached Window Behavior
+
+Tool, Settings, SSL Manager, Repeat, and Breakpoint windows are single-purpose workspaces. If one of those windows is already open, triggering the same action again focuses the existing window instead of creating a duplicate.
+
+For tool windows, this also avoids replaying prefilled rule data over in-progress edits. Settings navigation is the exception: opening Settings for a specific section focuses the existing Settings window and switches it to that section.
+
 ## Customize Visible Tool Buttons
 
 Use toolbar customization when you want a quieter workspace or only use a subset of tools day to day.

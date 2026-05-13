@@ -14,7 +14,7 @@ Try in order:
 1. **Is the proxy running?** Look for the green indicator in the toolbar. Toggle with `⌘ P` if needed.
 2. **Is the system proxy enabled?** Click the network icon in the toolbar — WePROXA should show the system proxy as active.
 3. **Does the browser respect the system proxy?** Safari always does. Firefox has its own proxy settings (set them to "Use system proxy settings"). Chrome uses system settings on macOS.
-4. **Is an app using its own proxy / DNS?** Some CLIs (`curl`, `git`) respect environment variables (`HTTP_PROXY`, `HTTPS_PROXY`). Set them to `http://127.0.0.1:<port>`.
+4. **Is an app using its own proxy / DNS?** Some CLIs (`curl`, `git`) respect environment variables (`HTTP_PROXY`, `HTTPS_PROXY`). In **Settings** → **Proxy Config**, click **Open Configured Terminal** to start a Terminal session with those variables set, or copy the export commands into your current shell.
 5. **Is another tool already on the proxy port?** WePROXA will log a port-in-use error. Change the port in **Settings** → **Proxy**.
 
 ## HTTPS Requests Show as `CONNECT` Tunnels
@@ -43,7 +43,9 @@ Apps that hard-code certificate fingerprints (pinning) will refuse WePROXA's dyn
 
 WePROXA restores your previous macOS proxy settings on exit. If it was force-killed (e.g., the process crashed), the system proxy may still point to WePROXA.
 
-**Fix**: reopen WePROXA and quit normally, or disable the proxy manually in **System Settings** → **Network** → your connection → **Details** → **Proxies**.
+Current versions disable the macOS proxy state, clear stale host and port fields, then disable it again so the system is left in a usable state even if cleanup is interrupted.
+
+**Fix**: reopen WePROXA and quit normally, or disable the proxy manually in **System Settings** → **Network** → your connection → **Details** → **Proxies**. If you see old WePROXA host or port values but the proxy toggles are off, networking should still work; you can clear the stale values from the same macOS Proxies screen.
 
 ## Request List Feels Slow
 

@@ -86,16 +86,20 @@ Saved snapshots are available from the sidebar even after the original live requ
 ### Request Section
 
 - **Headers** — All request headers in a key-value table (count shown in the tab label)
+- **Cookies** — Request `Cookie` headers parsed into individual cookie names and values
 - **Body** — Request body with syntax highlighting (JSON, XML, HTML, etc.), or media preview for binary content
 - **Raw** — Full HTTP/1.1 request format (method, path, headers, and body)
 
 Large request bodies load on demand so selecting a request stays responsive even when the payload is big. Body buffering is bounded so unusually large uploads cannot force WePROXA to keep unlimited data in memory.
+
+When a request carries multiple `Cookie` headers, the Headers tab keeps them tidy as one combined entry while the Cookies tab breaks them into individual pairs. This is especially useful for HTTP/2 browser traffic, where clients may split cookies across multiple header fields.
 
 If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" indicator is shown.
 
 ### Response Section
 
 - **Headers** — All response headers in a key-value table (count shown in the tab label)
+- **Cookies** — Response `Set-Cookie` headers grouped by cookie, including attributes such as `Path`, `Domain`, `HttpOnly`, `Secure`, and `SameSite`
 - **Body** — Response body with auto-formatting and syntax highlighting. JSON is pretty-printed. Images, video, and audio are previewed inline with file metadata (content type, size, dimensions)
 - **Raw** — Full HTTP/1.1 response format (status line, headers, and body)
 - **Frames** — WebSocket frames for successful `101 Switching Protocols` responses, with sent/received filters, payload search, opcodes, sizes, and timestamps

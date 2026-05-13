@@ -48,7 +48,9 @@ The search field matches decoded payload previews and opcode names, so searches 
 
 ## Compression and Limits
 
-WebSocket bytes are forwarded unchanged. If a frame is compressed with `permessage-deflate`, WePROXA marks it as compressed instead of rendering unreadable bytes as text.
+WebSocket bytes are forwarded unchanged, including masking, fragmentation, and negotiated extensions. When the connection negotiates `permessage-deflate`, WePROXA inflates complete compressed messages for the frame preview so text and JSON payloads remain readable.
+
+If a compressed message cannot be inflated, WePROXA falls back to showing that the frame was compressed instead of rendering unreadable bytes as text. Large decompressed messages are still bounded to a preview so the UI stays responsive.
 
 WePROXA keeps the most recent frames for each request and trims older entries after the frame log reaches its retention limit. Tunnel byte totals are still recorded when the upgraded connection closes, even if the message log has been trimmed.
 
