@@ -16,11 +16,5 @@
     "sharp": "^0.34.2",
     "starlight-blog": "^0.26.1",
     "starlight-sidebar-topics": "^0.7.1"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
   }
 }
