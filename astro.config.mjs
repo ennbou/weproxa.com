@@ -14,6 +14,7 @@ export default defineConfig({
 			title: 'WePROXA',
 			disable404Route: true,
 			components: {
+				Banner: './src/components/Banner.astro',
 				Footer: './src/components/Footer.astro',
 			},
 			logo: {
