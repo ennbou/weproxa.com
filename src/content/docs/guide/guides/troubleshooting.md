@@ -11,10 +11,10 @@ This page collects the most common issues reported by WePROXA users and how to r
 
 Try in order:
 
-1. **Is the proxy running?** Look for the green indicator in the toolbar. Toggle with `⌘ P` if needed.
+1. **Is the proxy running?** Look for the green indicator in the toolbar. Toggle with `⌘ P` on macOS or `Ctrl + P` on Windows if needed.
 2. **Is the system proxy enabled?** Click the network icon in the toolbar — WePROXA should show the system proxy as active.
-3. **Does the browser respect the system proxy?** Safari always does. Firefox has its own proxy settings (set them to "Use system proxy settings"). Chrome uses system settings on macOS.
-4. **Is an app using its own proxy / DNS?** Some CLIs (`curl`, `git`) respect environment variables (`HTTP_PROXY`, `HTTPS_PROXY`). In **Settings** → **Proxy Config**, click **Open Configured Terminal** to start a Terminal session with those variables set, or copy the export commands into your current shell.
+3. **Does the browser respect the system proxy?** Safari uses system settings on macOS, and Chrome and Edge use system settings on both macOS and Windows. Firefox has its own proxy settings unless you set it to "Use system proxy settings".
+4. **Is an app using its own proxy / DNS?** Some CLIs (`curl`, `git`) respect environment variables (`HTTP_PROXY`, `HTTPS_PROXY`). In **Settings** → **Proxy Config**, open a configured terminal where available, or copy the terminal proxy commands into your current shell.
 5. **Is another tool already on the proxy port?** WePROXA will log a port-in-use error. Change the port in **Settings** → **Proxy**.
 
 ## HTTPS Requests Show as `CONNECT` Tunnels
@@ -27,7 +27,7 @@ When a host isn't in the SSL Interception list, WePROXA forwards the raw encrypt
 
 The device doesn't trust WePROXA's root CA.
 
-- **On this Mac**: open **Settings** → **Certificates** → **Install to macOS Keychain** in WePROXA, or follow [Certificate Trust](/guide/guides/certificate-trust/) to trust it manually.
+- **On this computer**: open **Settings** → **Certificates** and install the WePROXA Root CA for your platform, or follow [Certificate Trust](/guide/guides/certificate-trust/) to trust it manually.
 - **On a remote device**: see [Remote Devices](/guide/guides/remote-devices/) to install and trust the certificate over QR code.
 - **Firefox**: uses its own certificate store. Enable `security.enterprise_roots.enabled` in `about:config`, or import the CA manually from **Settings** → **Privacy & Security** → **Certificates**.
 
@@ -41,11 +41,15 @@ Apps that hard-code certificate fingerprints (pinning) will refuse WePROXA's dyn
 
 ## System Proxy Not Restored After Quitting
 
-WePROXA restores your previous macOS proxy settings on exit. If it was force-killed (e.g., the process crashed), the system proxy may still point to WePROXA.
+WePROXA restores your previous system proxy settings on exit. If it was force-killed (e.g., the process crashed), the system proxy may still point to WePROXA.
 
-Current versions disable the macOS proxy state, clear stale host and port fields, then disable it again so the system is left in a usable state even if cleanup is interrupted.
+Current versions reset proxy state in platform-specific ways so the system is left in a usable state even if cleanup is interrupted.
 
-**Fix**: reopen WePROXA and quit normally, or disable the proxy manually in **System Settings** → **Network** → your connection → **Details** → **Proxies**. If you see old WePROXA host or port values but the proxy toggles are off, networking should still work; you can clear the stale values from the same macOS Proxies screen.
+**Fix**: reopen WePROXA and quit normally. On macOS, you can also disable the proxy manually in **System Settings** → **Network** → your connection → **Details** → **Proxies**. On Windows, open **Settings** → **Network & internet** → **Proxy** and turn off manual proxy setup, or clear the stale WePROXA host and port.
+
+## Window Flashes While Resizing
+
+WePROXA 3.0.0 improves macOS resize and maximize behavior by synchronizing the window backdrop during size changes. If you still see rendering flashes, update to the latest build and include your macOS version, display scale, and whether the window was maximized when reporting the issue.
 
 ## Request List Feels Slow
 
@@ -55,13 +59,13 @@ WePROXA keeps up to 10,000 requests in memory. Large payload buffers plus thousa
 - Use the [advanced filter](/guide/features/advanced-filtering/) to narrow the list to the traffic you care about.
 - Collapse the details panel (`⌘ J`) when not needed.
 
-## Remote Device Can't Reach the Mac
+## Remote Device Can't Reach This Computer
 
 See [Remote Devices → Troubleshooting](/guide/guides/remote-devices/#troubleshooting). Most commonly:
 
 - LAN access is disabled in **Settings** → **Remote Access**.
-- macOS firewall is blocking incoming connections to WePROXA.
-- Mac and the device are on different networks (e.g., the Mac on Wi-Fi, the phone on cellular).
+- The firewall is blocking incoming connections to WePROXA.
+- The computer and the device are on different networks (e.g., the computer on Wi-Fi, the phone on cellular).
 
 ## MCP Server Won't Start
 
@@ -86,6 +90,6 @@ See [Remote Devices → Troubleshooting](/guide/guides/remote-devices/#troublesh
 Include the following when opening a [GitHub issue](https://github.com/ennbou/weproxa.com/issues):
 
 - WePROXA version (**Settings** → **About**)
-- macOS version and chip (Apple Silicon / Intel)
+- Operating system version and hardware details (macOS Apple Silicon / Intel, or Windows version)
 - A short description of what you expected and what happened
 - Steps to reproduce — ideally with a public URL, a mock server, or the command you're running

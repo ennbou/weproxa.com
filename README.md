@@ -1,14 +1,14 @@
 # 🌐 WePROXA
 
-**The native macOS HTTP/HTTPS proxy debugger**
+**The native macOS and Windows HTTP/HTTPS proxy debugger**
 
-WePROXA is a native macOS proxy debugger for inspecting, intercepting, and replaying HTTP and HTTPS traffic. It gives you a fast, focused way to understand requests and responses, test edge cases, swap remote assets with local files, and capture traffic from browsers, apps, simulators, and real devices.
+WePROXA is a native macOS and Windows proxy debugger for inspecting, intercepting, and replaying HTTP and HTTPS traffic. It gives you a fast, focused way to understand requests and responses, test edge cases, swap remote assets with local files, and capture traffic from browsers, apps, simulators, and real devices.
 
 ---
 
 ## 🚀 Install from Terminal
 
-Download and install the latest WePROXA release in one command:
+On macOS, download and install the latest WePROXA release in one command:
 
 ```sh
 curl -fsSL https://weproxa.com/i | bash
@@ -18,6 +18,7 @@ curl -fsSL https://weproxa.com/i | bash
 
 - **macOS** 11.0 (Big Sur) or later
 - **Architecture**: Apple Silicon (M1/M2/M3) or Intel Mac
+- **Windows** 10 or 11, installed from the [Microsoft Store](https://apps.microsoft.com/detail/9p9npx1zvrjs)
 
 ## ✨ Why WePROXA?
 
@@ -35,7 +36,7 @@ It's especially useful for:
 - 🔎 **Deep inspection**: See request and response headers, bodies, status, timing, and connection details in one focused interface.
 -  **Breakpoints and interception**: Pause traffic before it reaches the server or client, then edit requests and responses in place.
 -  **Request replay**: Resend captured requests immediately or open them in the repeat editor to test variations safely.
--  **HTTPS inspection**: Generate and trust a local certificate on macOS so encrypted traffic can be inspected when needed.
+-  **HTTPS inspection**: Generate and trust a local certificate on macOS or Windows so encrypted traffic can be inspected when needed.
 -  **Map Local**: Replace remote resources with local files to prototype UI changes, mock assets, or test fixes without touching the backend.
 -  **Advanced filtering**: Narrow large traffic sessions by method, host, path, status code, headers, or body content.
 -  **Side-by-side diff**: Compare two requests or responses to quickly spot changes in payloads, headers, or behavior.
@@ -43,9 +44,9 @@ It's especially useful for:
 
 ## ⚡ Quick Start
 
-1. **Install** WePROXA using the terminal command above.
-2. **Launch** the app from your Applications folder.
-3. **Start** the proxy by clicking the toolbar play button or pressing `⌘ + P`.
+1. **Install** WePROXA using the macOS terminal command above or from the [Microsoft Store](https://apps.microsoft.com/detail/9p9npx1zvrjs) on Windows.
+2. **Launch** the app from your Applications folder or Start menu.
+3. **Start** the proxy by clicking the toolbar play button or pressing `⌘ + P` on macOS or `Ctrl + P` on Windows.
 4. **Enable** the system proxy via the network button in the toolbar.
 5. **Trust** the WePROXA root certificate if you want to inspect HTTPS traffic.
 6. **Intercept** by adding a target host to the SSL interception list, then use your browser or app normally.
@@ -56,7 +57,9 @@ It's especially useful for:
 If you want the full setup guide, screenshots, and feature walkthroughs, start here:
 
 - 🏠 [**Home**](https://weproxa.com)
--  [Installation](https://weproxa.com/guide/getting-started/installation/)
+-  [Installation macOS](https://weproxa.com/guide/getting-started/installation/)
+-  [Installation Windows](https://weproxa.com/guide/getting-started/installation-windows/)
+-  [Microsoft Store](https://apps.microsoft.com/detail/9p9npx1zvrjs)
 -  [Quick Start](https://weproxa.com/guide/getting-started/quick-start/)
 -  [Inspect Requests](https://weproxa.com/guide/features/inspect-requests/)
 -  [Breakpoints](https://weproxa.com/guide/features/breakpoints/)
@@ -75,7 +78,6 @@ If you want the full setup guide, screenshots, and feature walkthroughs, start h
 
 ## 📌 Notes
 
-- **HTTPS inspection** requires trusting the auto-generated WePROXA root certificate in your macOS Keychain.
-- **Custom proxy settings** may still be needed for apps or CLI tools that do not use the macOS system proxy.
+- **HTTPS inspection** requires trusting the auto-generated WePROXA root certificate in your operating system trust store.
+- **Custom proxy settings** may still be needed for apps or CLI tools that do not use the system proxy.
 - For screenshots, detailed setup help, and guided walkthroughs, visit the [official documentation](https://weproxa.com).
-

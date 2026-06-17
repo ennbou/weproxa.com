@@ -9,7 +9,7 @@ lastUpdated: 2026-04-06
 
 ## Overview
 
-WePROXA ("we", "our", "us") is a native macOS HTTP/HTTPS proxy debugger. Your privacy matters to us. This policy explains what data we collect, how we use it, and your rights.
+WePROXA ("we", "our", "us") is a native macOS and Windows HTTP/HTTPS proxy debugger. Your privacy matters to us. This policy explains what data we collect, how we use it, and your rights.
 
 ## Data That Stays on Your Device
 
@@ -77,7 +77,7 @@ Each service operates under its own privacy policy.
 
 ## Data Storage and Security
 
-All user data is stored locally on your macOS device. We do not operate servers that store your personal data or captured traffic. Communication with third-party services (Sentry, Lemon Squeezy, PostHog) uses HTTPS encryption.
+All user data is stored locally on your device. We do not operate servers that store your personal data or captured traffic. Communication with third-party services (Sentry, Lemon Squeezy, PostHog) uses HTTPS encryption.
 
 ## Children's Privacy
 

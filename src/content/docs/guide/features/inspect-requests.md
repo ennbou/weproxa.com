@@ -7,7 +7,7 @@ WePROXA captures all HTTP and HTTPS traffic flowing through the proxy and displa
 
 ## Request List
 
-The main view shows all captured requests in a sortable table with columns for:
+The default layout opens with the source sidebar visible and the **URL** column shown, so you can immediately see where requests came from and where they are going. The main view shows all captured requests in a sortable table with columns for:
 
 - **ID** — Numeric request identifier
 - **Method** — GET, POST, PUT, DELETE, etc. (shows "BLOCKED" for blocked requests)
@@ -65,6 +65,8 @@ Right-click any request to access quick actions:
 
 The context menu only shows actions that apply to the selected request. Internal lifecycle markers, such as upgraded tunnel handling, are kept out of tool labels so the list focuses on rules you configured.
 
+On macOS and Windows, WePROXA attributes local traffic to the source application when the operating system exposes that process information. The request list and source sidebar show detected app names and icons where available, with a generic client label used as a fallback.
+
 ## Request Details
 
 Click on any request to open the details panel with full information:
@@ -79,7 +81,7 @@ The header above the details tabs includes contextual actions:
 
 - **Save** — store the currently selected live HTTPS request as a persistent snapshot for later inspection
 - **Delete** — remove a saved snapshot when you're viewing an item from **Saved Requests**
-- **Download** — save the current response body to your macOS **Downloads** folder
+- **Download** — save the current response body to your system **Downloads** folder
 
 Saved snapshots are available from the sidebar even after the original live request scrolls out of the session.
 
@@ -119,7 +121,7 @@ Toggle to the source/tree view in the sidebar to see requests organized into sec
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)
 - **SSL** — Hosts with SSL interception enabled (toggle via right-click)
 - **SSL Enabled Apps** — Apps with SSL interception enabled, grouped as app → host → path
-- **Apps** — Requests grouped by the client application or browser
+- **Apps** — Requests grouped by the client application or browser, with detected app icons on macOS and Windows when available
 - **Devices** — Requests from remote devices, grouped by IP address
 
 Each section can be expanded into host and path hierarchies. Saved requests get their own host/path tree, and app-based SSL rules expand as app → host → path so you can isolate one client quickly. A search field at the top filters hosts and app names in real time.

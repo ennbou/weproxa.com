@@ -1,33 +1,35 @@
 ---
 title: WePROXA â€” HTTP/HTTPS Proxy Debugger
-description: A powerful HTTP/HTTPS proxy debugger for macOS. Inspect, modify, and replay network requests with an intuitive interface.
+description: A powerful HTTP/HTTPS proxy debugger for macOS and Windows. Inspect, modify, and replay network requests with an intuitive interface.
 template: splash
 hero:
-  tagline: A powerful HTTP/HTTPS proxy debugger for macOS. Inspect, modify, and replay network requests with an intuitive native interface.
+  tagline: A powerful HTTP/HTTPS proxy debugger for macOS and Windows. Inspect, modify, and replay network requests with an intuitive native interface.
   image:
     file: ../../assets/weproxa-hero.png
   actions:
-    - text: Download for macOS
-      link: https://files.weproxa.com/2.x.x/2.5.0/WePROXA_2.5.0_universal.dmg
+    - text: Install WePROXA
+      link: /guide/getting-started/installation/
       icon: download
       variant: primary
-    - text: Get Started
-      link: /guide/getting-started/installation/
+    - text: Windows Store Guide
+      link: /guide/getting-started/installation-windows/
       icon: right-arrow
       variant: minimal
 ---
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
-## Install from Terminal
+## Install from Terminal on macOS
 
 ```sh
 curl -fsSL https://weproxa.com/i | bash
 ```
 
+On Windows, install WePROXA from the [Microsoft Store](https://apps.microsoft.com/detail/9p9npx1zvrjs). See [Installation Windows](/guide/getting-started/installation-windows/).
+
 ## Why WePROXA?
 
-WePROXA is a **native macOS proxy debugger** built with Tauri, React, and Rust â€” designed for speed, clarity, and developer experience. Whether you're debugging API calls, testing mobile apps, or building integrations, WePROXA gives you full visibility into your HTTP traffic.
+WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React, and Rust â€” designed for speed, clarity, and developer experience. Whether you're debugging API calls, testing mobile apps, or building integrations, WePROXA gives you full visibility into your HTTP traffic.
 
 <CardGrid stagger>
   <Card title="Inspect Requests" icon="magnifier">
@@ -43,7 +45,7 @@ WePROXA is a **native macOS proxy debugger** built with Tauri, React, and Rust â
     Easily repeat any captured request with modifications to test different scenarios and edge cases.
   </Card>
   <Card title="HTTPS Support" icon="approve-check">
-    Full SSL/TLS interception with automatic certificate generation and one-click trust management on macOS.
+    Full SSL/TLS interception with automatic certificate generation and one-click trust management on macOS and Windows.
   </Card>
   <Card title="Map Local Files" icon="document">
     Replace remote resources with local files for rapid development and testing without modifying your server.
@@ -65,9 +67,14 @@ WePROXA is a **native macOS proxy debugger** built with Tauri, React, and Rust â
 
 <CardGrid>
   <LinkCard
-    title="Installation"
+    title="Installation macOS"
     description="Download and install WePROXA on your Mac."
     href="/guide/getting-started/installation/"
+  />
+  <LinkCard
+    title="Installation Windows"
+    description="Install WePROXA from the Microsoft Store."
+    href="/guide/getting-started/installation-windows/"
   />
   <LinkCard
     title="Quick Start"

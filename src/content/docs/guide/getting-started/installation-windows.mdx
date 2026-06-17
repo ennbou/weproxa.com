@@ -1,0 +1,48 @@
+---
+title: Installation Windows
+description: How to install WePROXA on Windows from the Microsoft Store.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+WePROXA 3.0.0 is the first release with Windows support. The Windows build is distributed through the [Microsoft Store](https://apps.microsoft.com/detail/9p9npx1zvrjs) only.
+
+## System Requirements
+
+- **Windows 10** or **Windows 11**
+- 64-bit Windows
+- Microsoft Store access
+
+## Install from Microsoft Store
+
+<Steps>
+
+1. Open [WePROXA in the Microsoft Store](https://apps.microsoft.com/detail/9p9npx1zvrjs), or open the **Microsoft Store** app on Windows.
+
+2. Search for **WePROXA**.
+
+3. Select **Get** or **Install**.
+
+4. Launch **WePROXA** from the Start menu after installation completes.
+
+5. Open **Settings** → **Certificates** and choose **Install & Trust Certificate** before inspecting HTTPS traffic. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+
+</Steps>
+
+The Microsoft Store handles Windows app updates automatically unless you have disabled Store updates.
+
+## Setup Notes
+
+- Start the proxy from the toolbar, then enable the system proxy with the network button.
+- WePROXA configures the Windows system proxy for the current user and restores the previous values when the proxy stops or the app exits normally.
+- Some command-line tools need `HTTP_PROXY` and `HTTPS_PROXY` environment variables even when the Windows system proxy is enabled. See [Quick Start](/guide/getting-started/quick-start/#terminal-proxy-setup) for shell examples.
+- Firefox and some developer tools may use their own proxy or certificate store. Configure them to use system settings or import the WePROXA Root CA manually.
+
+## Uninstall
+
+To uninstall WePROXA on Windows:
+
+1. Quit WePROXA if it is running.
+2. Open **Settings** → **Apps** → **Installed apps**.
+3. Find **WePROXA**, open the overflow menu, and choose **Uninstall**.
+4. Optionally remove the WePROXA Root CA from the current user's trusted root store. See [Certificate Trust](/guide/guides/certificate-trust/#removing-the-certificate).

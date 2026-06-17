@@ -55,7 +55,8 @@ export default defineConfig({
 							{
 								label: 'Getting Started',
 								items: [
-									{ label: 'Installation', slug: 'guide/getting-started/installation' },
+									{ label: 'Installation macOS', slug: 'guide/getting-started/installation' },
+									{ label: 'Installation Windows', slug: 'guide/getting-started/installation-windows' },
 									{ label: 'Quick Start', slug: 'guide/getting-started/quick-start' },
 								],
 							},

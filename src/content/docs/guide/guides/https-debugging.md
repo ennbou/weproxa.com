@@ -46,7 +46,10 @@ HTTPS requests appear in the request list just like HTTP requests. You can:
 ## Troubleshooting
 
 ### Certificate errors in browser
-Make sure the WePROXA CA certificate is trusted in your macOS Keychain. See [Certificate Trust](/guide/guides/certificate-trust/).
+Make sure the WePROXA CA certificate is trusted in your operating system's certificate store. See [Certificate Trust](/guide/guides/certificate-trust/).
+
+### TLS root compatibility
+WePROXA includes fallback trust roots for newer Microsoft TLS roots, so upstream sites that rely on those roots continue to connect even before every platform trust store has caught up.
 
 ### Some apps ignore system proxy
 Some applications use their own proxy settings or certificate stores. You may need to configure them manually to use the WePROXA proxy address.

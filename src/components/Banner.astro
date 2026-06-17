@@ -7,9 +7,10 @@ const { banner } = Astro.locals.starlightRoute.entry.data;
   <span class="windows-banner__label">
     <Icon name="seti:windows" label="windows logo" class="windows-banner__icon" />
     Windows
-    </span>
+  </span>
   <p class="windows-banner__copy">
-    Windows support is coming soon. Planned for the upcoming release.
+    WePROXA 3.0.0 now supports Windows and macOS. Windows installation is available from the
+    <a href="https://apps.microsoft.com/detail/9p9npx1zvrjs">Microsoft Store</a>.
   </p>
 </div>
 
@@ -65,6 +66,14 @@ const { banner } = Astro.locals.starlightRoute.entry.data;
       line-height: 1.45;
       color: color-mix(in oklab, var(--sl-color-white), transparent 6%);
       text-wrap: balance;
+    }
+
+    .windows-banner__copy a {
+      color: inherit;
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.18em;
     }
 
     .sl-banner {

@@ -3,40 +3,40 @@ title: Keyboard Shortcuts
 description: Full list of keyboard shortcuts available in WePROXA.
 ---
 
-WePROXA ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS.
+WePROXA ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS and `Ctrl` on Windows unless noted.
 
 ## Proxy & Capture
 
 | Action | Shortcut |
 |---|---|
-| Start / stop the proxy | `⌘ P` |
-| Clear captured requests | `⌘ K` |
-| Focus the search / filter input | `⌘ F` |
+| Start / stop the proxy | `⌘ P` / `Ctrl + P` |
+| Clear captured requests | `⌘ K` / `Ctrl + K` |
+| Focus the search / filter input | `⌘ F` / `Ctrl + F` |
 
 ## Appearance
 
 | Action | Shortcut |
 |---|---|
-| Increase font size | `⌘ +` |
-| Decrease font size | `⌘ -` |
+| Increase font size | `⌘ +` / `Ctrl +` |
+| Decrease font size | `⌘ -` / `Ctrl -` |
 
 ## Layout
 
 | Action | Shortcut |
 |---|---|
-| Toggle the left (sources) panel | `⌘ B` |
-| Toggle the details panel | `⌘ J` |
+| Toggle the left (sources) panel | `⌘ B` / `Ctrl + B` |
+| Toggle the details panel | `⌘ J` / `Ctrl + J` |
 
 ## Tools
 
 | Action | Shortcut |
 |---|---|
-| Open Map Local | `⌘ ⇧ M` |
-| Open Breakpoints | `⌘ ⇧ B` |
-| Open Block List | `⌘ ⇧ K` |
-| Open Network Conditioning | `⌘ ⇧ N` |
-| Open Scripting | `⌘ ⇧ J` |
-| Open Diff | `⌘ ⇧ D` |
+| Open Map Local | `⌘ ⇧ M` / `Ctrl + Shift + M` |
+| Open Breakpoints | `⌘ ⇧ B` / `Ctrl + Shift + B` |
+| Open Block List | `⌘ ⇧ K` / `Ctrl + Shift + K` |
+| Open Network Conditioning | `⌘ ⇧ N` / `Ctrl + Shift + N` |
+| Open Scripting | `⌘ ⇧ J` / `Ctrl + Shift + J` |
+| Open Diff | `⌘ ⇧ D` / `Ctrl + Shift + D` |
 
 Tool shortcuts open the matching tool window. Use the toolbar, tray, or tool panel toggle to enable or disable a tool's rules.
 
@@ -46,7 +46,7 @@ These shortcuts work while an add/edit form is open in Breakpoints, Block List, 
 
 | Action | Shortcut |
 |---|---|
-| Save the rule | `⌘ S` |
+| Save the rule | `⌘ S` / `Ctrl + S` |
 | Cancel and close the form | `Escape` |
 
 After a rule saves successfully, the action button briefly changes to a saved confirmation so you can keep editing without losing track of the last save.
@@ -55,7 +55,7 @@ After a rule saves successfully, the action button briefly changes to a saved co
 
 | Action | Shortcut |
 |---|---|
-| Open Settings | `⌘ ,` |
+| Open Settings | `⌘ ,` / `Ctrl + ,` |
 
 ## Request List Navigation
 
@@ -71,4 +71,4 @@ Hold `⌘` (macOS) or `Ctrl` (other platforms) while clicking a content-type chi
 ## Tips
 
 - Most shortcuts also appear in the app menu bar, so you can discover them contextually.
-- Shortcuts are disabled while typing in editors, inputs, or dialogs — so `⌘ F` in the Monaco editor still opens Monaco's find widget.
+- Shortcuts are disabled while typing in editors, inputs, or dialogs — so the editor's own find shortcut still opens Monaco's find widget.

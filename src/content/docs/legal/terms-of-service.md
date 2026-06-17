@@ -13,7 +13,7 @@ By downloading, installing, or using WePROXA ("the App"), you agree to these Ter
 
 ## 2. Description of Service
 
-WePROXA is a native macOS HTTP/HTTPS proxy debugger that allows you to capture, inspect, modify, and replay network traffic on your local machine. The App is provided as a desktop application for macOS.
+WePROXA is a native macOS and Windows HTTP/HTTPS proxy debugger that allows you to capture, inspect, modify, and replay network traffic on your local machine. The App is provided as a desktop application for macOS and Windows.
 
 ## 3. License
 

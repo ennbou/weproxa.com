@@ -5,16 +5,16 @@ description: Route HTTP/HTTPS traffic from iPhone, iPad, or Android devices thro
 
 import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
-WePROXA can act as a proxy for any device on your local network — including physical iPhones, iPads, and Android phones — so you can inspect real app traffic the same way you inspect browser traffic on your Mac.
+WePROXA can act as a proxy for any device on your local network — including physical iPhones, iPads, and Android phones — so you can inspect real app traffic the same way you inspect browser traffic on your computer.
 
 ## Prerequisites
 
-- Your Mac and the mobile device must be on the **same Wi-Fi network**.
+- Your computer and the mobile device must be on the **same Wi-Fi network**.
 - WePROXA's proxy must be **running**.
 - **LAN access** must be enabled (it's disabled by default so the proxy only listens on `127.0.0.1`).
 
 :::note
-LAN access exposes the proxy port on your Mac's local IP. Only enable it on trusted networks.
+LAN access exposes the proxy port on your computer's local IP. Only enable it on trusted networks.
 :::
 
 ## 1. Enable LAN Access
@@ -27,7 +27,7 @@ LAN access exposes the proxy port on your Mac's local IP. Only enable it on trus
 
 </Steps>
 
-When LAN access is on, the Remote Access panel shows your Mac's proxy address, for example `192.168.1.42:8888`.
+When LAN access is on, the Remote Access panel shows your computer's proxy address, for example `192.168.1.42:8888`.
 
 ## 2. Install the CA Certificate on the Device
 
@@ -81,7 +81,7 @@ Android 7+ apps ignore user-installed CAs by default. For app traffic you usuall
 
 After you open **Show QR Code for Certificate**, WePROXA gives you two ways to point a device at the proxy:
 
-- **Manual proxy** — enter your Mac's IP and proxy port yourself.
+- **Manual proxy** — enter your computer's IP and proxy port yourself.
 - **Automatic proxy (PAC)** — paste the PAC URL shown in the Remote Access panel.
 
 ### Automatic Proxy Setup (PAC)
@@ -136,7 +136,7 @@ Configure the device's Wi-Fi network to use the proxy address shown in WePROXA.
 
 1. **Settings** → **Wi-Fi** → tap the **ⓘ** next to the connected network.
 2. Scroll to **HTTP Proxy** and select **Manual**.
-3. Set **Server** to your Mac's local IP (e.g. `192.168.1.42`) and **Port** to the WePROXA port (default `8888`).
+3. Set **Server** to your computer's local IP (e.g. `192.168.1.42`) and **Port** to the WePROXA port (default `8888`).
 4. Leave authentication off.
 
 </Steps>
@@ -149,7 +149,7 @@ Configure the device's Wi-Fi network to use the proxy address shown in WePROXA.
 
 1. **Settings** → **Network & internet** → **Internet** → tap the gear next to the connected network → **Advanced**.
 2. Change **Proxy** to **Manual**.
-3. Set **Proxy hostname** to your Mac's local IP and **Proxy port** to the WePROXA port (default `8888`).
+3. Set **Proxy hostname** to your computer's local IP and **Proxy port** to the WePROXA port (default `8888`).
 
 </Steps>
 
@@ -167,7 +167,7 @@ The device row and each nested host row show live request counts from the curren
 
 ## Troubleshooting
 
-- **Nothing shows up** — verify the Mac's IP is reachable (try `http://<mac-ip>:<port>` in the device's browser). A firewall on the Mac may be blocking incoming connections.
+- **Nothing shows up** — verify the computer's IP is reachable (try `http://<computer-ip>:<port>` in the device's browser). A firewall may be blocking incoming connections.
 - **HTTPS errors on the device** — the CA profile isn't installed or isn't fully trusted. On iOS, check **Certificate Trust Settings**.
 - **App traffic not captured (Android)** — app uses its own CA pinning or ignores user CAs. Use a debug build or run against an emulator. See [iOS Simulator](/guide/guides/ios-simulator/) for simulator-based debugging.
 - **Certificate QR code won't load** — the local cert server uses a short-lived port. Close the dialog and click **Show QR Code** again to restart it.

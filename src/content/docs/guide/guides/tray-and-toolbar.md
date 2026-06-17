@@ -1,9 +1,9 @@
 ---
 title: Toolbar & Tray
-description: Customize the WePROXA toolbar and use the macOS tray menu for quick proxy and tool controls.
+description: Customize the WePROXA toolbar, menus, tray, and appearance controls.
 ---
 
-The toolbar and macOS tray give you quick access to capture controls, tool windows, SSL settings, and app appearance options without opening extra panels first.
+The toolbar, app menus, and tray give you quick access to capture controls, tool windows, SSL settings, and app appearance options without opening extra panels first.
 
 ## Toolbar Controls
 
@@ -16,7 +16,7 @@ The main toolbar includes:
 - **Certificate menu** - manage SSL host and app rules and open certificate setup.
 - **Settings** - open WePROXA settings.
 
-Clicking a tool button opens the tool. Holding `Command` while clicking a toggleable tool button enables or disables that tool without opening it.
+Clicking a tool button opens the tool. Holding `Command` on macOS or `Ctrl` on Windows while clicking a toggleable tool button enables or disables that tool without opening it.
 
 When space is tight, the toolbar automatically switches to a compact icon layout while keeping counts and status indicators visible.
 
@@ -36,15 +36,34 @@ Use toolbar customization when you want a quieter workspace or only use a subset
 
 Your selection is saved automatically and synced across WePROXA windows. Newly added tools remain visible by default after upgrades.
 
+## Appearance and Language
+
+Use Appearance settings to keep the app comfortable across all windows:
+
+1. Open **Settings**.
+2. Go to **Appearance**.
+3. Choose your preferred language, **English** or **French**.
+
+The language choice is saved automatically and applied across the main window and detached tool windows.
+
 ## Certificate and SSL Shortcuts
 
 The lock button opens the certificate menu for quick SSL rule management. From there you can add host rules, review enabled host and app rules, and open certificate installation settings.
 
 For a larger SSL workspace, open the standalone [SSL Manager](/guide/guides/ssl-interception/#ssl-manager-window). It is better suited for longer rule lists because it includes search and host/app filters.
 
-## macOS Tray Menu
+## Platform Menus and Window Chrome
 
-The tray menu works even when the main window is closed. Use it to:
+WePROXA follows platform conventions for top-level app controls:
+
+- **macOS** — the app uses the macOS menu bar, native window controls, and macOS keyboard shortcuts such as `⌘ P`.
+- **Windows** — the app uses themed Windows chrome with standard minimize, maximize, and close controls. The Windows menu exposes platform-appropriate app, edit, view, tool, window, and help actions with `Ctrl` shortcuts.
+
+Some actions only appear on the platform where they apply. For example, macOS certificate installation targets Keychain, while Windows certificate installation targets the current user's trusted root certificate store.
+
+## Tray Menu
+
+The tray menu works even when the main window is closed or hidden. On macOS it appears in the menu bar; on Windows it appears in the notification area when enabled. Use it to:
 
 - Show the main WePROXA window.
 - Start or stop the proxy.

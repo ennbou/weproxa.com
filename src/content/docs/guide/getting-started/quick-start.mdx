@@ -3,33 +3,100 @@ title: Quick Start
 description: Start capturing HTTP traffic with WePROXA in under 2 minutes.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
 Get up and running with WePROXA in just a few steps.
 
-<Steps>
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+    <Steps>
 
-1. **Launch WePROXA** from your Applications folder.
+    1. **Launch WePROXA** from your Applications folder.
 
-   ![WePROXA startup screen](@assets/guide/getting-started/launch_weproxa.png)
+       ![WePROXA startup screen](@assets/guide/getting-started/launch_weproxa.png)
 
-2. **Start the proxy** by clicking the play button in the toolbar or pressing `⌘ + P`.
+    2. **Start the proxy** by clicking the play button in the toolbar or pressing `⌘ + P`.
 
-   ![WePROXA with requests](@assets/guide/getting-started/start_with_request.png)
+       ![WePROXA with requests](@assets/guide/getting-started/start_with_request.png)
 
-3. **Enable the system proxy** — WePROXA can automatically configure your Mac's system proxy settings. Click the network icon in the toolbar to toggle it on.
+    3. **Enable the system proxy** — WePROXA can automatically configure your Mac's system proxy settings. Click the network icon in the toolbar to toggle it on.
 
-4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access** so WePROXA is ready to capture traffic as soon as you open it.
+    4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access** so WePROXA is ready to capture traffic as soon as you open it.
 
-5. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **Certificates** and click **Install to macOS Keychain**. This is a one-time setup. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+    5. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **Certificates** and click **Install to macOS Keychain**. This is a one-time setup. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
 
-6. **Enable SSL for a host** — click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
+    6. **Enable SSL for a host** — click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
 
-7. **Browse the web** — open your browser or app and make some requests. They'll appear in the request list in real time.
+    7. **Browse the web** — open your browser or app and make some requests. They'll appear in the request list in real time.
 
-8. **Inspect a request** — click on any request in the list to see its full details: headers, body, timing, and more.
+    8. **Inspect a request** — click on any request in the list to see its full details: headers, body, timing, and more.
 
-</Steps>
+    </Steps>
+  </TabItem>
+
+  <TabItem label="Windows">
+    <Steps>
+
+    1. **Launch WePROXA** from the Start menu.
+
+       ![WePROXA startup screen](@assets/guide/getting-started/launch_weproxa.png)
+
+    2. **Start the proxy** by clicking the play button in the toolbar or pressing `Ctrl + P`.
+
+       ![WePROXA with requests](@assets/guide/getting-started/start_with_request.png)
+
+    3. **Enable the system proxy** — click the network icon in the toolbar. WePROXA configures the Windows proxy settings for the current user and restores the previous values when capture stops or the app exits normally.
+
+    4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access** so WePROXA is ready to capture traffic as soon as you open it.
+
+    5. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **Certificates** and click **Install & Trust Certificate**. This installs the WePROXA Root CA into the current user's trusted root store. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+
+    6. **Enable SSL for a host** — click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
+
+    7. **Browse the web** — open your browser or app and make some requests. They'll appear in the request list in real time.
+
+    8. **Inspect a request** — click on any request in the list to see its full details: headers, body, timing, and more.
+
+    </Steps>
+  </TabItem>
+</Tabs>
+
+## Terminal Proxy Setup
+
+Most browsers use the system proxy once you enable it in WePROXA. Some terminal tools prefer environment variables, especially inside shells, package managers, or language runtimes.
+
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+
+    In **Settings** → **Proxy Config**, click **Open Configured Terminal** to open a Terminal session with WePROXA proxy variables already set. You can also copy the export commands into your current shell:
+
+    ```sh
+    export HTTP_PROXY=http://127.0.0.1:8888
+    export HTTPS_PROXY=http://127.0.0.1:8888
+    export ALL_PROXY=http://127.0.0.1:8888
+    ```
+
+  </TabItem>
+  <TabItem label="Windows">
+
+    In **Settings** → **Proxy Config**, copy the terminal proxy commands for your current port. For PowerShell, set the variables in the shell you want to capture from:
+
+    ```powershell
+    $env:HTTP_PROXY = "http://127.0.0.1:8888"
+    $env:HTTPS_PROXY = "http://127.0.0.1:8888"
+    $env:ALL_PROXY = "http://127.0.0.1:8888"
+    ```
+
+    For Command Prompt:
+
+    ```bat
+    set HTTP_PROXY=http://127.0.0.1:8888
+    set HTTPS_PROXY=http://127.0.0.1:8888
+    set ALL_PROXY=http://127.0.0.1:8888
+    ```
+
+  </TabItem>
+</Tabs>
 
 ## What's Next?
 
