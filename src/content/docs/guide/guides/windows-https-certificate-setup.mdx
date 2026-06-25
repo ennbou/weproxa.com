@@ -1,0 +1,78 @@
+---
+title: Windows HTTPS Certificate Setup
+description: Why WePROXA may need a local HTTPS certificate on Windows, how to think about trust, and how to remove it later.
+---
+
+WePROXA can capture ordinary HTTP traffic without any certificate changes. HTTPS is different: it is encrypted between the client app and the destination server. To show request and response bodies for HTTPS traffic, a debugging proxy needs a local Certificate Authority (CA) certificate that your computer trusts.
+
+The Windows version of WePROXA does not install this certificate from inside the app. The app links here so you can understand what the certificate is before deciding whether HTTPS inspection is appropriate for your device or organization.
+
+## What the Certificate Is
+
+The WePROXA Root CA is a local certificate generated for your device. When trusted by Windows, it lets WePROXA create temporary site certificates during HTTPS debugging so your browser or app can connect to WePROXA, and WePROXA can connect onward to the real server.
+
+This is the same general technique used by HTTPS debugging tools. It should only be used on devices you control and only for traffic you are allowed to inspect.
+
+## Why HTTPS Debugging Needs It
+
+Without a trusted local CA, WePROXA can still show HTTPS connections as `CONNECT` tunnels, but it cannot decrypt the encrypted request and response contents. Trusting the local CA allows WePROXA to inspect HTTPS traffic for the hosts or apps you explicitly enable in SSL interception settings.
+
+You do not need to trust the certificate if you only need HTTP traffic, connection metadata, proxy routing, or CONNECT tunnel visibility.
+
+## Find the Certificate File
+
+WePROXA shows the generated certificate path in **Settings** -> **Certificates**. Use **Copy** to copy the path, then decide outside the app whether you want to import that certificate into Windows trust settings.
+
+## Manually Install and Trust on Windows
+
+Only do this on a Windows device you own or administer, and only when you need HTTPS body inspection.
+
+1. Open WePROXA and go to **Settings** -> **Certificates**.
+2. Copy the **Certificate Path** shown in the app.
+3. Open the Windows Start menu and search for **Manage user certificates**.
+4. Open **Certificates - Current User**.
+5. Expand **Trusted Root Certification Authorities** -> **Certificates**.
+6. Choose **Action** -> **All Tasks** -> **Import**.
+7. In the Certificate Import Wizard, select the certificate file from the path copied from WePROXA.
+8. Choose **Place all certificates in the following store**.
+9. Select **Trusted Root Certification Authorities**.
+10. Finish the wizard and accept the Windows trust warning only if you understand the implications.
+11. Restart browsers or apps you want to test.
+
+After the certificate is trusted, enable SSL interception only for the specific hosts or apps you want to inspect.
+
+## Keep It Safe
+
+Treat the WePROXA certificate material as sensitive local debugging data:
+
+- Do not share the WePROXA certificate files or app data directory with other people.
+- Never share the private key associated with the local CA.
+- Only trust the certificate on devices you own or administer.
+- Remove the certificate when you no longer need HTTPS inspection on that device.
+
+If someone else gets a trusted CA certificate and its private key, they may be able to impersonate HTTPS sites on systems that trust it. WePROXA stores this material locally and does not upload it.
+
+## Removing the Certificate Later
+
+If a WePROXA Root CA has been trusted on Windows and you want to remove it:
+
+1. Open the Windows Start menu and search for **Manage user certificates**.
+2. Open **Certificates - Current User**.
+3. Expand **Trusted Root Certification Authorities** -> **Certificates**.
+4. Search for **WePROXA Root CA**.
+5. Right-click the certificate and choose **Delete**.
+6. Restart browsers or apps that were using the certificate.
+
+If your device is managed by an organization, certificate trust may be controlled by company policy. In that case, contact your administrator before adding or removing trusted certificates.
+
+## Testing WePROXA Without HTTPS Trust
+
+Microsoft Store reviewers can test WePROXA without trusting an additional certificate:
+
+1. Launch WePROXA.
+2. Start the proxy from the toolbar.
+3. Use a browser or command-line client configured to `127.0.0.1:8888`.
+4. Visit an HTTP test endpoint, or inspect HTTPS connection metadata as CONNECT tunnels.
+5. Use tools such as request filtering, saved requests, Map Local, breakpoints, and repeater with traffic that does not require HTTPS decryption.
+
+HTTPS body inspection is optional and should only be enabled by users who understand the certificate trust implications.

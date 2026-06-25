@@ -20,8 +20,8 @@ WePROXA offers a free tier with core features. Advanced features are available w
 
 ## Setup & Configuration
 
-### Why does WePROXA need to install a certificate?
-To inspect HTTPS (encrypted) traffic, WePROXA needs to generate and trust a local Certificate Authority. This is standard practice for proxy debugging tools. The certificate is generated locally and never leaves your machine. See [Certificate Trust](/guide/guides/certificate-trust/).
+### Why does WePROXA need a certificate for HTTPS inspection?
+To inspect HTTPS (encrypted) traffic, WePROXA needs a trusted local Certificate Authority. This is standard practice for proxy debugging tools. The certificate is generated locally and never leaves your machine. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 
 ### How do I enable the system proxy?
 Click the network icon in the toolbar. WePROXA will configure your system proxy settings automatically. When you stop the proxy or quit the app, the settings are restored.
@@ -52,7 +52,7 @@ Apps with certificate pinning will reject WePROXA's generated certificates. This
 3. Try opening a website in a browser that uses system proxy settings, such as Safari on macOS or Edge/Chrome on Windows
 
 ### HTTPS requests show certificate errors
-The WePROXA CA certificate may not be trusted. See [Certificate Trust](/guide/guides/certificate-trust/) for setup instructions.
+The WePROXA CA certificate may not be trusted. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 
 ### The app is slow with many requests
 WePROXA keeps up to 10,000 requests in memory. Use the **Clear** button in the toolbar to remove old requests, or use filters to focus on relevant traffic.

@@ -29,7 +29,7 @@ If the upstream server does not support HTTP/2, WePROXA falls back to HTTP/1.1 a
 
 HTTPS interception works on a per-host basis. To start inspecting HTTPS traffic:
 
-1. **Install the CA certificate** — see [Certificate Trust](/guide/guides/certificate-trust/) for setup instructions.
+1. **Understand certificate trust** — on macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 2. **Add SSL hosts** — add the hosts you want to inspect to the SSL Interception Hosts list. See [SSL Interception](/guide/guides/ssl-interception/) for the two ways to do this.
 
 ## Viewing HTTPS Traffic
@@ -46,7 +46,7 @@ HTTPS requests appear in the request list just like HTTP requests. You can:
 ## Troubleshooting
 
 ### Certificate errors in browser
-Make sure the WePROXA CA certificate is trusted in your operating system's certificate store. See [Certificate Trust](/guide/guides/certificate-trust/).
+Make sure the WePROXA CA certificate is trusted in your operating system's certificate store. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 
 ### TLS root compatibility
 WePROXA includes fallback trust roots for newer Microsoft TLS roots, so upstream sites that rely on those roots continue to connect even before every platform trust store has caught up.

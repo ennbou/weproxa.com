@@ -48,7 +48,7 @@ The language choice is saved automatically and applied across the main window an
 
 ## Certificate and SSL Shortcuts
 
-The lock button opens the certificate menu for quick SSL rule management. From there you can add host rules, review enabled host and app rules, and open certificate installation settings.
+The lock button opens the certificate menu for quick SSL rule management. From there you can add host rules, review enabled host and app rules, and open certificate settings.
 
 For a larger SSL workspace, open the standalone [SSL Manager](/guide/guides/ssl-interception/#ssl-manager-window). It is better suited for longer rule lists because it includes search and host/app filters.
 
@@ -59,7 +59,7 @@ WePROXA follows platform conventions for top-level app controls:
 - **macOS** — the app uses the macOS menu bar, native window controls, and macOS keyboard shortcuts such as `⌘ P`.
 - **Windows** — the app uses themed Windows chrome with standard minimize, maximize, and close controls. The Windows menu exposes platform-appropriate app, edit, view, tool, window, and help actions with `Ctrl` shortcuts.
 
-Some actions only appear on the platform where they apply. For example, macOS certificate installation targets Keychain, while Windows certificate installation targets the current user's trusted root certificate store.
+Some actions only appear on the platform where they apply. For example, macOS certificate installation targets Keychain, while Windows shows a Learn More link for HTTPS certificate trust information.
 
 ## Tray Menu
 

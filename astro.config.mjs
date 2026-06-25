@@ -80,6 +80,7 @@ export default defineConfig({
 								label: 'Guides',
 								items: [
 									{ label: 'Certificate Trust', slug: 'guide/guides/certificate-trust' },
+									{ label: 'Windows HTTPS Certificate Setup', slug: 'guide/guides/windows-https-certificate-setup' },
 									{ label: 'SSL Interception', slug: 'guide/guides/ssl-interception' },
 									{ label: 'HTTPS Debugging', slug: 'guide/guides/https-debugging' },
 									{ label: 'iOS Simulator', slug: 'guide/guides/ios-simulator' },

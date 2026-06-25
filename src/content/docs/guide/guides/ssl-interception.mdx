@@ -5,7 +5,7 @@ description: How to enable HTTPS inspection for specific hosts or apps in WePROX
 
 import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
-WePROXA intercepts HTTPS traffic only for rules you explicitly enable. After [installing the CA certificate](/guide/guides/certificate-trust/), you can target interception in two ways:
+WePROXA intercepts HTTPS traffic only for rules you explicitly enable. After your device trusts the WePROXA Root CA, you can target interception in two ways:
 
 - **Host rules** — match a hostname such as `api.example.com` or a wildcard such as `*.example.com`
 - **App rules** — match the exact client application name shown in the **Apps** source view
@@ -96,7 +96,7 @@ From the SSL Manager you can:
 - Search across configured hosts and apps.
 - Filter the list to **All**, **Host**, or **App** rules.
 - Toggle or remove individual rules.
-- Open certificate installation settings from the title bar.
+- Open certificate settings from the title bar.
 
 The SSL Manager uses the same saved SSL rules as the toolbar certificate menu, so changes appear immediately across open windows.
 
@@ -123,7 +123,7 @@ The Certificate Menu labels each rule as **Host** or **App**, and all SSL rules 
 
 ## Prerequisites
 
-Before SSL interception can work, you must install and trust the WePROXA Root CA certificate. See [Certificate Trust](/guide/guides/certificate-trust/) for instructions.
+Before SSL interception can decrypt HTTPS bodies, your device must trust the WePROXA Root CA certificate. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 
 ## Troubleshooting
 
@@ -131,7 +131,7 @@ Before SSL interception can work, you must install and trust the WePROXA Root CA
 No matching host or app SSL rule is enabled. Add the host, enable SSL for the client app, or both.
 
 ### Certificate errors after enabling SSL
-Make sure the WePROXA Root CA is installed and trusted in your macOS Keychain. See [Certificate Trust](/guide/guides/certificate-trust/).
+Make sure the WePROXA Root CA is trusted. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 
 ### Wildcard patterns
 Use `*.example.com` to match all subdomains (e.g., `api.example.com`, `cdn.example.com`). The exact host `example.com` itself is not matched by a wildcard — add it separately if needed. Wildcards only apply to host rules, not app rules.

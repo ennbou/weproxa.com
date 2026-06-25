@@ -49,7 +49,7 @@ Get up and running with WePROXA in just a few steps.
 
     4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access** so WePROXA is ready to capture traffic as soon as you open it.
 
-    5. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **Certificates** and click **Install & Trust Certificate**. This installs the WePROXA Root CA into the current user's trusted root store. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+    5. **Review HTTPS certificate trust** — HTTPS body inspection on Windows requires a trusted local CA. Open **Settings** -> **Certificates** and click **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether HTTPS inspection is appropriate for your device.
 
     6. **Enable SSL for a host** — click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
 

@@ -27,7 +27,8 @@ When a host isn't in the SSL Interception list, WePROXA forwards the raw encrypt
 
 The device doesn't trust WePROXA's root CA.
 
-- **On this computer**: open **Settings** → **Certificates** and install the WePROXA Root CA for your platform, or follow [Certificate Trust](/guide/guides/certificate-trust/) to trust it manually.
+- **On macOS**: open **Settings** -> **Certificates** and install the WePROXA Root CA, or follow [Certificate Trust](/guide/guides/certificate-trust/) to trust it manually.
+- **On Windows**: open **Settings** -> **Certificates** and choose **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether to trust a local CA.
 - **On a remote device**: see [Remote Devices](/guide/guides/remote-devices/) to install and trust the certificate over QR code.
 - **Firefox**: uses its own certificate store. Enable `security.enterprise_roots.enabled` in `about:config`, or import the CA manually from **Settings** → **Privacy & Security** → **Certificates**.
 

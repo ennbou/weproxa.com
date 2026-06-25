@@ -1,36 +1,23 @@
 ---
 title: Certificate Trust
-description: How WePROXA's HTTPS certificate trust works on macOS and Windows.
+description: How WePROXA's HTTPS certificate trust works on macOS.
 ---
 
-import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
 
-To intercept HTTPS traffic, WePROXA generates a local root Certificate Authority (CA) and installs it in your operating system's trusted certificate store. This lets WePROXA decrypt, inspect, and re-encrypt HTTPS traffic transparently.
+To intercept HTTPS traffic on macOS, WePROXA generates a local root Certificate Authority (CA) and trusts it in macOS Keychain. This lets WePROXA decrypt, inspect, and re-encrypt HTTPS traffic for the hosts or apps you explicitly enable.
 
 ## Setup Process
 
 When WePROXA starts, it automatically generates a root CA certificate unique to your machine. To intercept HTTPS traffic, you must install and trust this certificate.
 
-<Tabs syncKey="os">
-  <TabItem label="macOS">
-    <Steps>
+<Steps>
 
-    1. Open WePROXA and go to **Settings** → **Certificates**.
-    2. Click **Install to macOS Keychain**.
-    3. Enter your macOS password when prompted — the certificate is installed in the System keychain and marked as trusted for SSL/TLS connections.
+1. Open WePROXA and go to **Settings** -> **Certificates**.
+2. Click **Install to macOS Keychain**.
+3. Enter your macOS password when prompted. The certificate is installed in the System keychain and marked as trusted for SSL/TLS connections.
 
-    </Steps>
-  </TabItem>
-  <TabItem label="Windows">
-    <Steps>
-
-    1. Open WePROXA and go to **Settings** → **Certificates**.
-    2. Click **Install & Trust Certificate**.
-    3. Confirm the Windows security prompt. WePROXA installs the certificate into the current user's **Trusted Root Certification Authorities** store.
-
-    </Steps>
-  </TabItem>
-</Tabs>
+</Steps>
 
 After this one-time setup, HTTPS interception works seamlessly.
 
@@ -38,49 +25,19 @@ After this one-time setup, HTTPS interception works seamlessly.
 
 If you need to manually trust the certificate:
 
-<Tabs syncKey="os">
-  <TabItem label="macOS">
-
-    1. Open **Keychain Access** (search in Spotlight).
-    2. Find the **WePROXA Root CA** certificate in the **System** keychain (or **login** keychain if installed for the current user only).
-    3. Double-click it and expand **Trust**.
-    4. Set **Secure Sockets Layer (SSL)** to **Always Trust**.
-    5. Close and enter your password to confirm.
-
-  </TabItem>
-  <TabItem label="Windows">
-
-    1. Open **Manage user certificates** from the Start menu, or run `certmgr.msc`.
-    2. Expand **Trusted Root Certification Authorities** → **Certificates**.
-    3. Choose **Action** → **All Tasks** → **Import**.
-    4. Select the WePROXA Root CA certificate exported from WePROXA's certificate settings.
-    5. Place it in the **Trusted Root Certification Authorities** store for the current user.
-    6. Finish the wizard and accept the trust warning.
-
-  </TabItem>
-</Tabs>
+1. Open **Keychain Access** from Spotlight.
+2. Find the **WePROXA Root CA** certificate in the **System** keychain, or in the **login** keychain if it was installed for the current user only.
+3. Double-click it and expand **Trust**.
+4. Set **Secure Sockets Layer (SSL)** to **Always Trust**.
+5. Close the window and enter your password to confirm.
 
 ## Removing the Certificate
 
 To remove WePROXA's CA certificate:
 
-<Tabs syncKey="os">
-  <TabItem label="macOS">
-
-    1. Open **Keychain Access**.
-    2. Search for "WePROXA".
-    3. Right-click the certificate and select **Delete**.
-
-  </TabItem>
-  <TabItem label="Windows">
-
-    1. Open **Manage user certificates** from the Start menu, or run `certmgr.msc`.
-    2. Expand **Trusted Root Certification Authorities** → **Certificates**.
-    3. Search for **WePROXA Root CA**.
-    4. Right-click the certificate and select **Delete**.
-
-  </TabItem>
-</Tabs>
+1. Open **Keychain Access**.
+2. Search for **WePROXA**.
+3. Right-click the certificate and select **Delete**.
 
 ## Security
 
