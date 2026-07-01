@@ -34,7 +34,34 @@ The MCP server exposes tools that let AI assistants:
 - List captured requests
 - Inspect request/response details
 - Filter requests by various criteria
-- Interact with proxy features
+- Start, stop, and inspect the proxy
+- Add, update, remove, and list Map Local, Breakpoint, Block List, Network Conditioning, and Scripting rules
+- Add, update, remove, and list SSL interception hosts
+- Read and change the enabled state of rule-based tools
+
+### Network Conditioning and Scripting
+
+MCP clients can manage Network Conditioning rules with:
+
+- `weproxa_networkConditioning_addRule`
+- `weproxa_networkConditioning_updateRule`
+- `weproxa_networkConditioning_removeRule`
+- `weproxa_networkConditioning_listRules`
+
+Request and response delays are limited to 300,000 milliseconds (five minutes) per rule.
+
+MCP clients can manage Rhai Scripting rules with:
+
+- `weproxa_scripting_addRule`
+- `weproxa_scripting_updateRule`
+- `weproxa_scripting_removeRule`
+- `weproxa_scripting_listRules`
+
+New or updated script source is validated before the rule is saved. Use `weproxa_tools_getEnabled` and `weproxa_tools_setEnabled` to inspect or change the tool-level enabled state for `networkConditioning`, `scripting`, and the other rule-based tools in the active workspace.
+
+:::note
+Rule-management tools operate on the workspace currently active in WePROXA. Switch workspaces in the source sidebar before asking an MCP client to change a different scenario.
+:::
 
 ## Security
 

@@ -21,7 +21,7 @@ Get up and running with WePROXA in just a few steps.
 
     3. **Enable the system proxy** — WePROXA can automatically configure your Mac's system proxy settings. Click the network icon in the toolbar to toggle it on.
 
-    4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access** so WePROXA is ready to capture traffic as soon as you open it.
+    4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
 
     5. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **Certificates** and click **Install to macOS Keychain**. This is a one-time setup. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
 
@@ -47,7 +47,7 @@ Get up and running with WePROXA in just a few steps.
 
     3. **Enable the system proxy** — click the network icon in the toolbar. WePROXA configures the Windows proxy settings for the current user and restores the previous values when capture stops or the app exits normally.
 
-    4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access** so WePROXA is ready to capture traffic as soon as you open it.
+    4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
 
     5. **Review HTTPS certificate trust** — HTTPS body inspection on Windows requires a trusted local CA. Open **Settings** -> **Certificates** and click **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether HTTPS inspection is appropriate for your device.
 
@@ -60,6 +60,10 @@ Get up and running with WePROXA in just a few steps.
     </Steps>
   </TabItem>
 </Tabs>
+
+## Auto-start Behavior
+
+**Auto-start proxy** is the main switch for automatic capture. When **Auto-start LAN access** is also enabled, WePROXA enables LAN access first and then starts the proxy on the saved port. The persisted settings are loaded before either action runs, so a cold start uses the same configuration you selected previously.
 
 ## Terminal Proxy Setup
 
@@ -103,6 +107,7 @@ Most browsers use the system proxy once you enable it in WePROXA. Some terminal 
 Now that you're capturing traffic, explore WePROXA's powerful features:
 
 - [Set breakpoints](/guide/features/breakpoints/) to intercept and modify requests
+- [Organize rules with workspaces](/guide/features/workspaces/) for different projects or scenarios
 - [Map local files](/guide/features/map-local/) to replace remote resources
 - [Repeat requests](/guide/features/repeat-requests/) to test different scenarios
 - [Use advanced filters](/guide/features/advanced-filtering/) to find specific requests

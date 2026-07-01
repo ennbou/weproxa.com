@@ -31,6 +31,10 @@ WePROXA 3.0.0 is the first release with Windows support. You can install the Win
 
 The Microsoft Store handles Windows app updates automatically unless you have disabled Store updates.
 
+:::note
+WePROXA 3.1.0 fixes Microsoft Store package restrictions that could prevent the app from updating the current user's proxy settings or writing its generated certificate files. Update through the Microsoft Store or WinGet if the system proxy does not change or **Certificate Path** is empty.
+:::
+
 ## Install from Command Prompt
 
 Open **Command Prompt** and run:
@@ -45,6 +49,7 @@ WinGet downloads and installs WePROXA from the Microsoft Store.
 
 - Start the proxy from the toolbar, then enable the system proxy with the network button.
 - WePROXA configures the Windows system proxy for the current user and restores the previous values when the proxy stops or the app exits normally.
+- If the network button does not update Windows proxy settings, confirm that WePROXA is version 3.1.0 or later, quit the app completely, and open it again.
 - Some command-line tools need `HTTP_PROXY` and `HTTPS_PROXY` environment variables even when the Windows system proxy is enabled. See [Quick Start](/guide/getting-started/quick-start/#terminal-proxy-setup) for shell examples.
 - Firefox and some developer tools may use their own proxy or certificate store. Configure them to use system settings before testing HTTPS interception.
 

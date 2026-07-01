@@ -27,7 +27,31 @@ Free accounts are limited to **2 Scripting rules**. Upgrade to Pro for unlimited
 5. Select **Run on request**, **Run on response**, or both.
 6. Write the script and save the rule.
 
-Each rule can be enabled or disabled individually, duplicated, edited, deleted, and sorted by name or date. The global Scripting toggle turns the whole rule engine on or off without deleting rules.
+Each rule can be enabled or disabled individually, duplicated, edited, deleted, and sorted by name or date. The global Scripting toggle turns the whole rule engine on or off without deleting rules. The script editor expands to use the available panel height, including when Scripting is opened in a detached tool window.
+
+## Console and Runtime Diagnostics
+
+The console at the bottom of the Scripting panel shows output from matching script rules while traffic passes through the proxy. Expand it to see each invocation's time, rule name, request or response phase, URL, and log entries.
+
+Use `print(...)` for ordinary output and `debug(...)` for diagnostic values:
+
+```txt
+fn on_request() {
+    print("Matched request");
+    debug(this.method);
+}
+```
+
+Runtime warnings and errors appear in the same console, including a source line when Rhai provides one. A failing invocation does not stop capture; WePROXA keeps traffic moving with the last valid request or response state.
+
+Console controls let you:
+
+- Show only warnings and errors.
+- Pause new console entries without disabling Scripting.
+- Clear captured output.
+- Filter output to the rule currently being edited.
+
+Pausing the console affects log capture only. Matching scripts continue to run and modify traffic.
 
 ## Entry Points
 

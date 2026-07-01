@@ -38,12 +38,18 @@ You can also create a Map Local rule by **right-clicking a request** in the requ
 - **Toggle all rules** at once using the global enable/disable button
 - **Sort rules** by name, creation date, or last updated date
 - **Edit** or **delete** rules at any time
-- **Duplicate** a rule to reuse an existing pattern or mock file
+- **Duplicate** a rule to create an independent copy of its pattern and response content
 - **Export** and **import** rule files when you need to share mocks with a team
 
 :::note
 Free accounts are limited to **5 Map Local rules**. Upgrade to Pro for unlimited rules.
 :::
+
+### Duplicating Rules
+
+Duplicating a Map Local rule copies its current response content into a new WePROXA-managed file. The original and duplicate can then be edited or deleted independently without changing the other rule's response.
+
+When you remove a rule, WePROXA deletes only response files it manages. Files you selected with **Browse** remain on your computer even after the rule is removed.
 
 ### Exporting & Importing Rules
 
