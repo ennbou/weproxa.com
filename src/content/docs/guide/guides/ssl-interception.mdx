@@ -125,6 +125,12 @@ The Certificate Menu labels each rule as **Host** or **App**, and all SSL rules 
 
 Before SSL interception can decrypt HTTPS bodies, your device must trust the WePROXA Root CA certificate. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 
+## How WePROXA Trusts Upstream Servers
+
+When WePROXA decrypts a host, it makes its own HTTPS connection to the origin server and must verify that server's certificate. On macOS, WePROXA delegates this verification to the **system trust store** (the same trust the operating system uses), so anything Safari and other system apps trust is trusted here too. This also lets WePROXA fetch missing intermediate certificates automatically, so origins that ship an incomplete chain still verify instead of failing.
+
+If you add a certificate to macOS system trust for a private or internal server, WePROXA picks it up without extra configuration.
+
 ## Troubleshooting
 
 ### HTTPS requests show as CONNECT tunnels
@@ -132,6 +138,9 @@ No matching host or app SSL rule is enabled. Add the host, enable SSL for the cl
 
 ### Certificate errors after enabling SSL
 Make sure the WePROXA Root CA is trusted. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
+
+### Upstream server shows a certificate error
+This means WePROXA could not verify the **origin server's** certificate (separate from trusting the WePROXA Root CA). On macOS, verification uses the system trust store — if the server is internal or uses a private CA, add that CA to macOS system trust and try again.
 
 ### Wildcard patterns
 Use `*.example.com` to match all subdomains (e.g., `api.example.com`, `cdn.example.com`). The exact host `example.com` itself is not matched by a wildcard — add it separately if needed. Wildcards only apply to host rules, not app rules.

@@ -52,6 +52,7 @@ WinGet downloads and installs WePROXA from the Microsoft Store.
 - If the network button does not update Windows proxy settings, confirm that WePROXA is version 3.1.0 or later, quit the app completely, and open it again.
 - Some command-line tools need `HTTP_PROXY` and `HTTPS_PROXY` environment variables even when the Windows system proxy is enabled. See [Quick Start](/guide/getting-started/quick-start/#terminal-proxy-setup) for shell examples.
 - Firefox and some developer tools may use their own proxy or certificate store. Configure them to use system settings before testing HTTPS interception.
+- For capturing traffic from phones and other computers on your network, the Microsoft Store package declares its own firewall rules so Windows pre-authorizes inbound connections to the proxy and certificate server on private and public networks. You should not need to add a Windows Defender Firewall rule by hand. See [Remote Devices](/guide/guides/remote-devices/).
 
 ## Uninstall
 

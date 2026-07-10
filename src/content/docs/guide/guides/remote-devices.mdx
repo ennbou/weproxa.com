@@ -1,11 +1,15 @@
 ---
 title: Remote Devices
-description: Route HTTP/HTTPS traffic from iPhone, iPad, or Android devices through WePROXA over your local network.
+description: Route HTTP/HTTPS traffic from iPhone, iPad, Android, and other computers through WePROXA over your local network.
 ---
 
 import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 
-WePROXA can act as a proxy for any device on your local network — including physical iPhones, iPads, and Android phones — so you can inspect real app traffic the same way you inspect browser traffic on your computer.
+WePROXA can act as a proxy for any device on your local network — physical iPhones, iPads, and Android phones, as well as other macOS, Windows, and Linux computers — so you can inspect real app traffic the same way you inspect browser traffic on your computer.
+
+:::tip[Built-in setup guide]
+**Settings** → **Remote Access** includes a step-by-step setup guide with a tab for each platform (**iOS**, **Android**, **macOS**, **Windows**, and **Linux**). Each tab lists the exact certificate-trust and proxy steps for that platform, pre-filled with your computer's current IP and proxy port. The steps below mirror that guide.
+:::
 
 ## Prerequisites
 
@@ -158,6 +162,61 @@ Configure the device's Wi-Fi network to use the proxy address shown in WePROXA.
 </Tabs>
 
 Open a browser on the device and visit any site — you should see traffic flowing into WePROXA's request list.
+
+## Other Computers (macOS, Windows, Linux)
+
+You can also route another computer's traffic through WePROXA. Enable **LAN access** (step 1) and open **Show QR Code for Certificate** on the WePROXA computer so the certificate URL and PAC URL are available, then follow the steps for the target computer's operating system.
+
+<Tabs>
+
+<TabItem label="macOS">
+
+<Steps>
+
+1. Open the certificate URL shown in WePROXA in Safari or another browser on the Mac, and download the WePROXA CA certificate.
+2. Double-click the certificate to open it in **Keychain Access** (login keychain).
+3. Open the certificate, expand **Trust**, and set **When using this certificate** to **Always Trust**.
+4. Open **System Settings** → **Wi-Fi** → **Details** → **Proxies**.
+5. Enable **Web Proxy (HTTP)** and **Secure Web Proxy (HTTPS)**, then set the server to the WePROXA computer's local IP and the port to the WePROXA port (default `8888`).
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="Windows">
+
+<Steps>
+
+1. Open the certificate URL shown in WePROXA in Edge, Chrome, or Firefox, and download the WePROXA CA certificate.
+2. Open the certificate file and choose **Install Certificate**.
+3. Choose **Current User**, then place the certificate in **Trusted Root Certification Authorities**.
+4. Open **Settings** → **Network & internet** → **Proxy**.
+5. Enable **Manual proxy setup** and set the address to the WePROXA computer's local IP and the port to the WePROXA port (default `8888`).
+
+</Steps>
+
+</TabItem>
+
+<TabItem label="Linux">
+
+<Steps>
+
+1. Open the certificate URL shown in WePROXA in a browser and download the certificate.
+2. Install it into the system trust store — on Debian or Ubuntu, copy it to `/usr/local/share/ca-certificates/weproxa-ca.crt` and run `sudo update-ca-certificates`. Apps that use their own certificate store (such as Firefox) need the CA imported there as well.
+3. Set the HTTP and HTTPS proxy to the WePROXA computer's local IP and port in your desktop network settings, **or** export the environment variables for a terminal session:
+
+   ```bash
+   export http_proxy="http://<weproxa-ip>:8888"
+   export https_proxy="http://<weproxa-ip>:8888"
+   ```
+
+</Steps>
+
+</TabItem>
+
+</Tabs>
+
+The [Automatic Proxy Setup (PAC)](#automatic-proxy-setup-pac) URL works from these computers too — point the OS or browser proxy configuration at the PAC URL instead of entering the host and port by hand.
 
 ## Finding Remote Traffic
 

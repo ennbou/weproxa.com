@@ -68,6 +68,14 @@ See [Remote Devices → Troubleshooting](/guide/guides/remote-devices/#troublesh
 - The firewall is blocking incoming connections to WePROXA.
 - The computer and the device are on different networks (e.g., the computer on Wi-Fi, the phone on cellular).
 
+## macOS Local Network Permission Prompt
+
+macOS asks apps for permission before they access the local network. WePROXA only triggers this prompt when it actually needs LAN access — for example, when you enable **Allow LAN access** in **Settings** → **Remote Access**. If you only capture traffic from the local machine, WePROXA avoids the prompt entirely. If you previously denied it and now want remote-device capture, allow WePROXA under **System Settings** → **Privacy & Security** → **Local Network**.
+
+## Upstream (Origin) Server Certificate Errors
+
+If a decrypted host fails with a certificate error that isn't about the WePROXA Root CA, WePROXA could not verify the **origin server's** certificate. On macOS, this verification uses the system trust store, so add the server's private or internal CA to macOS system trust. See [SSL Interception → How WePROXA Trusts Upstream Servers](/guide/guides/ssl-interception/#how-weproxa-trusts-upstream-servers).
+
 ## MCP Server Won't Start
 
 - **Not on Pro** — starting the MCP server requires a Pro license. See [Pricing](/pricing/).

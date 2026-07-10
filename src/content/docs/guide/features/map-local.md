@@ -123,6 +123,8 @@ The Map Local panel includes a built-in **Monaco editor** with syntax highlighti
 
 Press **Cmd+S** (macOS) or **Ctrl+S** (Windows/Linux) to save changes to the file. The save button and inline saved indicator confirm when the file has been written.
 
+When the response body is JSON, the editor validates it as you type. A subtle **Valid JSON** indicator confirms well-formed content, and a malformed body shows an inline **Invalid JSON** message with the parser error and a **Line _n_, Col _n_** link that jumps straight to the problem.
+
 If you open Map Local in a detached window, the title bar includes **Import** and **Add Mapping** actions so you can manage mocks without returning to the main window.
 
 ## File Watching

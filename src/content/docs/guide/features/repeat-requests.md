@@ -39,6 +39,8 @@ To modify a request before resending:
 
 ![Repeat editor window](@assets/guide/features/repeat-request/repeat_editor_window.png)
 
+When you edit a JSON body, WePROXA validates it inline: a **Valid JSON** indicator confirms well-formed content, and a malformed body shows an **Invalid JSON** message with the parser error and a **Line _n_, Col _n_** link that jumps to the error.
+
 :::note
 The `Host` and `Content-Length` headers are managed automatically — you don't need to set them manually.
 :::

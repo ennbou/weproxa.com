@@ -73,7 +73,7 @@ Click on any request to open the details panel with full information:
 
    ![Request details panel](@assets/guide/features/inspect-requests/request_details.png)
 
-The details panel can be positioned as a right sidebar or a bottom panel, and can be collapsed when not needed.
+The details panel can be positioned as a right sidebar or a bottom panel, and can be collapsed when not needed. The request method and response status are shown as compact color-coded badges at the top of the panel so they're easy to scan at a glance.
 
 ### Detail Actions
 
@@ -88,6 +88,7 @@ Saved snapshots are available from the sidebar even after the original live requ
 ### Request Section
 
 - **Headers** — All request headers in a key-value table (count shown in the tab label)
+- **Query** — The URL query string decoded into a name/value table (count shown in the tab label). This tab appears only when the request URL has query parameters, and empty names or values are shown as `(empty)`
 - **Cookies** — Request `Cookie` headers parsed into individual cookie names and values
 - **Body** — Request body with syntax highlighting (JSON, XML, HTML, etc.), or media preview for binary content
 - **Raw** — Full HTTP/1.1 request format (method, path, headers, and body)
