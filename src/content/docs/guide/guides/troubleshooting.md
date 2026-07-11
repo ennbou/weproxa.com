@@ -96,6 +96,10 @@ If a decrypted host fails with a certificate error that isn't about the WePROXA 
 
 ## Still Stuck?
 
+You can find your build details and check for updates in **Settings** → **About**.
+
+![WePROXA About settings](@assets/generated/screenshots/settings/about.png)
+
 Include the following when opening a [GitHub issue](https://github.com/ennbou/weproxa.com/issues):
 
 - WePROXA version (**Settings** → **About**)

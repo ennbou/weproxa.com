@@ -5,6 +5,10 @@ description: Full list of keyboard shortcuts available in WePROXA.
 
 WePROXA ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS and `Ctrl` on Windows unless noted.
 
+The full list is also available in **Settings** → **Keyboard Shortcuts**.
+
+![WePROXA Keyboard Shortcuts settings](@assets/generated/screenshots/settings/shortcuts.png)
+
 ## Proxy & Capture
 
 | Action | Shortcut |

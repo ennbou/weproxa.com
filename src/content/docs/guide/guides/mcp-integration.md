@@ -20,6 +20,8 @@ MCP is an open protocol that allows AI models to interact with tools and data so
 3. Enable the MCP server
 4. Note the **server URL** and **authentication token** displayed
 
+![WePROXA MCP Server settings](@assets/generated/screenshots/settings/mcp-server.png)
+
 ## Connecting an AI Client
 
 Configure your MCP-compatible AI client with:
