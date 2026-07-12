@@ -9,7 +9,7 @@ The toolbar, app menus, and tray give you quick access to capture controls, tool
 
 The main toolbar includes:
 
-- **Clear** - remove captured requests from the current session.
+- **Clear** - remove the requests currently shown in the list. When a filter is active, Clear removes only the displayed matches and leaves the rest of the session intact; with no filter it clears every captured request. The button's tooltip reflects which of the two it will do.
 - **LAN access** - choose whether the proxy listens only on `127.0.0.1` or on your local network address.
 - **Start / stop proxy** - toggle capture on the configured proxy port.
 - **Tool buttons** - open Map Local, Breakpoints, Block List, Network Conditioning, Scripting, and Diff.
@@ -69,8 +69,11 @@ The tray menu works even when the main window is closed or hidden. On macOS it a
 - Start or stop the proxy.
 - Open any tool window.
 - Toggle Map Local, Breakpoints, Block List, Network Conditioning, and Scripting.
+- Switch the active workspace from the **Switch Workspace** submenu.
 - Open Settings.
 - Quit WePROXA.
+
+The **Switch Workspace** submenu also appears in the macOS menu bar and lists every workspace with the active one checked. See [Workspaces](/guide/features/workspaces/) for details.
 
 Tray tool toggles update the same backend state as toolbar toggles, so changes are reflected immediately in open windows.
 

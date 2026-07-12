@@ -31,6 +31,8 @@ Only one workspace is active at a time, and only the active workspace's rules ma
 
 WePROXA saves the workspace you are leaving and loads the selected workspace's rules and tool enabled states. If a request is paused at a breakpoint when you switch, WePROXA releases that breakpoint before loading the next workspace.
 
+You can also switch without opening the sidebar. A native **Switch Workspace** submenu appears in the macOS menu bar and the tray menu, listing every workspace with the active one checked. Selecting a workspace there activates it immediately, and the list updates automatically as you create, rename, or delete workspaces.
+
 ## Creating and Managing Workspaces
 
 From the **Workspaces** tab you can create, rename, delete, and set the active workspace.

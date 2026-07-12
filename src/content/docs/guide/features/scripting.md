@@ -29,6 +29,15 @@ Free accounts are limited to **2 Scripting rules**. Upgrade to Pro for unlimited
 
 Each rule can be enabled or disabled individually, duplicated, edited, deleted, and sorted by name or date. The global Scripting toggle turns the whole rule engine on or off without deleting rules. The script editor expands to use the available panel height, including when Scripting is opened in a detached tool window.
 
+## Importing and Exporting Rules
+
+You can move script rules between machines or share them with teammates without copying scripts by hand.
+
+- **Export script** - Saves a single rule to a `WePROXA Script Rule` file (its name, URL pattern, method filter, phases, and script source).
+- **Import script** - Loads a rule from a previously exported file into the current workspace as a new rule.
+
+Import validates the file before adding the rule: it rejects files that are not valid WePROXA script rules, use an unsupported version, or exceed the 1 MB size limit. A successful import or export shows a confirmation toast.
+
 ## Console and Runtime Diagnostics
 
 The console at the bottom of the Scripting panel shows output from matching script rules while traffic passes through the proxy. Expand it to see each invocation's time, rule name, request or response phase, URL, and log entries.

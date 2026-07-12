@@ -23,6 +23,15 @@ A row of category buttons sits above the request list for quick content-type fil
 
 Click a button to show only that type. **Cmd+Click** (macOS) or **Ctrl+Click** (Windows/Linux) to select multiple types at once.
 
+## Filter from the Context Menu
+
+You can build a filter straight from a captured request without opening the query builder. Right-click a request and open the **Filter** submenu:
+
+- **Same Host** — show only requests to the selected request's host
+- **Same Client** — show only requests from the selected request's client or app
+
+WePROXA turns your choice into a query-builder condition, so you can refine or combine it afterward. Because it uses the query builder, filtering from the context menu is a **Pro** feature.
+
 ## Query Builder
 
 For more complex queries, use the advanced query builder:

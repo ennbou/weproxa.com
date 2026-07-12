@@ -23,6 +23,25 @@ When WePROXA starts, it automatically generates a root CA certificate unique to 
 
 After this one-time setup, HTTPS interception works seamlessly.
 
+## Trust Status
+
+The **Certificates** settings show a live **Trust status** for the local CA so you always know whether HTTPS can be decrypted:
+
+- **Installed & trusted** — the certificate is in Keychain and set to trust SSL/TLS. Interception is ready.
+- **Not trusted yet** — the certificate exists but is not installed or trusted. Install it to inspect HTTPS.
+- **Set to "Never Trust"** — the certificate is explicitly distrusted in Keychain, which blocks interception until you re-enable trust.
+
+If SSL interception is enabled while the certificate is not trusted, WePROXA warns you that HTTPS won't be decrypted until you install it.
+
+### Guided Setup
+
+When the certificate still needs attention, WePROXA can walk you through fixing it instead of sending you to Keychain unaided:
+
+- If it is **not trusted yet**, an **Install & Trust** action installs and trusts the certificate in one step.
+- If it is **set to "Never Trust"**, the dialog explains how to switch it back to **Always Trust** in Keychain Access.
+
+You can reopen these steps at any time from the certificate menu or the **Certificate settings** link.
+
 ## Manual Trust
 
 If you need to manually trust the certificate:
@@ -33,9 +52,22 @@ If you need to manually trust the certificate:
 4. Set **Secure Sockets Layer (SSL)** to **Always Trust**.
 5. Close the window and enter your password to confirm.
 
+## Managing the Certificate Lifecycle
+
+The **Certificate lifecycle** controls in **Settings** -> **Certificates** let you manage the local CA directly from WePROXA:
+
+- **Generate certificate** — create a new local CA when none exists yet.
+- **Regenerate certificate** — replace the CA identity and private key. HTTPS inspection stops working until the new certificate is installed and trusted again on every device.
+- **Download certificate** — save the CA certificate to a file, for example to trust it on another device.
+- **Remove local certificate** — permanently delete WePROXA's local CA certificate and private key.
+
+:::caution
+Stop the proxy before regenerating or removing the certificate. Regenerating creates a brand-new CA identity, so any copies already installed in Keychain or on other devices keep pointing at the old certificate until you remove and reinstall them there.
+:::
+
 ## Removing the Certificate
 
-To remove WePROXA's CA certificate:
+The quickest way to remove the CA is the **Remove local certificate** action described above. To also delete copies from Keychain (or to remove a certificate installed by an older version):
 
 1. Open **Keychain Access**.
 2. Search for **WePROXA**.

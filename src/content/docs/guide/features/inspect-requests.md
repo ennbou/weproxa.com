@@ -20,7 +20,7 @@ The default layout opens with the source sidebar visible and the **URL** column 
 - **Query** — The URL query string
 - **Remote Address** — Resolved IP address and port of the server
 - **HTTP Version** — Negotiated protocol (HTTP/1.1, HTTP/2.0, etc.)
-- **Client** — The application or browser that made the request
+- **Client** — The application or browser that made the request, shown with its app icon on macOS and Windows when one is available (a generic glyph is used as a fallback)
 - **Request Size** — Request body size
 - **Response Size** — Response body size, or tunnel byte totals after an upgraded connection closes
 - **Time** — Timestamp of the request (HH:MM:SS)
@@ -51,17 +51,18 @@ When you're viewing **Saved Requests**, request and response body search is unav
 
 ### Context Menu
 
-Right-click any request to access quick actions:
+Right-click any request to access quick actions. Related actions are grouped into nested submenus you can navigate with the mouse or keyboard:
 
+- **Filter** — narrow the request list to the **Same Host** or **Same Client** as the selected request (Pro; see [Advanced Filtering](/guide/features/advanced-filtering/))
 - **Copy as cURL** — Copy the request as a `curl` command
 - **Enable / Disable SSL for {host}** — Toggle HTTPS interception for the request's host
-- **Repeat Now** — Re-execute the same request immediately
-- **Repeat with Edit...** — Open the repeat editor to modify the request before sending
-- **Add to Diff** — Select requests to compare side by side
-- **Map Local** — Create a Map Local rule pre-filled with the request's URL
-- **Add Breakpoint** — Create a breakpoint rule for the request's URL pattern
-- **Add Block Rule** — Block requests matching this URL
-- **Add Throttle Rule** — Add a network conditioning rule for this URL
+- **Repeat** — Choose **Repeat Now** to re-execute immediately, or **Repeat with Edit...** to modify the request first
+- **Tools** — Create a rule from the request:
+  - **Add to Diff** — Select requests to compare side by side
+  - **Map Local** — Create a Map Local rule pre-filled with the request's URL
+  - **Add Breakpoint** — Create a breakpoint rule for the request's URL pattern
+  - **Add Block Rule** — Block requests matching this URL
+  - **Add Throttle Rule** — Add a network conditioning rule for this URL
 
 The context menu only shows actions that apply to the selected request. Internal lifecycle markers, such as upgraded tunnel handling, are kept out of tool labels so the list focuses on rules you configured.
 
@@ -118,6 +119,7 @@ If a tool modified the response (e.g., Map Local, Breakpoint), a "Modified By" i
 Toggle to the source/tree view in the sidebar to see requests organized into sections:
 
 - **All** — Every captured request
+- **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, or Scripting), so you can see exactly what each rule touched. Long lists collapse behind a **Show N more** control
 - **Saved Requests** — Persistent HTTPS request snapshots you explicitly saved from the details panel
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)
 - **SSL** — Hosts with SSL interception enabled (toggle via right-click)
