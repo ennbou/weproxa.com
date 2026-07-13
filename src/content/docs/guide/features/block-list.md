@@ -21,7 +21,7 @@ When a request matches a Block List rule, WePROXA intercepts it and returns an *
    - **Method** — optionally restrict to a specific HTTP method (GET, POST, PUT, etc.), or leave as "Any" to match all methods
 4. Enable the rule
 
-    ![Add block rule](@assets/guide/features/block-list/block_list_window.png)
+    ![WePROXA Block List window](@assets/generated/screenshots/features/block-list/window.png)
 
 :::tip
 You can also create a Block rule by **right-clicking a request** in the request list and selecting **Add Block Rule**. The URL pattern will be pre-filled from the selected request.

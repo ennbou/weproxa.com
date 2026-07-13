@@ -29,6 +29,8 @@ Added requests appear in a pool at the top of the Diff panel. Click a pooled req
 
 Use the **swap** button to flip left and right, or the trash icon to clear either side. Detached Diff windows include the same swap and clear controls in their title bar.
 
+![WePROXA Diff window](@assets/generated/screenshots/features/diff/window.png)
+
 ## Content Handling
 
 - **JSON** bodies are pretty-printed before diffing, so re-ordered or re-indented JSON does not show spurious changes.

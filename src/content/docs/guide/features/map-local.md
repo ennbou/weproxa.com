@@ -25,7 +25,7 @@ If the local file is not found, the request falls through and is forwarded to th
    - Or let WePROXA create a managed mock file automatically when you add a new rule
 5. Enable the rule
 
-    ![WePROXA Map Local window](@assets/guide/features/maplocal/maplocal_window.png)
+    ![WePROXA Map Local window](@assets/generated/screenshots/features/map-local/window.png)
 
 :::tip
 You can also create a Map Local rule by **right-clicking a request** in the request list and selecting **Map Local**. The URL pattern, HTTP method, status, headers, and response content are pre-filled from the selected request. WePROXA creates an editable mock response file for you so you can save the rule immediately or adjust the payload first.

@@ -26,7 +26,7 @@ Multiple breakpoints can fire concurrently — each opens its own editor window,
 4. Choose whether to break on **request**, **response**, or **both** (at least one must be selected)
 5. Enable the rule
 
-    ![Add breakpoint rule](@assets/guide/features/breakpoint/breakpoint_window.png)
+    ![WePROXA Breakpoints window](@assets/generated/screenshots/features/breakpoints/window.png)
 
 :::tip
 You can also create a breakpoint by **right-clicking a request** in the request list and selecting **Add Breakpoint**. The URL pattern will be pre-filled from the selected request.

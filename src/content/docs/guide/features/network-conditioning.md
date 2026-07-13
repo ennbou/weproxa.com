@@ -28,7 +28,7 @@ Delays are applied per-rule based on URL pattern matching — you can target spe
    - **Response Delay** — milliseconds to delay before delivering the response (e.g., `500`)
 4. Enable the rule
 
-    ![Network conditioning window](@assets/guide/features/network-conditioning/network_conditioning_window.png)
+    ![Network conditioning window](@assets/generated/screenshots/features/network-conditioning/window.png)
 
 :::tip
 You can also create a rule by **right-clicking a request** in the request list and selecting the network conditioning option. The URL pattern will be pre-filled with a default of 500ms for each delay.
