@@ -11,14 +11,14 @@ Starting the MCP server is a **Pro** feature. Free accounts can view the configu
 
 ## What is MCP?
 
-MCP is an open protocol that allows AI models to interact with tools and data sources. WePROXA's MCP server lets AI assistants access your captured HTTP traffic and proxy tools.
+MCP is an open protocol that allows AI models to interact with tools and data sources. WePROXA's current MCP server exposes proxy lifecycle and debugging-configuration tools to compatible AI clients.
 
 ## Enabling the MCP Server
 
 1. Open **Settings** in WePROXA
-2. Navigate to the **MCP** section
-3. Enable the MCP server
-4. Note the **server URL** and **authentication token** displayed
+2. Navigate to **MCP Server**
+3. Click **Start**
+4. Copy the **Endpoint URL** and **Auth Token** displayed
 
 ![WePROXA MCP Server settings](@assets/generated/screenshots/settings/mcp-server.png)
 
@@ -33,13 +33,14 @@ Configure your MCP-compatible AI client with:
 
 The MCP server exposes tools that let AI assistants:
 
-- List captured requests
-- Inspect request/response details
-- Filter requests by various criteria
 - Start, stop, and inspect the proxy
 - Add, update, remove, and list Map Local, Breakpoint, Block List, Network Conditioning, and Scripting rules
 - Add, update, remove, and list SSL interception hosts
 - Read and change the enabled state of rule-based tools
+
+:::note
+The current MCP tool surface does not expose captured requests, response bodies, headers, cookies, or saved-request contents. It manages proxy state and debugging configuration only.
+:::
 
 ### Network Conditioning and Scripting
 

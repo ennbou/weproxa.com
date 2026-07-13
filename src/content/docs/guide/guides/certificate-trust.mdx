@@ -13,8 +13,8 @@ When WePROXA starts, it automatically generates a root CA certificate unique to 
 
 <Steps>
 
-1. Open WePROXA and go to **Settings** -> **Certificates**.
-2. Click **Install to macOS Keychain**.
+1. Open WePROXA and go to **Settings** → **CA Certificate**.
+2. Click **Install to macOS**.
 3. Enter your macOS password when prompted. The certificate is installed in the System keychain and marked as trusted for SSL/TLS connections.
 
 </Steps>
@@ -54,7 +54,7 @@ If you need to manually trust the certificate:
 
 ## Managing the Certificate Lifecycle
 
-The **Certificate lifecycle** controls in **Settings** -> **Certificates** let you manage the local CA directly from WePROXA:
+The **Certificate lifecycle** controls in **Settings** → **CA Certificate** let you manage the local CA directly from WePROXA:
 
 - **Generate certificate** — create a new local CA when none exists yet.
 - **Regenerate certificate** — replace the CA identity and private key. HTTPS inspection stops working until the new certificate is installed and trusted again on every device.

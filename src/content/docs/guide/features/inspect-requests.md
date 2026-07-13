@@ -128,3 +128,5 @@ Toggle to the source/tree view in the sidebar to see requests organized into sec
 - **Devices** — Requests from remote devices, grouped by IP address
 
 Each section can be expanded into host and path hierarchies. Saved requests get their own host/path tree, and app-based SSL rules expand as app → host → path so you can isolate one client quickly. A search field at the top filters hosts and app names in real time.
+
+WePROXA remembers whether stable top-level groups and **Modified by Tool** subgroups are expanded or collapsed between launches. Traffic-derived host, app, device, and path nodes remain session-specific and start collapsed in a new session.

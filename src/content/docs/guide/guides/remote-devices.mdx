@@ -25,9 +25,10 @@ LAN access exposes the proxy port on your computer's local IP. Only enable it on
 
 <Steps>
 
-1. Open **Settings** → **Remote Access** in WePROXA.
-2. Toggle **Allow LAN access** on. (You may need to stop the proxy to change this setting; WePROXA will prompt you if so.)
-3. Optionally enable **Auto-start LAN access** so the proxy listens on the network automatically on every launch.
+1. If the proxy is running, stop it from the main toolbar. LAN access cannot be changed while the proxy is running.
+2. Click the **LAN access** Wi-Fi button in the main toolbar so it changes from local-only to network-accessible.
+3. Start the proxy again.
+4. Optionally open **Settings** → **Remote Access** and enable **Auto-enable LAN access on launch**. Pair it with **Auto-start proxy on launch** in **Settings** → **Proxy Config** when you want remote capture to start automatically.
 
 </Steps>
 
@@ -43,7 +44,7 @@ WePROXA ships a temporary local certificate server with a QR code so you don't h
 
 <Steps>
 
-1. In **Settings** → **Remote Access**, click **Show QR Code for Certificate**.
+1. In **Settings** → **Remote Access**, click **Show certificate and setup**.
 2. On your device, scan the QR code (camera app on iOS, a QR scanner on Android) or open the URL shown below the QR code in the device's browser.
 3. Download and install the certificate, then trust it (see platform-specific steps below).
 4. Click **Close** in WePROXA when you're done — this stops the temporary certificate server.
@@ -85,7 +86,7 @@ Android 7+ apps ignore user-installed CAs by default. For app traffic you usuall
 
 ## 3. Choose a Proxy Setup Method
 
-After you open **Show QR Code for Certificate**, WePROXA gives you two ways to point a device at the proxy:
+After you open **Show certificate and setup**, WePROXA gives you two ways to point a device at the proxy:
 
 - **Manual proxy** — enter your computer's IP and proxy port yourself.
 - **Automatic proxy (PAC)** — paste the PAC URL shown in the Remote Access panel.
@@ -127,7 +128,7 @@ Use this when you want the device to fetch proxy settings automatically instead 
 </Tabs>
 
 :::note
-The PAC URL is served by the same temporary local server as the certificate QR flow. If you close that panel, the PAC URL is no longer available until you open **Show QR Code for Certificate** again.
+The PAC URL is served by the same temporary local server as the certificate QR flow. If you close that panel, the PAC URL is no longer available until you open **Show certificate and setup** again.
 :::
 
 ### Manual Proxy Setup
@@ -167,7 +168,7 @@ Open a browser on the device and visit any site — you should see traffic flowi
 
 ## Other Computers (macOS, Windows, Linux)
 
-You can also route another computer's traffic through WePROXA. Enable **LAN access** (step 1) and open **Show QR Code for Certificate** on the WePROXA computer so the certificate URL and PAC URL are available, then follow the steps for the target computer's operating system.
+You can also route another computer's traffic through WePROXA. Enable **LAN access** as described above and open **Show certificate and setup** on the WePROXA computer so the certificate URL and PAC URL are available, then follow the steps for the target computer's operating system.
 
 <Tabs>
 
@@ -231,7 +232,7 @@ The device row and each nested host row show live request counts from the curren
 - **Nothing shows up** — verify the computer's IP is reachable (try `http://<computer-ip>:<port>` in the device's browser). A firewall may be blocking incoming connections.
 - **HTTPS errors on the device** — the CA profile isn't installed or isn't fully trusted. On iOS, check **Certificate Trust Settings**.
 - **App traffic not captured (Android)** — app uses its own CA pinning or ignores user CAs. Use a debug build or run against an emulator. See [iOS Simulator](/guide/guides/ios-simulator/) for simulator-based debugging.
-- **Certificate QR code won't load** — the local cert server uses a short-lived port. Close the dialog and click **Show QR Code** again to restart it.
-- **Certificate QR code port is already in use** — reopen **Show QR Code**. WePROXA automatically falls back to an available port when the default certificate server port is busy.
+- **Certificate QR code won't load** — the local cert server uses a short-lived port. Close the setup panel and click **Show certificate and setup** again to restart it.
+- **Certificate QR code port is already in use** — reopen **Show certificate and setup**. WePROXA automatically falls back to an available port when the default certificate server port is busy.
 - **PAC URL missing** — PAC is only shown while the certificate panel is open and **LAN access** is enabled.
-- **Automatic proxy stops working later** — reopen **Show QR Code for Certificate** to bring the PAC URL back if the temporary cert server was closed.
+- **Automatic proxy stops working later** — reopen **Show certificate and setup** to bring the PAC URL back if the temporary cert server was closed.

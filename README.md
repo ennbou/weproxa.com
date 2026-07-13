@@ -38,9 +38,15 @@ It's especially useful for:
 -  **Request replay**: Resend captured requests immediately or open them in the repeat editor to test variations safely.
 -  **HTTPS inspection**: Generate and trust a local certificate on macOS or Windows so encrypted traffic can be inspected when needed.
 -  **Map Local**: Replace remote resources with local files to prototype UI changes, mock assets, or test fixes without touching the backend.
+-  **Workspaces**: Keep Map Local, Breakpoints, Block List, Network Conditioning, and Scripting rules isolated by project or test scenario.
+-  **Scripting**: Automate matching request and response changes with reusable Rhai rules and runtime diagnostics.
+-  **Block List and Network Conditioning**: Block matching traffic or add request and response delays to reproduce failure and latency conditions.
+-  **WebSocket inspection**: Follow upgraded connections frame by frame, including readable compressed messages.
 -  **Advanced filtering**: Narrow large traffic sessions by method, host, path, status code, headers, or body content.
+-  **Network performance metrics**: Inspect detailed timing phases and waterfalls for captured requests.
 -  **Side-by-side diff**: Compare two requests or responses to quickly spot changes in payloads, headers, or behavior.
 -  **Remote device capture**: Inspect traffic from phones, tablets, simulators, and other devices on your local network.
+-  **MCP integration**: Let compatible AI clients manage proxy state, tool rules, SSL hosts, and tool enabled states.
 
 ## ⚡ Quick Start
 
@@ -62,11 +68,19 @@ If you want the full setup guide, screenshots, and feature walkthroughs, start h
 -  [Microsoft Store](https://apps.microsoft.com/detail/9p9npx1zvrjs)
 -  [Quick Start](https://weproxa.com/guide/getting-started/quick-start/)
 -  [Inspect Requests](https://weproxa.com/guide/features/inspect-requests/)
+-  [Workspaces](https://weproxa.com/guide/features/workspaces/)
+-  [WebSocket Inspection](https://weproxa.com/guide/features/websocket-inspection/)
 -  [Breakpoints](https://weproxa.com/guide/features/breakpoints/)
 -  [Map Local](https://weproxa.com/guide/features/map-local/)
+-  [Block List](https://weproxa.com/guide/features/block-list/)
+-  [Network Conditioning](https://weproxa.com/guide/features/network-conditioning/)
+-  [Scripting](https://weproxa.com/guide/features/scripting/)
 -  [Repeat Requests](https://weproxa.com/guide/features/repeat-requests/)
 -  [Advanced Filtering](https://weproxa.com/guide/features/advanced-filtering/)
+-  [Network Performance Metrics](https://weproxa.com/guide/features/network-performance-metrics/)
 -  [Diff Requests](https://weproxa.com/guide/features/diff-requests/)
+-  [Remote Devices](https://weproxa.com/guide/guides/remote-devices/)
+-  [MCP Integration](https://weproxa.com/guide/guides/mcp-integration/)
 
 ## 💡 Typical Use Cases
 

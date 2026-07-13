@@ -5,7 +5,7 @@ description: Full list of keyboard shortcuts available in WePROXA.
 
 WePROXA ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS and `Ctrl` on Windows unless noted.
 
-The full list is also available in **Settings** → **Keyboard Shortcuts**.
+The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcuts. This guide also includes tool and editor shortcuts that are not shown in that screen.
 
 ![WePROXA Keyboard Shortcuts settings](@assets/generated/screenshots/settings/shortcuts.png)
 

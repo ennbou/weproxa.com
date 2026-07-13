@@ -21,7 +21,7 @@ You do not need to trust the certificate if you only need HTTP traffic, connecti
 
 ## Find the Certificate File
 
-WePROXA shows the generated certificate path in **Settings** -> **Certificates**. Use **Copy** to copy the path, then decide outside the app whether you want to import that certificate into Windows trust settings.
+WePROXA shows the generated certificate path in **Settings** → **CA Certificate**. Use **Copy** to copy the path, then decide outside the app whether you want to import that certificate into Windows trust settings.
 
 If **Certificate Path** is empty in a Microsoft Store installation, update WePROXA to version 3.1.0 or later, quit the app completely, and open it again. Version 3.1.0 fixes Store package restrictions that could prevent the generated certificate files from being written.
 
@@ -29,7 +29,7 @@ If **Certificate Path** is empty in a Microsoft Store installation, update WePRO
 
 Only do this on a Windows device you own or administer, and only when you need HTTPS body inspection.
 
-1. Open WePROXA and go to **Settings** -> **Certificates**.
+1. Open WePROXA and go to **Settings** → **CA Certificate**.
 2. Copy the **Certificate Path** shown in the app.
 3. Open the Windows Start menu and search for **Manage user certificates**.
 4. Open **Certificates - Current User**.

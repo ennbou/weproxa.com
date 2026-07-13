@@ -15,7 +15,7 @@ Try in order:
 2. **Is the system proxy enabled?** Click the network icon in the toolbar — WePROXA should show the system proxy as active.
 3. **Does the browser respect the system proxy?** Safari uses system settings on macOS, and Chrome and Edge use system settings on both macOS and Windows. Firefox has its own proxy settings unless you set it to "Use system proxy settings".
 4. **Is an app using its own proxy / DNS?** Some CLIs (`curl`, `git`) respect environment variables (`HTTP_PROXY`, `HTTPS_PROXY`). In **Settings** → **Proxy Config**, open a configured terminal where available, or copy the terminal proxy commands into your current shell.
-5. **Is another tool already on the proxy port?** WePROXA will log a port-in-use error. Change the port in **Settings** → **Proxy**.
+5. **Is another tool already on the proxy port?** WePROXA will log a port-in-use error. Change the port in **Settings** → **Proxy Config**.
 
 ## HTTPS Requests Show as `CONNECT` Tunnels
 
@@ -27,8 +27,8 @@ When a host isn't in the SSL Interception list, WePROXA forwards the raw encrypt
 
 The device doesn't trust WePROXA's root CA.
 
-- **On macOS**: open **Settings** -> **Certificates** and install the WePROXA Root CA, or follow [Certificate Trust](/guide/guides/certificate-trust/) to trust it manually.
-- **On Windows**: open **Settings** -> **Certificates** and choose **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether to trust a local CA.
+- **On macOS**: open **Settings** → **CA Certificate** and install the WePROXA Root CA, or follow [Certificate Trust](/guide/guides/certificate-trust/) to trust it manually.
+- **On Windows**: open **Settings** → **CA Certificate** and choose **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether to trust a local CA.
 - **On a remote device**: see [Remote Devices](/guide/guides/remote-devices/) to install and trust the certificate over QR code.
 - **Firefox**: uses its own certificate store. Enable `security.enterprise_roots.enabled` in `about:config`, or import the CA manually from **Settings** → **Privacy & Security** → **Certificates**.
 
@@ -79,8 +79,8 @@ If a decrypted host fails with a certificate error that isn't about the WePROXA 
 ## MCP Server Won't Start
 
 - **Not on Pro** — starting the MCP server requires a Pro license. See [Pricing](/pricing/).
-- **Port already in use** — change the port in **Settings** → **MCP**.
-- **Wrong bearer token in the client** — copy the token from WePROXA again; it rotates when the server is restarted.
+- **Port range unavailable** — WePROXA starts at its preferred local port and automatically tries subsequent ports. Close conflicting local services, start the MCP server again, and use the exact **Endpoint URL** shown in **Settings** → **MCP Server**.
+- **Wrong bearer token in the client** — copy the **Auth Token** from WePROXA again. The token persists across server restarts and changes only when you choose **Regenerate Token**.
 
 ## Map Local Rule Doesn't Fire
 

@@ -2,10 +2,10 @@
 title: Terms of Service
 description: WePROXA terms of service — conditions for using the app and website.
 tableOfContents: false
-lastUpdated: 2026-04-06
+lastUpdated: 2026-07-13
 ---
 
-**Effective Date: April 6, 2026**
+**Effective Date: July 13, 2026**
 
 ## 1. Acceptance of Terms
 
@@ -27,7 +27,7 @@ A WePROXA Pro license removes all usage limits and unlocks additional features. 
 
 - A **one-time purchase** of $25 USD.
 - Includes **1 year of updates** from the date of purchase.
-- **Per-user**: each license is for a single user.
+- **Per-device activation**: the standard license may be active on one machine at a time. If your purchase includes a different activation limit, that limit controls how many machines may use the key concurrently.
 - **Non-transferable**: licenses may not be resold or transferred.
 
 After the update period expires, you may continue using the last version you received. You can purchase a new license to receive another year of updates.

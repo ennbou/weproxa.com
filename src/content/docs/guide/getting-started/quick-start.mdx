@@ -21,11 +21,11 @@ Get up and running with WePROXA in just a few steps.
 
     3. **Enable the system proxy** — WePROXA can automatically configure your Mac's system proxy settings. Click the network icon in the toolbar to toggle it on.
 
-    4. **(Optional) Auto-start on launch** — in **Settings** → **Proxy Config** you can enable **Auto-start proxy** and **Auto-start LAN access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
+    4. **(Optional) Auto-start on launch** — enable **Auto-start proxy on launch** in **Settings** → **Proxy Config**. For remote capture, also enable **Auto-enable LAN access on launch** in **Settings** → **Remote Access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
 
        ![WePROXA Proxy Config settings](@assets/generated/screenshots/settings/proxy.png)
 
-    5. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **Certificates** and click **Install to macOS Keychain**. This is a one-time setup. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+    5. **Install the CA certificate** — to inspect HTTPS traffic, go to **Settings** → **CA Certificate** and click **Install to macOS**. This is a one-time setup. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
 
     6. **Enable SSL for a host** — click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
 
@@ -49,9 +49,9 @@ Get up and running with WePROXA in just a few steps.
 
     3. **Enable the system proxy** — click the network icon in the toolbar. WePROXA configures the Windows proxy settings for the current user and restores the previous values when capture stops or the app exits normally.
 
-    4. **(Optional) Auto-start on launch** — in **Settings** you can enable **Auto-start proxy** and **Auto-start LAN access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
+    4. **(Optional) Auto-start on launch** — enable **Auto-start proxy on launch** in **Settings** → **Proxy Config**. For remote capture, also enable **Auto-enable LAN access on launch** in **Settings** → **Remote Access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
 
-    5. **Review HTTPS certificate trust** — HTTPS body inspection on Windows requires a trusted local CA. Open **Settings** -> **Certificates** and click **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether HTTPS inspection is appropriate for your device.
+    5. **Review HTTPS certificate trust** — HTTPS body inspection on Windows requires a trusted local CA. Open **Settings** → **CA Certificate** and click **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether HTTPS inspection is appropriate for your device.
 
     6. **Enable SSL for a host** — click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
 
@@ -65,7 +65,7 @@ Get up and running with WePROXA in just a few steps.
 
 ## Auto-start Behavior
 
-**Auto-start proxy** is the main switch for automatic capture. When **Auto-start LAN access** is also enabled, WePROXA enables LAN access first and then starts the proxy on the saved port. The persisted settings are loaded before either action runs, so a cold start uses the same configuration you selected previously.
+**Auto-start proxy on launch** is the main switch for automatic capture. When **Auto-enable LAN access on launch** is also enabled, WePROXA enables LAN access first and then starts the proxy on the saved port. The persisted settings are loaded before either action runs, so a cold start uses the same configuration you selected previously.
 
 ## Terminal Proxy Setup
 

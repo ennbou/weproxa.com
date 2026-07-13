@@ -2,10 +2,10 @@
 title: Privacy Policy
 description: WePROXA privacy policy — how we handle your data.
 tableOfContents: false
-lastUpdated: 2026-04-06
+lastUpdated: 2026-07-13
 ---
 
-**Effective Date: April 6, 2026**
+**Effective Date: July 13, 2026**
 
 ## Overview
 
@@ -52,9 +52,19 @@ If you purchase a WePROXA Pro license, your license key is validated through [Le
 
 We do not store your payment information. We only store your license key locally on your device.
 
-### Feature Flags (PostHog)
+### Desktop App Analytics and Feature Flags (PostHog)
 
-We may use [PostHog](https://posthog.com) to query feature flags that control app behavior. These requests are anonymous and do not include personal data.
+The WePROXA desktop app may use [PostHog](https://posthog.com) for anonymous product analytics and feature-flag evaluation. Analytics is event-based: WePROXA records selected actions such as starting or stopping the proxy, opening or toggling a tool, managing a rule, applying a filter, changing a preference, or completing a license or update action.
+
+Desktop analytics may include:
+
+- A randomly generated anonymous app-install identifier and session identifier.
+- App version, operating-system platform, locale, and license tier.
+- Coarse event properties such as the tool or action type, counts, durations, enabled state, and categorized success or failure reason.
+
+WePROXA does not identify people or accounts in PostHog and does not create person profiles. Automatic page views, autocapture, session recording, surveys, and performance capture are disabled in the desktop app. Raw errors are reduced to coarse categories before analytics events are sent.
+
+Desktop analytics and feature-flag requests do **not** include intercepted request or response URLs, headers, bodies, cookies, local file paths, certificate material, license keys, or customer email addresses.
 
 ## Data We Do NOT Collect
 
@@ -71,13 +81,13 @@ We may use [PostHog](https://posthog.com) to query feature flags that control ap
 | Umami | Website analytics | Anonymous page views |
 | Sentry | Crash reporting | Error details, app version |
 | Lemon Squeezy | License & payments | License key, payment info |
-| PostHog | Feature flags | Anonymous flag queries |
+| PostHog | Desktop app analytics and feature flags | Anonymous install/session IDs, selected usage events, and app/platform metadata |
 
 Each service operates under its own privacy policy.
 
 ## Data Storage and Security
 
-All user data is stored locally on your device. We do not operate servers that store your personal data or captured traffic. Communication with third-party services (Sentry, Lemon Squeezy, PostHog) uses HTTPS encryption.
+Captured traffic and local configuration are stored locally on your device. We do not operate servers that store your captured traffic. Communication with third-party services (Sentry, Lemon Squeezy, PostHog) uses HTTPS encryption.
 
 ## Children's Privacy
 
