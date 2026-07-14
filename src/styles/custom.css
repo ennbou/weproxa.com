@@ -49,11 +49,11 @@
   width: 2rem;
 }
 
-/* Present native window captures as a distinct, softly rounded frame. */
-.sl-markdown-content img[alt$=' window'] {
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.75rem;
-}
+/* Native window captures ship with their own rounded corners and hairline
+   border baked into the PNG by the docs-screenshot harness (see
+   tests/src/support/docs-screenshots.ts), so no CSS frame is applied here — a
+   CSS border/radius would double up on the frames whose alt text ends in
+   "window". */
 
 /* --- Pricing Page Styles --- */
 
