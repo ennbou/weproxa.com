@@ -37,7 +37,7 @@ To modify a request before resending:
 - **Headers** — add, edit, or remove request headers
 - **Body** — edit the request payload with syntax highlighting (language auto-detected from `Content-Type`)
 
-![Repeat editor window](@assets/guide/features/repeat-request/repeat_editor_window.png)
+![Repeat editor window](@assets/generated/screenshots/features/repeat-request/editor.png)
 
 When you edit a JSON body, WePROXA validates it inline: a **Valid JSON** indicator confirms well-formed content, and a malformed body shows an **Invalid JSON** message with the parser error and a **Line _n_, Col _n_** link that jumps to the error.
 

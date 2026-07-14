@@ -52,7 +52,7 @@ When a breakpoint fires on the **request phase**, an editor window opens with:
 - **Headers** — add, edit, or remove request headers
 - **Body** — edit the request body with syntax highlighting (language auto-detected from `Content-Type`)
 
-    ![Breakpoint request editor](@assets/guide/features/breakpoint/breakpoint_request_editor.png)
+    ![Breakpoint request editor](@assets/generated/screenshots/features/breakpoints/request-editor.png)
 
 Click **Continue** to send the (modified or unchanged) request, or **Abort** to drop it entirely.
 
@@ -65,7 +65,7 @@ When a breakpoint fires on the **response phase**, the editor window shows:
 - **Headers** — add, edit, or remove response headers
 - **Body** — edit the response body (already decompressed for easy editing)
 
-    ![Breakpoint response editor](@assets/guide/features/breakpoint/breakpoint_response_editor.png)
+    ![Breakpoint response editor](@assets/generated/screenshots/features/breakpoints/response-editor.png)
 
 Click **Continue** to forward the response to the client, or **Abort** to cancel delivery.
 

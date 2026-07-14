@@ -21,6 +21,8 @@ Captured requests, saved requests, proxy settings, and SSL interception rules ar
 
 The left sidebar has two tabs: **Explorer** (the traffic and source tree) and **Workspaces** (the workspace manager). Open the **Workspaces** tab to see every workspace, create new ones, and select any workspace to view and edit its rules.
 
+![WePROXA Workspaces tab with the active workspace selected](@assets/generated/screenshots/features/workspaces/tab.png)
+
 ## Switching Workspaces
 
 Only one workspace is active at a time, and only the active workspace's rules match live traffic.
@@ -50,6 +52,8 @@ Deleting a workspace cannot be undone. Review its rules before confirming the de
 ## Editing Rules Without Activating
 
 Selecting a workspace in the **Workspaces** tab opens its rules in the main area, grouped under each tool (Map Local, Breakpoints, Block List, Network Conditioning, and Scripting). You can add, edit, toggle, and remove rules for **any** workspace — including ones that are not active — so you can prepare a scenario ahead of time without disturbing live capture.
+
+![Previewing an inactive workspace's rules without activating it](@assets/generated/screenshots/features/workspaces/preview.png)
 
 A hint above the rules tells you which mode you're in:
 
