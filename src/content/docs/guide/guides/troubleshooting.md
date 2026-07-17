@@ -94,6 +94,12 @@ If a decrypted host fails with a certificate error that isn't about the WePROXA 
 - The URL pattern is too narrow. Try a broader glob like `*example.com*`.
 - You chose **response only** but the request didn't complete (e.g., it was blocked by a Block List rule).
 
+## Reset WePROXA to Defaults
+
+If WePROXA ends up in a confusing state, you can start fresh. Open **Settings** → **Reset** and choose **Reset all settings**. This clears every setting, preference, and workspace rule — theme, language, layout, proxy config, SSL hosts, MCP server config and access token, breakpoints, Map Local, block list, throttling, and scripts — then restarts the app.
+
+Your **license**, **installed certificate**, and **saved requests** are preserved. The reset cannot be undone, so WePROXA asks you to confirm first.
+
 ## Still Stuck?
 
 You can find your build details and check for updates in **Settings** → **About**.

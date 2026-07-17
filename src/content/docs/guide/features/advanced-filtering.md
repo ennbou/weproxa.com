@@ -49,6 +49,12 @@ Use **Cmd+Click** (macOS) or **Ctrl+Click** (Windows/Linux) on the filter icon t
 The advanced query builder is a **Pro** feature. Free accounts can use the quick filter and content-type filters.
 :::
 
+### Activating Individual Rules
+
+Each rule in the query builder has its own **Active / Inactive** toggle. Deactivating a rule keeps it in the builder — so you can edit it later — but excludes it from evaluation, letting you temporarily narrow or widen a query without deleting and rebuilding conditions. A summary next to the **Advanced Filter** title shows how many rules are currently active out of the total (e.g., **Active: 2/3**).
+
+Your query builder rules and each rule's active state are saved, so they persist across app restarts until you clear them.
+
 ## Saved Requests Limitations
 
 When the sidebar selection is inside **Saved Requests**, filtering is intentionally narrower than live traffic filtering:

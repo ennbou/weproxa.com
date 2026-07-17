@@ -119,7 +119,7 @@ If a tool modified the response (e.g., Map Local, Breakpoint), a "Modified By" i
 Toggle to the source/tree view in the sidebar to see requests organized into sections:
 
 - **All** — Every captured request
-- **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, or Scripting), so you can see exactly what each rule touched. Long lists collapse behind a **Show N more** control
+- **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, Scripting, or Repeat), so you can see exactly what each rule touched. Requests you replayed appear under the **Repeat** group. Long lists collapse behind a **Show N more** control
 - **Saved Requests** — Persistent HTTPS request snapshots you explicitly saved from the details panel
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)
 - **SSL** — Hosts with SSL interception enabled (toggle via right-click)

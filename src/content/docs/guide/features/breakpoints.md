@@ -28,6 +28,8 @@ Multiple breakpoints can fire concurrently — each opens its own editor window,
 
     ![WePROXA Breakpoints window](@assets/generated/screenshots/features/breakpoints/window.png)
 
+WePROXA validates the **URL Pattern** glob as you type and shows whether it's valid. Patterns can't contain spaces.
+
 :::tip
 You can also create a breakpoint by **right-clicking a request** in the request list and selecting **Add Breakpoint**. The URL pattern will be pre-filled from the selected request.
 ![Add Breakpoint from requests list](@assets/guide/features/breakpoint/breakpoint_from_request.png)

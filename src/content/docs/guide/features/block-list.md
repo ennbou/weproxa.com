@@ -49,6 +49,8 @@ Block List rules support glob patterns for flexible URL matching:
 - **Domain-wide** — `*tracking.example.com*` blocks all requests to a domain
 - **Exact URLs** — `https://api.example.com/v1/telemetry` blocks a specific endpoint
 
+WePROXA validates the **URL Pattern** as you type and shows whether the glob is valid. Patterns can't contain spaces.
+
 ## Use Cases
 
 - **Test error handling** — see how your app behaves when an API returns 403

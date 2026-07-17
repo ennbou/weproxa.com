@@ -41,6 +41,10 @@ To modify a request before resending:
 
 When you edit a JSON body, WePROXA validates it inline: a **Valid JSON** indicator confirms well-formed content, and a malformed body shows an **Invalid JSON** message with the parser error and a **Line _n_, Col _n_** link that jumps to the error.
 
+### Compressed Request Bodies
+
+If the original request body was compressed (`gzip`, `deflate`, `br`, or `zstd`), WePROXA decodes it so you can read and edit it as plain text, then re-encodes it with the same `Content-Encoding` when you send. If a body can't be decoded losslessly, WePROXA tells you and resends the original bytes untouched — unless you replace the body yourself. In that case, replace the body before changing the `Content-Encoding` header.
+
 :::note
 The `Host` and `Content-Length` headers are managed automatically — you don't need to set them manually.
 :::

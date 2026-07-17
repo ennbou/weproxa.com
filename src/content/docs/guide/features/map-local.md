@@ -3,7 +3,7 @@ title: Map Local
 description: Replace remote resources with local files for rapid development.
 ---
 
-Map Local lets you serve local files in place of remote resources — without changing your server or application code.
+Map Local lets you serve a **local file** — or an asset fetched from a **remote URL** — in place of a remote resource, without changing your server or application code.
 
 ## How It Works
 
@@ -19,10 +19,9 @@ If the local file is not found, the request falls through and is forwarded to th
    - **Name** — a descriptive label for the rule
    - **URL Pattern** — a glob pattern to match URLs (e.g., `https://api.example.com/v1/*`)
    - **Method** — optionally restrict to a specific HTTP method (GET, POST, PUT, etc.), or leave as "Any" to match all methods
-4. Choose the local file to serve:
-   - **Browse** to select an existing file
-   - **Create File** to save the current editor content as a new mock file
-   - Or let WePROXA create a managed mock file automatically when you add a new rule
+4. Choose the **Response Source** — a local file or a remote URL (see [Response Source](#response-source)):
+   - **Local file** — **Browse** to select an existing file, **Create File** to save the current editor content as a new mock file, or let WePROXA create a managed mock file automatically when you add a new rule
+   - **Remote URL** — enter an HTTP(S) URL and WePROXA fetches that asset on demand
 5. Enable the rule
 
     ![WePROXA Map Local window](@assets/generated/screenshots/features/map-local/window.png)
@@ -62,10 +61,21 @@ You can export and import Map Local rules to share configurations across devices
 - **Export** — click the download icon on any rule card to save it as a `.weproxa-map-local.json` file. The export includes the rule settings (name, URL pattern, method) and the full response file content.
 - **Import** — click the **Import** button in the toolbar to load a previously exported rule file. WePROXA recreates the rule and its mock file automatically.
 
+Exports are limited to **32 MB** of file content, and imported files can be up to **48 MB**.
+
 This is useful for:
 - Sharing API mocks with teammates
 - Backing up your rules before switching machines
 - Distributing pre-configured mock setups for a project
+
+## Response Source
+
+Each Map Local rule serves its response from one of two sources:
+
+- **Local file** — serve JSON, text, images, video, or audio from a file on disk. WePROXA watches the file, so external edits are picked up immediately, and this source works offline. This is the default.
+- **Remote URL** — point the rule at an HTTP or HTTPS URL. WePROXA fetches that asset **on demand** the first time a matching request arrives; the response is **not saved to disk**, and a bounded in-memory cache keeps repeat matches fast. This is handy for swapping in a replacement image, script, or bundle hosted elsewhere without downloading it first.
+
+When you pick **Remote URL**, WePROXA validates the address inline and only accepts a well-formed `http://` or `https://` URL.
 
 ## Pattern Matching
 
@@ -74,6 +84,8 @@ Map Local rules support flexible URL matching with glob patterns:
 - **Exact URLs** — `https://api.example.com/data.json`
 - **Glob patterns** — `https://api.example.com/v1/*`
 - **Host-only** — `*api.example.com*` to match all requests to a specific domain
+
+As you type a **URL Pattern**, WePROXA validates the glob live and shows whether it's valid. The same check runs across all rule panels — Map Local, Block List, Breakpoints, Network Conditioning, and Scripting — and patterns can't contain spaces.
 
 ## Response File Format
 

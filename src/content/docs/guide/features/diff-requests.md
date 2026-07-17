@@ -25,7 +25,7 @@ The diff editor uses the same engine as Monaco, with side-by-side rendering, syn
 
 The Diff panel can be used inline (as a detail view) or opened in its own window — useful for comparing on a second monitor while you keep capturing traffic.
 
-Added requests appear in a pool at the top of the Diff panel. Click a pooled request to assign it to a side, or drag it into the **Left** or **Right** slot. You can keep more than two requests in the pool, swap the active left/right selection, remove a single pooled request, clear either side, or clear the whole pool.
+Added requests appear in a pool at the top of the Diff panel, each showing its method and request URL — longer URLs wrap instead of being cut off, so you can tell similar requests apart. Click a pooled request to assign it to a side, or drag it into the **Left** or **Right** slot. You can keep more than two requests in the pool, swap the active left/right selection, remove a single pooled request, clear either side, or clear the whole pool.
 
 Use the **swap** button to flip left and right, or the trash icon to clear either side. Detached Diff windows include the same swap and clear controls in their title bar.
 
