@@ -63,7 +63,7 @@ MCP clients can manage Rhai Scripting rules with:
 New or updated script source is validated before the rule is saved. Use `weproxa_tools_getEnabled` and `weproxa_tools_setEnabled` to inspect or change the tool-level enabled state for `networkConditioning`, `scripting`, and the other rule-based tools in the active workspace.
 
 :::note
-Rule-management tools operate on the workspace currently active in WePROXA. Switch workspaces in the source sidebar before asking an MCP client to change a different scenario.
+Rule-management tools operate on the Workspace currently active in WePROXA. Newly created rules are assigned atomically to its active Scenario. Switch the Workspace and Scenario in WePROXA before asking an MCP client to build a different acceptance-criteria setup.
 :::
 
 ## Security

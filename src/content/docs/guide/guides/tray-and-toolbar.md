@@ -70,10 +70,11 @@ The tray menu works even when the main window is closed or hidden. On macOS it a
 - Open any tool window.
 - Toggle Map Local, Breakpoints, Block List, Network Conditioning, and Scripting.
 - Switch the active workspace from the **Switch Workspace** submenu.
+- Switch the active acceptance-criteria setup from the **Switch Scenario** submenu.
 - Open Settings.
 - Quit WePROXA.
 
-The **Switch Workspace** submenu also appears in the macOS menu bar and lists every workspace with the active one checked. See [Workspaces](/guide/features/workspaces/) for details.
+The **Switch Workspace** and **Switch Scenario** submenus also appear in the macOS menu bar and list the active choices with a checkmark. See [Workspaces](/guide/features/workspaces/) and [Scenarios](/guide/features/scenarios/) for details.
 
 Tray tool toggles update the same backend state as toolbar toggles, so changes are reflected immediately in open windows.
 

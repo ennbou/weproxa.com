@@ -65,6 +65,7 @@ export default defineConfig({
 								items: [
 									{ label: 'Inspect Requests', slug: 'guide/features/inspect-requests' },
 									{ label: 'Workspaces', slug: 'guide/features/workspaces' },
+									{ label: 'Scenarios', slug: 'guide/features/scenarios' },
 									{ label: 'WebSocket Inspection', slug: 'guide/features/websocket-inspection' },
 									{ label: 'Breakpoints', slug: 'guide/features/breakpoints' },
 									{ label: 'Map Local', slug: 'guide/features/map-local' },

@@ -1,13 +1,13 @@
 ---
 title: Workspaces
-description: Organize debugging rules into isolated, named scenarios.
+description: Organize projects and environments, then activate acceptance-criteria Scenarios within them.
 ---
 
-Workspaces let you keep separate sets of debugging rules for different projects, environments, or test scenarios. Only one workspace is active at a time, so you can change an entire rule setup without enabling and disabling rules individually.
+Workspaces separate projects and environments. Each Workspace contains [Scenarios](/guide/features/scenarios/) for individual acceptance criteria, plus reusable Shared Rules and a Rule Library. Only one Workspace and one Scenario within it are active at a time.
 
 ## What a Workspace Contains
 
-Each workspace keeps its own rules and tool-level enabled state for these tools:
+Each Workspace owns reusable rule definitions for these tools:
 
 - [Map Local](/guide/features/map-local/)
 - [Breakpoints](/guide/features/breakpoints/)
@@ -15,7 +15,7 @@ Each workspace keeps its own rules and tool-level enabled state for these tools:
 - [Network Conditioning](/guide/features/network-conditioning/)
 - [Scripting](/guide/features/scripting/)
 
-Captured requests, saved requests, proxy settings, and SSL interception rules are not workspace-specific. Switching workspaces changes the active tool rules without clearing the traffic already shown in the request list.
+Scenarios reference these definitions and store their own tool-level enabled states. Captured requests, saved requests, proxy settings, and SSL interception rules are not Workspace-specific. Switching Workspaces restores that Workspace’s active Scenario without clearing traffic already shown in the request list.
 
 ## The Workspaces Tab
 
@@ -51,23 +51,19 @@ Deleting a workspace cannot be undone. Review its rules before confirming the de
 
 ## Editing Rules Without Activating
 
-Selecting a workspace in the **Workspaces** tab opens its rules in the main area, grouped under each tool (Map Local, Breakpoints, Block List, Network Conditioning, and Scripting). You can add, edit, toggle, and remove rules for **any** workspace — including ones that are not active — so you can prepare a scenario ahead of time without disturbing live capture.
+Selecting a Workspace reveals its Scenarios, Shared Rules, and Rule Library. Select any Scenario to preview its effective rules without activating it, so you can prepare an acceptance criterion without disturbing live capture.
 
 ![Previewing an inactive workspace's rules without activating it](@assets/generated/screenshots/features/workspaces/preview.png)
 
-A hint above the rules tells you which mode you're in:
-
-- **This is the active workspace — changes affect live traffic.**
-- **Previewing without activating — live traffic is unaffected.**
-
-Edits to a non-active workspace are saved immediately and take effect the next time you set that workspace as active.
+Edits are saved immediately. New rules created from an inactive Scenario editor are assigned explicitly to that Scenario. Be aware that editing a definition referenced by the active Scenario or Shared Rules intentionally updates every place that reuses it; rule cards identify that propagation before you edit.
 
 ## Copying Rules Between Workspaces
 
 Each rule has a **Copy to workspace** action (the folder-in icon next to the rule's other controls). Use it to clone a single rule into another workspace:
 
 1. Select a rule's **Copy to workspace** action.
-2. Pick a destination workspace from the menu.
+2. Pick a destination Workspace.
+3. Pick its destination Scenario, Shared Rules, or Rule Library.
 
 The rule is added to the destination as an **independent clone** — later edits or deletions in either workspace don't affect the other. For Map Local rules that serve a managed response file, the copy receives its own fresh managed file, so editing the copied response never changes the original.
 
@@ -79,7 +75,7 @@ The first time a version with workspace support starts, WePROXA creates a worksp
 
 ## Free and Pro Limits
 
-Free accounts include the Default workspace. Creating additional workspaces is a **Pro** feature, and Pro accounts can create unlimited workspaces.
+Free accounts include the Default Workspace with up to three Scenarios. Creating additional Workspaces is a **Pro** feature, and Pro accounts can create unlimited Workspaces and Scenarios.
 
 ## Example Workflows
 
@@ -88,4 +84,4 @@ Free accounts include the Default workspace. Creating additional workspaces is a
 - Isolate Map Local mocks for different projects.
 - Pair Scripting and Network Conditioning rules for a repeatable test scenario.
 
-When using the [MCP server](/guide/guides/mcp-integration/), rule-management tools operate on the workspace that is currently active in WePROXA.
+When using the [MCP server](/guide/guides/mcp-integration/), new rules are assigned to the Scenario currently active in WePROXA.

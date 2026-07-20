@@ -39,6 +39,7 @@ It's especially useful for:
 -  **HTTPS inspection**: Generate and trust a local certificate on macOS or Windows so encrypted traffic can be inspected when needed.
 -  **Map Local**: Replace remote resources with local files to prototype UI changes, mock assets, or test fixes without touching the backend.
 -  **Workspaces**: Keep Map Local, Breakpoints, Block List, Network Conditioning, and Scripting rules isolated by project or test scenario.
+-  **Scenarios**: Activate and share the exact Workspace rules and tool states for one acceptance criterion.
 -  **Scripting**: Automate matching request and response changes with reusable Rhai rules and runtime diagnostics.
 -  **Block List and Network Conditioning**: Block matching traffic or add request and response delays to reproduce failure and latency conditions.
 -  **WebSocket inspection**: Follow upgraded connections frame by frame, including readable compressed messages.
@@ -69,6 +70,7 @@ If you want the full setup guide, screenshots, and feature walkthroughs, start h
 -  [Quick Start](https://weproxa.com/guide/getting-started/quick-start/)
 -  [Inspect Requests](https://weproxa.com/guide/features/inspect-requests/)
 -  [Workspaces](https://weproxa.com/guide/features/workspaces/)
+-  [Scenarios](https://weproxa.com/guide/features/scenarios/)
 -  [WebSocket Inspection](https://weproxa.com/guide/features/websocket-inspection/)
 -  [Breakpoints](https://weproxa.com/guide/features/breakpoints/)
 -  [Map Local](https://weproxa.com/guide/features/map-local/)
