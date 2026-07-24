@@ -15,6 +15,7 @@ The main toolbar includes:
 - **Tool buttons** - open Map Local, Breakpoints, Block List, Network Conditioning, Scripting, and Diff.
 - **Certificate menu** - manage SSL host and app rules and open certificate setup.
 - **Settings** - open WePROXA settings.
+- **Workspace and scenario switcher** - optional, hidden by default. See [Show the Workspace and Scenario Switcher](#show-the-workspace-and-scenario-switcher).
 
 Clicking a tool button opens the tool. Holding `Command` on macOS or `Ctrl` on Windows while clicking a toggleable tool button enables or disables that tool without opening it.
 
@@ -35,6 +36,16 @@ Use toolbar customization when you want a quieter workspace or only use a subset
 3. In **Toolbar Tools**, check the tools you want shown in the toolbar.
 
 Your selection is saved automatically and synced across WePROXA windows. Newly added tools remain visible by default after upgrades.
+
+## Show the Workspace and Scenario Switcher
+
+The toolbar can display the active workspace and scenario as two dropdowns. It is hidden by default because the same switch is always available from the **Workspaces** sidebar, the **Workspaces** application menu, and the tray.
+
+1. Open **Settings**.
+2. Go to **Appearance**.
+3. Toggle **Show workspace and scenario switcher**.
+
+The choice is saved between launches and synced across WePROXA windows. Switching a scenario from the toolbar shows the same activation summary as the sidebar before applying the change.
 
 ## Appearance and Language
 
@@ -69,12 +80,11 @@ The tray menu works even when the main window is closed or hidden. On macOS it a
 - Start or stop the proxy.
 - Open any tool window.
 - Toggle Map Local, Breakpoints, Block List, Network Conditioning, and Scripting.
-- Switch the active workspace from the **Switch Workspace** submenu.
-- Switch the active acceptance-criteria setup from the **Switch Scenario** submenu.
+- Switch the active workspace or acceptance-criteria setup from the **Workspaces** submenu, which groups **Switch Workspace** and **Switch Scenario**.
 - Open Settings.
 - Quit WePROXA.
 
-The **Switch Workspace** and **Switch Scenario** submenus also appear in the macOS menu bar and list the active choices with a checkmark. See [Workspaces](/guide/features/workspaces/) and [Scenarios](/guide/features/scenarios/) for details.
+The **Workspaces** menu also appears in the macOS menu bar with the same two submenus, each marking the active choice with a checkmark. See [Workspaces](/guide/features/workspaces/) and [Scenarios](/guide/features/scenarios/) for details.
 
 Tray tool toggles update the same backend state as toolbar toggles, so changes are reflected immediately in open windows.
 

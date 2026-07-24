@@ -25,7 +25,7 @@ Open the **Workspaces** sidebar and expand a Workspace:
 
 Selecting an inactive Scenario does not change live traffic. Choose **Activate** when you are ready. WePROXA shows how many rules and tools will be enabled or disabled before applying the switch atomically. Any request paused at a breakpoint is released during the switch.
 
-The toolbar, sidebar, native application menu, and tray all show the active Workspace and Scenario and provide quick switching.
+The sidebar, the native **Workspaces** menu, and the tray all show the active Workspace and Scenario and provide quick switching. The toolbar can show them too — enable **Show workspace and scenario switcher** in **Settings › Appearance**, since it is hidden by default.
 
 ## Reuse and Diverge Safely
 
