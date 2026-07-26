@@ -1,15 +1,15 @@
 ---
 title: WePROXA 3.5.0 Release Notes
-date: 2026-07-18
+date: 2026-07-26
 authors:
   - weproxa
 tags:
   - release
   - changelog
-excerpt: WePROXA 3.5.0 adds acceptance-criteria Scenarios, reusable Shared Rules, portable handoff files, and immutable request attribution.
+excerpt: WePROXA 3.5.0 adds acceptance-criteria Scenarios, reusable Shared Rules, portable handoffs, contextual filters, and a more polished workspace.
 ---
 
-WePROXA **3.5.0** adds Scenarios beneath Workspaces so developers and QA can activate the exact mocks, breakpoints, scripts, blocks, and network conditions required for one acceptance criterion.
+WePROXA **3.5.0** makes complex debugging setups easier to organize, share, and revisit, while refining the everyday request-filtering and window experience.
 
 ## New Features
 
@@ -17,15 +17,19 @@ WePROXA **3.5.0** adds Scenarios beneath Workspaces so developers and QA can act
 - **Shared Rules and Rule Library** - Reuse Workspace-owned definitions across Scenarios, see where each rule is used, and create an independent copy only when one Scenario must diverge.
 - **Portable Scenario handoff** - Import and export validated `.weproxa-scenario.json` bundles with scripts and binary-safe embedded Map Local payloads. Captured traffic is never included.
 - **Request attribution** - Requests and saved snapshots retain the Scenario that was active at capture time, even after a later switch.
-- **Scenario switchers everywhere** - Switch from the sidebar, toolbar, native application menu, or tray while each Workspace remembers its active Scenario.
+- **Contextual filter shortcuts** - Filter captured traffic by the same host, path, endpoint, method, or client directly from the request context menu.
+- **Scenario switchers everywhere** - Switch from the sidebar, optional toolbar control, application menu, or tray while each Workspace remembers its active Scenario.
 
-## Safety and Migration
+## Fixes & Improvements
 
-- Existing Workspaces migrate automatically into an active **Current setup** Scenario without moving rule definitions.
-- Scenario activation releases open breakpoints before applying the new prefiltered runtime snapshots.
-- Imports validate the complete bundle and stage managed files before committing, preventing partial setups.
-- Free includes three Scenarios per Workspace and import within existing limits. Pro unlocks unlimited Scenarios and export.
+- **Remembered window layouts** - Main, tool, Settings, SSL, Repeater, and Breakpoint windows now restore their saved size, position, and maximized state.
+- **Refined app layout** - Floating panel surfaces, clearer resize gutters, a branded request empty state, and redesigned Settings navigation make the workspace easier to scan.
+- **Stable workspace navigation** - Sidebar state now stays consistent when moving between Explorer, Workspace, Shared Rules, Rule Library, and Scenario views.
+- **Cleaner toolbar controls** - More focused default tool visibility and clearer remote-capture controls reduce toolbar noise while keeping customization available.
+- **More reliable Google push traffic** - Google MCS endpoints now bypass HTTPS interception so push messaging continues to work while the proxy is active.
+- **Clearer certificate identity** - Newly generated CA certificates include their generation date, hostname, and serial in the Common Name for easier recognition.
+- **Improved Windows chrome** - The custom menu now includes Workspace and Scenario switching, detached window headers integrate consistently, and startup flashing is reduced.
 
 ---
 
-Thanks to the developers and QA teams testing real acceptance-criteria handoffs with WePROXA.
+Thanks to everyone helping shape faster, more repeatable debugging workflows in WePROXA.

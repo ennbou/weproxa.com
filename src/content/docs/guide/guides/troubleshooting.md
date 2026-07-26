@@ -12,7 +12,7 @@ This page collects the most common issues reported by WePROXA users and how to r
 Try in order:
 
 1. **Is the proxy running?** Look for the green indicator in the toolbar. Toggle with `⌘ P` on macOS or `Ctrl + P` on Windows if needed.
-2. **Is the system proxy enabled?** Click the network icon in the toolbar — WePROXA should show the system proxy as active.
+2. **Was the system proxy configured?** Stop and restart capture with the toolbar play button — WePROXA configures the system proxy automatically when the proxy starts.
 3. **Does the browser respect the system proxy?** Safari uses system settings on macOS, and Chrome and Edge use system settings on both macOS and Windows. Firefox has its own proxy settings unless you set it to "Use system proxy settings".
 4. **Is an app using its own proxy / DNS?** Some CLIs (`curl`, `git`) respect environment variables (`HTTP_PROXY`, `HTTPS_PROXY`). In **Settings** → **Proxy Config**, open a configured terminal where available, or copy the terminal proxy commands into your current shell.
 5. **Is another tool already on the proxy port?** WePROXA will log a port-in-use error. Change the port in **Settings** → **Proxy Config**.

@@ -59,6 +59,12 @@ Selecting a Workspace reveals its Scenarios, Shared Rules, and Rule Library. Sel
 
 Edits are saved immediately. New rules created from an inactive Scenario editor are assigned explicitly to that Scenario. Be aware that editing a definition referenced by the active Scenario or Shared Rules intentionally updates every place that reuses it; rule cards identify that propagation before you edit.
 
+## Sidebar Layout Across Views
+
+The left sidebar keeps one shared width and collapsed state while you move between **Explorer**, a Workspace, a Scenario, **Shared Rules**, and the **Rule Library**. Collapsing it in one view keeps it collapsed in the others; resizing it carries the same width across each view.
+
+When the sidebar is collapsed, use the panel button at the left edge of the active view to reopen it. Switching views does not activate a Workspace or Scenario and does not reset the live capture.
+
 ## Copying Rules Between Workspaces
 
 Each rule has a **Copy to workspace** action (the folder-in icon next to the rule's other controls). Use it to clone a single rule into another workspace:
@@ -73,7 +79,7 @@ The action is available only when more than one workspace exists (creating addit
 
 ## Existing Rules After Upgrading
 
-The first time a version with workspace support starts, WePROXA creates a workspace named **Default** and moves your existing Map Local, Breakpoint, Block List, Network Conditioning, and Scripting rules into it. Your existing rules and tool enabled states remain available without manual migration.
+The first time a version with workspace support starts, WePROXA creates a workspace named **Default** and moves your existing Map Local, Breakpoint, Block List, Network Conditioning, and Scripting rules into it. When upgrading to Scenarios, each existing Workspace receives an active **Current setup** Scenario that preserves its rule membership and tool states without moving or duplicating the rule definitions.
 
 ## Free and Pro Limits
 

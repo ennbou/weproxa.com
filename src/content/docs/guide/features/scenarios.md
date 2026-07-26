@@ -15,6 +15,16 @@ A Scenario stores:
 
 Rules are reusable definitions. A Scenario references them instead of copying them, so two acceptance criteria can intentionally share the same mock or script. **Shared Rules** apply to every Scenario in the Workspace. The effective live setup is the active Scenario plus Shared Rules, filtered by each rule’s own enabled state and the Scenario’s tool states.
 
+## Create and Activate a Scenario
+
+1. Open the **Workspaces** sidebar and expand the Workspace that owns the setup.
+2. Choose **New scenario**, give it a clear acceptance-criterion name, and optionally add the criteria, expected outcome, and an HTTP(S) ticket link.
+3. Add new rules or reuse definitions from **Shared Rules** and the **Rule Library**.
+4. Set the five tool toggles for the Scenario.
+5. Select **Activate**, review the summary of rules and tools that will change, and confirm.
+
+Creating or selecting a Scenario does not change live traffic. Only activation applies its effective rules and tool states. Activation is atomic, so traffic never runs against a half-applied setup.
+
 ## Browse Without Activating
 
 Open the **Workspaces** sidebar and expand a Workspace:
@@ -27,6 +37,8 @@ Selecting an inactive Scenario does not change live traffic. Choose **Activate**
 
 The sidebar, the native **Workspaces** menu, and the tray all show the active Workspace and Scenario and provide quick switching. The toolbar can show them too — enable **Show workspace and scenario switcher** in **Settings › Appearance**, since it is hidden by default.
 
+![Workspace navigation with Scenarios and reusable rule sources](@assets/generated/screenshots/features/workspaces/tab.png)
+
 ## Reuse and Diverge Safely
 
 Rule cards show whether a definition is Shared and how many Scenarios reference it. Editing a reused definition intentionally updates every referencing Scenario.
@@ -37,7 +49,9 @@ Use **Add existing rule** to reference a definition from the Rule Library. Remov
 
 ## Request Attribution
 
-Every newly captured request records the active Scenario ID and name. That attribution remains unchanged if you switch Scenarios before the response arrives. It is shown in request details, available as an optional Request List column, and preserved in saved requests. Older saved requests remain valid with no Scenario attribution.
+Every newly captured request records the active Scenario ID and name. That attribution remains unchanged if you switch Scenarios before the response arrives. It is shown as a Scenario badge in request details, available through the optional **Scenario** Request List column, and preserved in saved requests. Older saved requests remain valid with no Scenario attribution.
+
+Use the column visibility picker in the Request List header when you want to compare traffic captured under different Scenarios. The badge in request details is the authoritative capture-time value; it does not follow the Scenario that happens to be active when you inspect the request later.
 
 ## Share a Portable Scenario
 
@@ -50,6 +64,10 @@ Scenario files use the `.weproxa-scenario.json` format. They include metadata, t
 Import always creates fresh Scenario and rule IDs and fresh managed Map Local files. Shared source rules become local references in the imported Scenario, so an import cannot change other target Scenarios. A missing or unreadable local file, a file larger than 32 MiB, or a bundle larger than 128 MiB is rejected before anything is changed.
 
 Import is available on Free while the Workspace remains within its Scenario and physical-rule limits. Export requires Pro.
+
+:::caution[Review before sharing]
+Scenario files can contain scripts, request or response headers, and complete Map Local payloads. Review the export before sending it outside your team. Captured traffic is never included.
+:::
 
 ## Free and Pro Limits
 

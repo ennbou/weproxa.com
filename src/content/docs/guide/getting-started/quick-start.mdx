@@ -15,11 +15,11 @@ Get up and running with WePROXA in just a few steps.
 
        ![WePROXA startup screen](@assets/generated/screenshots/getting-started/launch_weproxa.png)
 
-    2. **Start the proxy** by clicking the play button in the toolbar or pressing `⌘ + P`.
+    2. **Start the proxy** by clicking the play button in the toolbar or pressing `⌘ + P`. WePROXA starts capture and configures the Mac's system proxy automatically.
 
        ![WePROXA with requests](@assets/guide/getting-started/start_with_request.png)
 
-    3. **Enable the system proxy** — WePROXA can automatically configure your Mac's system proxy settings. Click the network icon in the toolbar to toggle it on.
+    3. **(Optional) Enable remote capture** — stop the proxy, click the **Remote capture / LAN access** device button, then start the proxy again. Leave this off when you only need traffic from this Mac.
 
     4. **(Optional) Auto-start on launch** — enable **Auto-start proxy on launch** in **Settings** → **Proxy Config**. For remote capture, also enable **Auto-enable LAN access on launch** in **Settings** → **Remote Access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
 
@@ -43,11 +43,11 @@ Get up and running with WePROXA in just a few steps.
 
        ![WePROXA startup screen](@assets/generated/screenshots/getting-started/launch_weproxa.png)
 
-    2. **Start the proxy** by clicking the play button in the toolbar or pressing `Ctrl + P`.
+    2. **Start the proxy** by clicking the play button in the toolbar or pressing `Ctrl + P`. WePROXA starts capture and configures the current user's Windows proxy settings automatically.
 
        ![WePROXA with requests](@assets/guide/getting-started/start_with_request.png)
 
-    3. **Enable the system proxy** — click the network icon in the toolbar. WePROXA configures the Windows proxy settings for the current user and restores the previous values when capture stops or the app exits normally.
+    3. **(Optional) Enable remote capture** — stop the proxy, click the **Remote capture / LAN access** device button, then start the proxy again. Leave this off when you only need traffic from this PC.
 
     4. **(Optional) Auto-start on launch** — enable **Auto-start proxy on launch** in **Settings** → **Proxy Config**. For remote capture, also enable **Auto-enable LAN access on launch** in **Settings** → **Remote Access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
 
@@ -62,6 +62,18 @@ Get up and running with WePROXA in just a few steps.
     </Steps>
   </TabItem>
 </Tabs>
+
+## Find Your Way Around
+
+The main window uses three floating surfaces separated by resize gutters:
+
+- **Explorer / Workspaces** on the left organizes captured traffic and reusable debugging setups.
+- **Request List** in the center shows live and saved traffic.
+- **Request Details** on the right or bottom shows headers, bodies, timing, and capture-time Scenario attribution.
+
+Drag a gutter to resize adjacent surfaces. The left sidebar keeps the same width and collapsed state when you switch between Explorer, Workspaces, Scenarios, Shared Rules, and the Rule Library.
+
+Settings uses a section list on the left and the selected controls on the right. Use `Arrow Up`, `Arrow Down`, `Home`, and `End` to move through sections from the keyboard. Main and detached windows remember their last usable size, position, and maximized state.
 
 ## Auto-start Behavior
 
@@ -109,7 +121,7 @@ Most browsers use the system proxy once you enable it in WePROXA. Some terminal 
 Now that you're capturing traffic, explore WePROXA's powerful features:
 
 - [Set breakpoints](/guide/features/breakpoints/) to intercept and modify requests
-- [Organize rules with workspaces](/guide/features/workspaces/) for different projects or scenarios
+- [Organize projects with workspaces](/guide/features/workspaces/) and [package acceptance criteria as Scenarios](/guide/features/scenarios/)
 - [Map local files](/guide/features/map-local/) to replace remote resources
 - [Repeat requests](/guide/features/repeat-requests/) to test different scenarios
 - [Use advanced filters](/guide/features/advanced-filtering/) to find specific requests

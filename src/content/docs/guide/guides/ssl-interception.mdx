@@ -85,6 +85,12 @@ Use TLS passthrough when an app-wide SSL rule is useful, but certain domains sho
 
 Bare domains include their subdomains: `example.com` matches `example.com` and `api.example.com`. Wildcards such as `*.example.org` are also accepted. Passthrough applies to app-wide SSL interception; an explicit host SSL rule still decrypts that host.
 
+### Built-in Google Push Passthrough
+
+Google Mobile Connection Server hosts such as `mtalk.google.com`, numbered `mtalk` variants, and `altN-mtalk.google.com` carry a non-HTTP push protocol used by Chrome and Firebase Cloud Messaging. WePROXA always tunnels these endpoints, even when a broad Google host or app SSL rule would otherwise enable interception.
+
+This automatic exception keeps push messaging connected while the proxy is active. It is limited to the known `mtalk` host forms under `google.com`; unrelated Google traffic still follows your SSL rules.
+
 ## SSL Manager Window
 
 For longer rule lists, open the standalone **SSL Manager** window from the certificate menu. The SSL Manager gives you a larger workspace for the same host and app interception rules.
@@ -147,3 +153,6 @@ Use `*.example.com` to match all subdomains (e.g., `api.example.com`, `cdn.examp
 
 ### App rule does not match anything
 Some traffic may not expose a stable client name and can appear under **Unknown** in the **Apps** source view. In that case, use a host rule instead.
+
+### Google or Firebase push messages stop arriving
+Current WePROXA versions tunnel known Google Mobile Connection Server (`mtalk`) endpoints automatically. If push traffic still fails, confirm the destination host in the request list and add any different non-HTTP or certificate-pinned endpoint to **TLS passthrough hosts**.

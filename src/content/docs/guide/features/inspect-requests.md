@@ -25,6 +25,7 @@ The default layout opens with the source sidebar visible and the **URL** column 
 - **Response Size** — Response body size, or tunnel byte totals after an upgraded connection closes
 - **Time** — Timestamp of the request (HH:MM:SS)
 - **Duration** — Time from request to response
+- **Scenario** — Scenario that was active when the request was captured
 
 Columns are sortable (click headers), draggable (reorder by dragging), resizable, and can be shown or hidden via the column visibility picker.
 
@@ -53,7 +54,7 @@ When you're viewing **Saved Requests**, request and response body search is unav
 
 Right-click any request to access quick actions. Related actions are grouped into nested submenus you can navigate with the mouse or keyboard:
 
-- **Filter** — narrow the request list to the **Same Host** or **Same Client** as the selected request (Pro; see [Advanced Filtering](/guide/features/advanced-filtering/))
+- **Add to Filters** — append **Same Host**, **Same Path**, **Same Endpoint**, **Similar Requests**, or **Same Client** conditions to the advanced filter (Pro; see [Advanced Filtering](/guide/features/advanced-filtering/#filter-from-the-context-menu))
 - **Copy as cURL** — Copy the request as a `curl` command
 - **Enable / Disable SSL for {host}** — Toggle HTTPS interception for the request's host
 - **Repeat** — Choose **Repeat Now** to re-execute immediately, or **Repeat with Edit...** to modify the request first
@@ -75,6 +76,8 @@ Click on any request to open the details panel with full information:
    ![Request details panel](@assets/guide/features/inspect-requests/request_details.png)
 
 The details panel can be positioned as a right sidebar or a bottom panel, and can be collapsed when not needed. The request method and response status are shown as compact color-coded badges at the top of the panel so they're easy to scan at a glance.
+
+If the request was captured while a Workspace Scenario was active, the header also shows that Scenario as a capture-time badge. The value stays attached to the request and saved snapshot even after you activate another Scenario.
 
 ### Detail Actions
 

@@ -25,12 +25,17 @@ Click a button to show only that type. **Cmd+Click** (macOS) or **Ctrl+Click** (
 
 ## Filter from the Context Menu
 
-You can build a filter straight from a captured request without opening the query builder. Right-click a request and open the **Filter** submenu:
+You can build or extend a filter straight from a captured request without constructing every rule by hand. Right-click a request and open **Add to Filters**:
 
 - **Same Host** — show only requests to the selected request's host
-- **Same Client** — show only requests from the selected request's client or app
+- **Same Path** — match the exact path across hosts
+- **Same Endpoint** — match the selected host and path together
+- **Similar Requests** — match the selected method, host, and path together
+- **Same Client** — show requests from the selected request's attributed client or app
 
-WePROXA turns your choice into a query-builder condition, so you can refine or combine it afterward. Because it uses the query builder, filtering from the context menu is a **Pro** feature.
+Each choice adds its exact-match conditions to the current query, enables the advanced filter when needed, and opens the builder so you can review the result. Existing AND rules are preserved, duplicate active conditions are skipped, and complex OR or NOT expressions are grouped before the new conditions are applied. The menu label shows the current active-rule count once filters are in use.
+
+Because these shortcuts use the query builder, filtering from the context menu is a **Pro** feature.
 
 ## Query Builder
 

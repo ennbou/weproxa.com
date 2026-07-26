@@ -10,7 +10,7 @@ The toolbar, app menus, and tray give you quick access to capture controls, tool
 The main toolbar includes:
 
 - **Clear** - remove the requests currently shown in the list. When a filter is active, Clear removes only the displayed matches and leaves the rest of the session intact; with no filter it clears every captured request. The button's tooltip reflects which of the two it will do.
-- **LAN access** - choose whether the proxy listens only on `127.0.0.1` or on your local network address.
+- **Remote capture / LAN access** - use the device button to choose whether the proxy listens only on `127.0.0.1` or on your local network address.
 - **Start / stop proxy** - toggle capture on the configured proxy port.
 - **Tool buttons** - open Map Local, Breakpoints, Block List, Network Conditioning, Scripting, and Diff.
 - **Certificate menu** - manage SSL host and app rules and open certificate setup.
@@ -27,6 +27,8 @@ Tool, Settings, SSL Manager, Repeat, and Breakpoint windows are single-purpose w
 
 For tool windows, this also avoids replaying prefilled rule data over in-progress edits. Settings navigation is the exception: opening Settings for a specific section focuses the existing Settings window and switches it to that section.
 
+WePROXA remembers the size, position, and maximized state of the main window and detached Tool, Settings, SSL Manager, Repeater, and Breakpoint windows. Reopening a window restores its last usable layout; if a display was disconnected, WePROXA keeps the restored window on an available screen.
+
 ## Customize Visible Tool Buttons
 
 Use toolbar customization when you want a quieter workspace or only use a subset of tools day to day.
@@ -35,7 +37,7 @@ Use toolbar customization when you want a quieter workspace or only use a subset
 2. Go to **Appearance**.
 3. In **Toolbar Tools**, check the tools you want shown in the toolbar.
 
-Your selection is saved automatically and synced across WePROXA windows. Newly added tools remain visible by default after upgrades.
+On a fresh install, **Map Local**, **Breakpoints**, and **Diff** are visible; **Block List**, **Network Conditioning**, and **Scripting** remain available from the application menu until you add them. Your selection is saved automatically and synced across WePROXA windows. Existing installations keep their saved toolbar layout during upgrades.
 
 ## Show the Workspace and Scenario Switcher
 
@@ -68,7 +70,7 @@ For a larger SSL workspace, open the standalone [SSL Manager](/guide/guides/ssl-
 WePROXA follows platform conventions for top-level app controls:
 
 - **macOS** — the app uses the macOS menu bar, native window controls, and macOS keyboard shortcuts such as `⌘ P`.
-- **Windows** — the app uses themed Windows chrome with standard minimize, maximize, and close controls. The Windows menu exposes platform-appropriate app, edit, view, tool, window, and help actions with `Ctrl` shortcuts.
+- **Windows** — the app uses themed Windows chrome with standard minimize, maximize, and close controls. Its custom menu exposes platform-appropriate app, edit, view, tool, window, help, Workspace, and Scenario actions with `Ctrl` shortcuts. The same integrated header is used by detached windows.
 
 Some actions only appear on the platform where they apply. For example, macOS certificate installation targets Keychain, while Windows shows a Learn More link for HTTPS certificate trust information.
 
