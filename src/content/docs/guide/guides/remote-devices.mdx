@@ -32,7 +32,7 @@ LAN access exposes the proxy port on your computer's local IP. Only enable it on
 
 </Steps>
 
-When LAN access is on, the Remote Access panel shows your computer's proxy address, for example `192.168.1.42:8888`.
+When LAN access is on, the Remote Access panel shows your computer's proxy address, for example `192.168.1.42:4545`. Existing installations keep their saved port, so the panel may show a different custom value.
 
 ![WePROXA Remote Access settings](@assets/generated/screenshots/settings/remote-access.png)
 
@@ -40,7 +40,7 @@ When LAN access is on, the Remote Access panel shows your computer's proxy addre
 
 To inspect HTTPS traffic from the device, the WePROXA root CA must be installed and trusted on that device.
 
-WePROXA ships a temporary local certificate server with a QR code so you don't have to email or AirDrop the certificate.
+WePROXA ships a temporary local certificate server on port `7676` with a QR code so you don't have to email or AirDrop the certificate. If that port is busy, WePROXA automatically uses an available port and updates the displayed URL.
 
 <Steps>
 
@@ -143,7 +143,7 @@ Configure the device's Wi-Fi network to use the proxy address shown in WePROXA.
 
 1. **Settings** → **Wi-Fi** → tap the **ⓘ** next to the connected network.
 2. Scroll to **HTTP Proxy** and select **Manual**.
-3. Set **Server** to your computer's local IP (e.g. `192.168.1.42`) and **Port** to the WePROXA port (default `8888`).
+3. Set **Server** to your computer's local IP (e.g. `192.168.1.42`) and **Port** to the WePROXA port (default `4545`).
 4. Leave authentication off.
 
 </Steps>
@@ -156,7 +156,7 @@ Configure the device's Wi-Fi network to use the proxy address shown in WePROXA.
 
 1. **Settings** → **Network & internet** → **Internet** → tap the gear next to the connected network → **Advanced**.
 2. Change **Proxy** to **Manual**.
-3. Set **Proxy hostname** to your computer's local IP and **Proxy port** to the WePROXA port (default `8888`).
+3. Set **Proxy hostname** to your computer's local IP and **Proxy port** to the WePROXA port (default `4545`).
 
 </Steps>
 
@@ -180,7 +180,7 @@ You can also route another computer's traffic through WePROXA. Enable **LAN acce
 2. Double-click the certificate to open it in **Keychain Access** (login keychain).
 3. Open the certificate, expand **Trust**, and set **When using this certificate** to **Always Trust**.
 4. Open **System Settings** → **Wi-Fi** → **Details** → **Proxies**.
-5. Enable **Web Proxy (HTTP)** and **Secure Web Proxy (HTTPS)**, then set the server to the WePROXA computer's local IP and the port to the WePROXA port (default `8888`).
+5. Enable **Web Proxy (HTTP)** and **Secure Web Proxy (HTTPS)**, then set the server to the WePROXA computer's local IP and the port to the WePROXA port (default `4545`).
 
 </Steps>
 
@@ -194,7 +194,7 @@ You can also route another computer's traffic through WePROXA. Enable **LAN acce
 2. Open the certificate file and choose **Install Certificate**.
 3. Choose **Current User**, then place the certificate in **Trusted Root Certification Authorities**.
 4. Open **Settings** → **Network & internet** → **Proxy**.
-5. Enable **Manual proxy setup** and set the address to the WePROXA computer's local IP and the port to the WePROXA port (default `8888`).
+5. Enable **Manual proxy setup** and set the address to the WePROXA computer's local IP and the port to the WePROXA port (default `4545`).
 
 </Steps>
 
@@ -209,8 +209,8 @@ You can also route another computer's traffic through WePROXA. Enable **LAN acce
 3. Set the HTTP and HTTPS proxy to the WePROXA computer's local IP and port in your desktop network settings, **or** export the environment variables for a terminal session:
 
    ```bash
-   export http_proxy="http://<weproxa-ip>:8888"
-   export https_proxy="http://<weproxa-ip>:8888"
+   export http_proxy="http://<weproxa-ip>:4545"
+   export https_proxy="http://<weproxa-ip>:4545"
    ```
 
 </Steps>

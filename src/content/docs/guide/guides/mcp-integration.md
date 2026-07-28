@@ -58,13 +58,13 @@ Start the WePROXA HTTP/HTTPS proxy server.
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `port` | number | No | Port to listen on. Defaults to `8080`. |
+| `port` | number | No | Port to listen on. Defaults to `4545`. |
 | `configureSystemProxy` | boolean | No | Set the macOS system proxy to WePROXA. Defaults to `true`. |
 
 Example response:
 
 ```json
-{ "success": true, "port": 8080 }
+{ "success": true, "port": 4545 }
 ```
 
 #### `weproxa_proxy_stop`
@@ -84,7 +84,7 @@ Get the current proxy status. Takes no parameters.
 Example response:
 
 ```json
-{ "isRunning": true, "port": 8080, "allowLan": false }
+{ "isRunning": true, "port": 4545, "allowLan": false }
 ```
 
 ---
