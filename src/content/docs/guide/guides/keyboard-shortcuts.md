@@ -16,6 +16,7 @@ The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcu
 | Start / stop the proxy | `⌘ P` / `Ctrl + P` |
 | Clear captured requests | `⌘ K` / `Ctrl + K` |
 | Focus the search / filter input | `⌘ F` / `Ctrl + F` |
+| Show / hide the advanced filter panel | `⌘ ⇧ F` / `Ctrl + Shift + F` |
 
 ## Appearance
 
@@ -30,6 +31,16 @@ The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcu
 |---|---|
 | Toggle the left (sources) panel | `⌘ B` / `Ctrl + B` |
 | Toggle the details panel | `⌘ J` / `Ctrl + J` |
+| Show the left panel on the Explorer tab | `⌘ ⇧ E` / `Ctrl + Shift + E` |
+| Show the left panel on the Workspaces tab | `⌘ ⇧ W` / `Ctrl + Shift + W` |
+
+The Explorer and Workspaces shortcuts expand the left panel first if it is collapsed, so they always land on the tab you asked for.
+
+## Certificates
+
+| Action | Shortcut |
+|---|---|
+| Open the SSL Manager window | `⌘ ⇧ C` / `Ctrl + Shift + C` |
 
 ## Tools
 
@@ -39,7 +50,7 @@ The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcu
 | Open Breakpoints | `⌘ ⇧ B` / `Ctrl + Shift + B` |
 | Open Block List | `⌘ ⇧ K` / `Ctrl + Shift + K` |
 | Open Network Conditioning | `⌘ ⇧ N` / `Ctrl + Shift + N` |
-| Open Scripting | `⌘ ⇧ J` / `Ctrl + Shift + J` |
+| Open Scripting | `⌘ ⇧ S` / `Ctrl + Shift + S` |
 | Open Diff | `⌘ ⇧ D` / `Ctrl + Shift + D` |
 
 Tool shortcuts open the matching tool window. Use the toolbar, tray, or tool panel toggle to enable or disable a tool's rules.
