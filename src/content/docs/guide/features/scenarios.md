@@ -49,9 +49,9 @@ Use **Add existing rule** to reference a definition from the Rule Library. Remov
 
 ## Request Attribution
 
-Every newly captured request records the active Scenario ID and name. That attribution remains unchanged if you switch Scenarios before the response arrives. It is shown as a Scenario badge in request details, available through the optional **Scenario** Request List column, and preserved in saved requests. Older saved requests remain valid with no Scenario attribution.
+Every newly captured request records the active Scenario ID and name. That attribution remains unchanged if you switch Scenarios before the response arrives. It is surfaced through the optional **Scenario** Request List column and preserved in saved requests. Older saved requests remain valid with no Scenario attribution.
 
-Use the column visibility picker in the Request List header when you want to compare traffic captured under different Scenarios. The badge in request details is the authoritative capture-time value; it does not follow the Scenario that happens to be active when you inspect the request later.
+Use the column visibility picker in the Request List header to show the **Scenario** column when you want to compare traffic captured under different Scenarios. The recorded value is the authoritative capture-time value; it does not follow the Scenario that happens to be active when you inspect the request later.
 
 ## Share a Portable Scenario
 

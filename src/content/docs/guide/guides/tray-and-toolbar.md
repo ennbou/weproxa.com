@@ -57,7 +57,18 @@ Use Appearance settings to keep the app comfortable across all windows:
 2. Go to **Appearance**.
 3. Choose your preferred language, **English** or **French**.
 
-The language choice is saved automatically and applied across the main window and detached tool windows.
+The language choice is saved automatically and applied across the main window and detached tool windows. It also covers native app chrome: the macOS menu bar, the tray menu, and the titles WePROXA gives its windows. Because that chrome is built before any window content loads, the saved language is restored at launch, so menus and tray entries are already translated on the first frame instead of switching from English a moment later.
+
+### Theme and Native Window Chrome
+
+The theme selector applies to more than the app's own interface. On macOS the window backdrop and the traffic-light buttons are drawn by the system and normally follow the macOS appearance, which used to leave them mismatched when the app theme differed.
+
+- **Light** or **Dark** pins the native window chrome to your choice across the main window and every detached tool, Settings, SSL Manager, Repeater, and Breakpoint window.
+- **System** removes the override and hands the windows back to macOS, so they follow your System Settings appearance again.
+
+The selected mode is saved between launches and applied before a window is shown, so windows never appear briefly in the wrong theme at startup.
+
+The macOS traffic lights also stay vertically centered in the title bar as you change the UI font size with `⌘ +` and `⌘ -`.
 
 ## Certificate and SSL Shortcuts
 

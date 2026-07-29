@@ -60,6 +60,39 @@ The generated formats follow each client’s current MCP contract:
 [Claude Code](https://code.claude.com/docs/en/mcp), and
 [JetBrains AI Assistant](https://www.jetbrains.com/help/ai-assistant/mcp.html).
 
+## Generate the configuration inside WePROXA
+
+**Settings → MCP Server → AI Connections** does the same job without leaving the app. It builds the configuration from the live endpoint and the token currently in use, so there is nothing to paste in by hand and nothing to keep in sync.
+
+<Steps>
+
+1. Start the MCP server.
+2. Open **Settings → MCP Server** and go to **AI Connections**.
+3. Select your client and a **User** or **Workspace** configuration scope.
+4. Choose **View configuration** to review it, then **Copy configuration**. Use **Copy token** when a client only needs the bearer token.
+5. Paste it into your client. **Open client instructions** explains where that file lives and how to remove the entry later.
+
+</Steps>
+
+:::caution
+A generated configuration contains the current bearer token. Store it privately and keep it out of source control.
+:::
+
+Each client shows its own status:
+
+- **Not configured** — nothing has been copied for the selected scope yet.
+- **Setup copied** — you copied a configuration that still matches the running server.
+- **Connected** — the client completed a real MCP handshake. WePROXA shows its reported version and the last connection time.
+- **Needs attention** — the copied setup is stale because the server stopped, its endpoint changed, or the token was regenerated. Start the server and copy a fresh configuration.
+
+Only **Connected** reflects a verified connection; the other states describe your setup progress. If a client that WePROXA does not recognize completes a handshake, the panel reports it generically rather than retaining the arbitrary name it sent.
+
+:::note
+AI Connections requires an active **Pro** license, like starting the server itself.
+:::
+
+The **Open WePROXA to connect** button in the generator above hands the selected client and scope to this panel through a `weproxa://` deep link. The link only preselects those two values — it never starts the server and never carries credentials.
+
 ## Verify the connection
 
 Use the client-specific verification guidance in the selector, then run this harmless test:

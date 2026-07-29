@@ -44,6 +44,14 @@ You can also create a Map Local rule by **right-clicking a request** in the requ
 Free accounts are limited to **5 Map Local rules**. Upgrade to Pro for unlimited rules.
 :::
 
+Toggling a rule takes effect on the next matching request — there is no need to restart the proxy or reload the tool after switching one back on.
+
+### Rule Precedence
+
+When several enabled rules match the same URL, the **oldest rule wins**. Precedence follows each rule's creation time, not the order shown in the panel, so re-sorting the list or editing a rule does not change which one serves the response.
+
+This ordering is stable across edits and app restarts. If an overlapping rule is not producing the response you expect, either narrow its URL pattern or delete and recreate the rule you want to take priority — a recreated rule becomes the newest and therefore the lowest priority of the matching set.
+
 ### Duplicating Rules
 
 Duplicating a Map Local rule copies its current response content into a new WePROXA-managed file. The original and duplicate can then be edited or deleted independently without changing the other rule's response.

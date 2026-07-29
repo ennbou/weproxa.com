@@ -60,6 +60,48 @@ Each rule in the query builder has its own **Active / Inactive** toggle. Deactiv
 
 Your query builder rules and each rule's active state are saved, so they persist across app restarts until you clear them.
 
+## Saved Filters
+
+When a query is worth keeping, save it under a name and reapply it later instead of rebuilding the conditions. Saved filters live in the **Filters** folder of the Explorer sidebar.
+
+:::note
+Saved Filters are a **Pro** feature, like the query builder itself.
+:::
+
+### Saving a Filter
+
+1. Build a query in the advanced filter panel.
+2. Choose **Save filter** in the panel header.
+3. Enter a name and confirm.
+
+Once a saved filter is applied, its name appears in the panel header and the header offers two actions:
+
+- **Save changes** — overwrite the applied filter with your current rules.
+- **Save as** — keep the original and store the current rules under a new name.
+
+An amber name with a trailing dot means the rules in the builder no longer match the saved version. A filter needs at least one rule before it can be saved, names must be unique, and they are limited to 100 characters.
+
+### Applying and Managing Filters
+
+Click any entry in the **Filters** folder to apply it. Each row shows how many of its rules are active out of the total, and the applied filter stays highlighted while the advanced filter is enabled.
+
+If the builder holds unsaved rules, WePROXA asks before replacing them so you don't lose work in progress — choose **Discard & Apply** to continue.
+
+Right-click a saved filter, or use the **⋯** button on its row, for:
+
+- **Edit rules** — apply the filter and open the query builder on it
+- **Rename**
+- **Clone** — create an independent copy you can edit without touching the original
+- **Delete**
+
+Deleting a saved filter does not change the filter currently shown in the request list. The Explorer search box also matches saved filter names, so a long list stays easy to navigate.
+
+### Scope
+
+Saved filters are **global**. They are not owned by a Workspace or Scenario, so the same filter stays available when you switch between them. A saved filter narrows whatever you are currently viewing — it combines with the selected Explorer source rather than replacing it.
+
+Press `⌘ ⇧ F` (macOS) or `Ctrl + Shift + F` (Windows/Linux) to show or hide the advanced filter panel while you work.
+
 ## Saved Requests Limitations
 
 When the sidebar selection is inside **Saved Requests**, filtering is intentionally narrower than live traffic filtering:
