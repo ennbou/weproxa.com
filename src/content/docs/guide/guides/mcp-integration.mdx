@@ -1,0 +1,393 @@
+---
+title: MCP Integration
+description: Connect WePROXA securely to Copilot, Cursor, Codex, Claude Code, JetBrains, and other MCP clients.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import McpConfigGenerator from '../../../../components/McpConfigGenerator.astro';
+
+<span id="what-is-mcp"></span>
+
+## Overview
+
+WePROXA runs a **local [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) MCP server** that lets compatible AI tools inspect captured traffic and operate WePROXA’s debugging features.
+
+The server:
+
+- binds to the loopback interface, so it is available only on your computer;
+- uses a dynamic endpoint such as `http://127.0.0.1:8765/mcp`;
+- requires a bearer token on every connection;
+- exposes captured-traffic, Workspace, Scenario, proxy, rule-management, SSL-host, and tool-state capabilities.
+
+:::note
+Starting the MCP server is a **Pro** feature. Free accounts can view its settings but cannot start the server.
+:::
+
+MCP tools can both **read data** and **change WePROXA state**. Review an AI client’s proposed tool calls before approving actions that start or stop the proxy, activate a Workspace or Scenario, or change rules.
+
+<span id="enabling-the-mcp-server"></span>
+
+## Enable the MCP server
+
+<Steps>
+
+1. Open **Settings** in WePROXA.
+2. Select **MCP Server**.
+3. Keep **Hide sensitive data** enabled unless you have a specific reason to expose unredacted captured values.
+4. Choose **Start**.
+5. Copy the exact **Endpoint URL** shown in WePROXA.
+
+</Steps>
+
+![WePROXA MCP Server settings](@assets/generated/screenshots/settings/mcp-server.png)
+
+:::caution
+`8765` is the preferred port, not a fixed port. If it is unavailable, WePROXA falls back to another local port. Always copy the current endpoint from **Settings → MCP Server**.
+:::
+
+<span id="connecting-an-ai-client"></span>
+
+## Connect an AI tool
+
+Choose your client, scope, and endpoint below. The generator creates the client’s own configuration format rather than applying one JSON shape everywhere.
+
+<McpConfigGenerator />
+
+The generated formats follow each client’s current MCP contract:
+[VS Code](https://code.visualstudio.com/docs/agents/reference/mcp-configuration),
+[Cursor](https://docs.cursor.com/en/tools/mcp),
+[Codex](https://developers.openai.com/codex/mcp/),
+[Claude Code](https://code.claude.com/docs/en/mcp), and
+[JetBrains AI Assistant](https://www.jetbrains.com/help/ai-assistant/mcp.html).
+
+## Verify the connection
+
+Use the client-specific verification guidance in the selector, then run this harmless test:
+
+> Ask WePROXA for the current proxy status. Do not start, stop, or modify anything.
+
+Expected client checks:
+
+- **VS Code / GitHub Copilot:** run **MCP: List Servers**, select WePROXA, and inspect its tools.
+- **Cursor:** open MCP settings and confirm WePROXA’s tools are enabled.
+- **Codex CLI or VS Code extension:** run `codex mcp list` or use `/mcp`.
+- **Claude Code terminal or VS Code extension:** run `claude mcp list` or use `/mcp`.
+- **JetBrains AI Assistant:** check the connection status and open the available-tools list.
+- **Other clients:** use the client’s MCP server-status and tool-discovery view.
+
+A configured entry is not proof of a working connection. Confirm that the server is connected, authenticated, and advertising `weproxa_proxy_status`.
+
+## Example debugging workflows
+
+### Read-only prompts
+
+These prompts inspect current state and should not modify WePROXA:
+
+**Inspect recent failed requests**
+
+```text
+List the 20 most recent captured requests with an HTTP status of 400 or higher.
+Summarize the failing hosts, paths, methods, and status codes. Do not modify WePROXA.
+```
+
+**Diagnose an API response**
+
+```text
+Inspect the captured request and response for request ID <REQUEST_ID>.
+Explain the most likely cause of the API failure using its status, headers, and bounded body.
+Do not create rules or change proxy state.
+```
+
+**Check the active Workspace**
+
+```text
+List WePROXA Workspaces and tell me which Workspace is active.
+Then list that Workspace's active Scenario and effective tool states. Do not change anything.
+```
+
+### Prompts that change state
+
+The following prompts create or activate debugging configuration. Review the proposed values and approve the tool call only when they are correct.
+
+**Create a Map Local rule**
+
+```text
+First summarize the active Workspace and Scenario. Then create an enabled Map Local rule named
+"Mock profile" for GET requests matching **/api/profile, using the local file
+/absolute/path/to/profile.json. This changes WePROXA state; show the exact rule before creating it.
+```
+
+**Add Network Conditioning**
+
+```text
+In the active Workspace and Scenario, create an enabled Network Conditioning rule named
+"Slow catalog" for **/api/catalog with a 1200 ms response delay and no request delay.
+Show the proposed rule and ask for confirmation before creating it.
+```
+
+**Create or activate a Scenario**
+
+```text
+In the active Workspace, create a Scenario named "Checkout timeout" with acceptance criteria that
+the checkout UI shows a retry action after a delayed response. Preview activation first, summarize
+the effective-rule and tool-state changes, and ask for confirmation before activating it.
+```
+
+:::note
+Rule-management tools operate on the selected Workspace. New rules are assigned to its active Scenario. Activating a Workspace or Scenario atomically changes the live effective rules and tool states.
+:::
+
+## Security
+
+- Treat the bearer token like a password. The documentation generator never asks for it and never connects to localhost.
+- Configuration generation runs entirely in the browser. Nothing is submitted to WePROXA’s website or another server.
+- Generated examples contain only `<WEPROXA_AUTH_TOKEN>`. Replace that placeholder locally after copying the token from WePROXA.
+- The app handoff URL contains only a controlled client and scope. It never contains an endpoint, token, configuration, hostname, port, or file path.
+- Client configuration files may store the `Authorization` header locally. Restrict file access and never commit a real token to version control.
+- **Hide sensitive data** redacts likely credentials and payment-card values in traffic returned through MCP. Binary bodies that cannot be inspected safely are omitted.
+- Request and response bodies returned by detail tools are bounded. Request listings do not include response bodies.
+- Regenerating the token immediately invalidates the previous token. Update every configured client after regeneration.
+- The server listens on loopback only. A client running on another computer, VM, container, or remote development host cannot use the host machine’s `127.0.0.1` endpoint directly.
+
+## Troubleshooting
+
+**The endpoint refuses the connection**
+
+Confirm the MCP server is running and copy its current endpoint again. Port `8765` may have been busy, causing WePROXA to choose another port.
+
+**The client reports Unauthorized or HTTP 401**
+
+Copy the current auth token from **Settings → MCP Server** and replace the placeholder or stale header locally. If the token was regenerated, every old client configuration is invalid.
+
+**The server connects but tools are missing**
+
+Restart or refresh the server from the client. VS Code can run **MCP: Reset Cached Tools**. Also confirm you connected to `/mcp` using Streamable HTTP rather than a legacy `/sse` transport.
+
+**The generated endpoint is rejected**
+
+Only loopback `http://` URLs with an explicit port and the exact `/mcp` path are accepted. Credentials, query parameters, and fragments do not belong in the endpoint.
+
+**The app handoff does not open**
+
+Open WePROXA manually and go to **Settings → MCP Server**. Clicking a handoff never means the connection was installed; verify it from the client afterward.
+
+**A project-scoped client does not load the server**
+
+Trust the project where required, confirm the configuration is in that client’s exact workspace location, and check that a higher-precedence user or local entry is not shadowing it.
+
+**A remote or containerized client cannot connect**
+
+`127.0.0.1` refers to the client’s own environment. Run the MCP client on the same host as WePROXA. Do not expose the local MCP server through a public tunnel.
+
+<span id="available-tools"></span>
+
+## Available tools reference
+
+### Conventions
+
+- Tool names start with `weproxa_` and parameters use `camelCase`.
+- Responses include a success or state result; validation failures include an error message.
+- `urlPattern` values use WePROXA glob syntax such as `**/api/*.json`.
+- An optional `method` limits a rule to one HTTP method; omitting it matches all methods.
+- Add operations return a UUID that can be passed to the corresponding update or remove operation.
+- Rule limits, Scenario limits, validation, active-Workspace ownership, and active-Scenario assignment are enforced by WePROXA.
+
+### Captured traffic
+
+#### `weproxa_requests_list`
+
+List captured HTTP requests using advanced query filters, bounded pagination, and newest/oldest ordering. Response bodies are not included.
+
+#### `weproxa_requests_getRequest`
+
+Get one captured request by ID, including headers and a bounded body. Sensitive values are redacted when MCP privacy protection is enabled.
+
+#### `weproxa_requests_getResponse`
+
+Get the captured response for a request ID, including headers and a bounded body. Sensitive values are redacted when MCP privacy protection is enabled.
+
+### Workspaces
+
+#### `weproxa_workspaces_list`
+
+List all Workspaces and the active Workspace ID.
+
+#### `weproxa_workspaces_create`
+
+Create a Workspace and make it active.
+
+#### `weproxa_workspaces_rename`
+
+Rename an existing Workspace.
+
+#### `weproxa_workspaces_delete`
+
+Delete a Workspace and its owned rules. The last Workspace cannot be deleted.
+
+#### `weproxa_workspaces_activate`
+
+Activate a Workspace and atomically replace the proxy’s live rules with its active Scenario.
+
+### Scenarios
+
+#### `weproxa_scenarios_list`
+
+List a Workspace’s Scenarios, active Scenario ID, Shared Rule references, and per-Scenario tool states.
+
+#### `weproxa_scenarios_create`
+
+Create an empty Scenario without activating it.
+
+#### `weproxa_scenarios_update`
+
+Update a Scenario’s name, acceptance criteria, expected outcome, and ticket URL.
+
+#### `weproxa_scenarios_duplicate`
+
+Duplicate a Scenario’s metadata, rule references, and tool states under a unique name.
+
+#### `weproxa_scenarios_delete`
+
+Delete a Scenario. The last Scenario in a Workspace cannot be deleted.
+
+#### `weproxa_scenarios_previewActivation`
+
+Preview effective-rule counts and tool-state changes before activation.
+
+#### `weproxa_scenarios_activate`
+
+Activate a Scenario in the active Workspace and atomically apply its effective rules and tool states.
+
+### Proxy lifecycle
+
+#### `weproxa_proxy_start`
+
+Start the HTTP/HTTPS proxy with an optional port and system-proxy configuration.
+
+#### `weproxa_proxy_stop`
+
+Stop the proxy.
+
+#### `weproxa_proxy_status`
+
+Read the current running state, port, and LAN-access state without changing anything.
+
+### Map Local
+
+#### `weproxa_mapLocal_addRule`
+
+Add a rule that serves a local file or remote HTTP(S) asset for matching requests.
+
+#### `weproxa_mapLocal_updateRule`
+
+Update an existing Map Local rule.
+
+#### `weproxa_mapLocal_removeRule`
+
+Remove a Map Local rule by ID.
+
+#### `weproxa_mapLocal_listRules`
+
+List Map Local rules.
+
+### Breakpoints
+
+#### `weproxa_breakpoints_addRule`
+
+Add a rule that pauses matching requests, responses, or both for inspection.
+
+#### `weproxa_breakpoints_updateRule`
+
+Update an existing Breakpoint rule.
+
+#### `weproxa_breakpoints_removeRule`
+
+Remove a Breakpoint rule by ID.
+
+#### `weproxa_breakpoints_listRules`
+
+List Breakpoint rules.
+
+### Block List
+
+#### `weproxa_blockList_addRule`
+
+Add a rule that blocks matching HTTP requests.
+
+#### `weproxa_blockList_updateRule`
+
+Update an existing Block List rule.
+
+#### `weproxa_blockList_removeRule`
+
+Remove a Block List rule by ID.
+
+#### `weproxa_blockList_listRules`
+
+List Block List rules.
+
+### Network Conditioning
+
+Request and response delays are limited to **300,000 ms (five minutes)** per rule.
+
+#### `weproxa_networkConditioning_addRule`
+
+Add request and/or response delay to matching traffic.
+
+#### `weproxa_networkConditioning_updateRule`
+
+Update an existing Network Conditioning rule.
+
+#### `weproxa_networkConditioning_removeRule`
+
+Remove a Network Conditioning rule by ID.
+
+#### `weproxa_networkConditioning_listRules`
+
+List Network Conditioning rules.
+
+### Scripting
+
+#### `weproxa_scripting_addRule`
+
+Add a Rhai script that can mutate matching requests and/or responses.
+
+#### `weproxa_scripting_updateRule`
+
+Update an existing Scripting rule.
+
+#### `weproxa_scripting_removeRule`
+
+Remove a Scripting rule by ID.
+
+#### `weproxa_scripting_listRules`
+
+List Scripting rules.
+
+### SSL Hosts
+
+#### `weproxa_ssl_addHost`
+
+Add a host pattern for HTTPS interception. The WePROXA CA must already be trusted.
+
+#### `weproxa_ssl_updateHost`
+
+Update an existing SSL host.
+
+#### `weproxa_ssl_removeHost`
+
+Remove an SSL host by ID.
+
+#### `weproxa_ssl_listHosts`
+
+List SSL hosts configured for interception.
+
+### Tool enable/disable
+
+#### `weproxa_tools_getEnabled`
+
+Read the enabled state of Map Local, Breakpoints, Block List, Network Conditioning, and Scripting.
+
+#### `weproxa_tools_setEnabled`
+
+Enable or disable one debugging tool. This changes the active tool state.

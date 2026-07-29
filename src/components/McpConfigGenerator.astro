@@ -1,0 +1,931 @@
+---
+import {
+  DEFAULT_MCP_ENDPOINT,
+  generateConfiguration,
+  type ClientTarget,
+} from './mcp/config';
+
+type ClientProfile = {
+  id: ClientTarget;
+  label: string;
+  shortLabel: string;
+  format: string;
+  surfaces: string;
+  storage: {
+    user: string;
+    workspace: string;
+  };
+  manual: string;
+  verify: string;
+  remove: string;
+  troubleshoot: string;
+};
+
+const clientProfiles = [
+  {
+    id: 'vscode',
+    label: 'VS Code / GitHub Copilot',
+    shortLabel: 'VS Code',
+    format: 'VS Code mcp.json',
+    surfaces:
+      'GitHub Copilot Chat and Agent mode use VS Code’s native MCP support. “VS Code” on this page does not mean the Codex or Claude extensions.',
+    storage: {
+      user: 'Run “MCP: Open User Configuration” to edit your profile’s mcp.json.',
+      workspace: 'Add the server to .vscode/mcp.json in the current workspace.',
+    },
+    manual:
+      'Run “MCP: Add Server” or open the selected mcp.json, then merge the generated weproxa entry without removing your other servers.',
+    verify:
+      'Run “MCP: List Servers”, open WePROXA, and inspect its discovered tools. You can also use “Configure Tools” in Chat.',
+    remove:
+      'Disable WePROXA from “MCP: List Servers”, or remove its entry from the selected mcp.json.',
+    troubleshoot:
+      'Choose “Show Output” or “Restart Server”. If tools are stale, run “MCP: Reset Cached Tools”.',
+  },
+  {
+    id: 'cursor',
+    label: 'Cursor',
+    shortLabel: 'Cursor',
+    format: 'Cursor mcp.json',
+    surfaces:
+      'Cursor Agent and its MCP tools use the same Cursor configuration for the selected scope.',
+    storage: {
+      user: 'Merge the server into ~/.cursor/mcp.json for use across projects.',
+      workspace: 'Merge the server into .cursor/mcp.json in the current project.',
+    },
+    manual:
+      'Open Cursor Settings → MCP & Integrations, or edit the selected mcp.json and preserve any existing mcpServers entries.',
+    verify:
+      'Open Cursor Settings → MCP & Integrations and confirm WePROXA is connected and its tools are available to Agent.',
+    remove:
+      'Turn off WePROXA in MCP settings, or remove its entry from the selected mcp.json.',
+    troubleshoot:
+      'Recheck the endpoint and header, then restart the server from MCP settings. A changed WePROXA token requires an updated header.',
+  },
+  {
+    id: 'codex',
+    label: 'Codex',
+    shortLabel: 'Codex',
+    format: 'Codex config.toml',
+    surfaces:
+      'Codex CLI and the Codex VS Code extension share one Codex configuration, so configure WePROXA only once per scope.',
+    storage: {
+      user: 'Merge the table into ~/.codex/config.toml for all Codex projects.',
+      workspace:
+        'Merge the table into .codex/config.toml in a trusted project for workspace-only access.',
+    },
+    manual:
+      'Open the selected config.toml and merge the generated table. Keep only one [mcp_servers.weproxa] table at that scope.',
+    verify:
+      'Run “codex mcp list”, use “/mcp” in Codex CLI, or inspect MCP servers from the extension gear menu.',
+    remove:
+      'Run “codex mcp remove weproxa” for a user server, or remove the table from the selected config.toml.',
+    troubleshoot:
+      'Restart Codex after editing config.toml. Check for duplicate tables, a stale token, or a project that has not been trusted.',
+  },
+  {
+    id: 'claude-code',
+    label: 'Claude Code',
+    shortLabel: 'Claude Code',
+    format: 'Claude Code CLI',
+    surfaces:
+      'Claude Code in the terminal and the Claude Code VS Code extension are one client and use the same Claude Code MCP setup.',
+    storage: {
+      user: 'The generated command uses Claude Code’s user scope for all projects.',
+      workspace:
+        'The generated command uses Claude Code’s project scope and writes a shareable .mcp.json entry.',
+    },
+    manual:
+      'Replace the token placeholder locally, run the generated command, and review project-server trust when Claude Code prompts.',
+    verify:
+      'Run “claude mcp list” or open “/mcp” in Claude Code and confirm WePROXA reports Connected.',
+    remove:
+      'Use “claude mcp remove weproxa” from the matching scope, or remove WePROXA through “/mcp”.',
+    troubleshoot:
+      'Use “claude mcp get weproxa” for details. Pending project servers must be approved from a trusted interactive session.',
+  },
+  {
+    id: 'jetbrains',
+    label: 'JetBrains AI Assistant',
+    shortLabel: 'JetBrains',
+    format: 'JetBrains HTTP MCP JSON',
+    surfaces:
+      'JetBrains AI Assistant uses its MCP settings and JSON paste/import flow for supported JetBrains IDEs.',
+    storage: {
+      user: 'Choose the global server level in the JetBrains MCP dialog.',
+      workspace: 'Choose the current-project server level in the JetBrains MCP dialog.',
+    },
+    manual:
+      'Open Settings → Tools → AI Assistant → Model Context Protocol (MCP), add an HTTP server, paste the JSON, and choose the server level.',
+    verify:
+      'Click Apply, check the Status column, then open the available-tools control for WePROXA.',
+    remove:
+      'Clear its checkbox and click Apply to disable it, or remove the WePROXA row from MCP settings.',
+    troubleshoot:
+      'Use Reconnect, confirm Streamable HTTP is selected, and inspect the IDE mcp logs if the status does not become connected.',
+  },
+  {
+    id: 'generic',
+    label: 'Other MCP client',
+    shortLabel: 'Other',
+    format: 'Streamable HTTP mcpServers JSON',
+    surfaces:
+      'Use this portable shape only when your client accepts mcpServers JSON with Streamable HTTP and custom headers.',
+    storage: {
+      user: 'Use the client’s user/global MCP configuration if it supports one.',
+      workspace: 'Use the client’s project/workspace MCP configuration if it supports one.',
+    },
+    manual:
+      'Open your client’s MCP documentation, confirm its HTTP field names, and merge the generated server without deleting existing entries.',
+    verify:
+      'Inspect the client’s server status and discovered tools. The exact screen or command depends on the client.',
+    remove:
+      'Disable the server or remove the weproxa entry using the client’s MCP settings.',
+    troubleshoot:
+      'Confirm the client supports Streamable HTTP and custom Authorization headers—not only stdio or legacy SSE.',
+  },
+] satisfies readonly ClientProfile[];
+
+const initialClient = clientProfiles[0];
+const initialConfiguration = generateConfiguration(
+  initialClient.id,
+  DEFAULT_MCP_ENDPOINT,
+  'user',
+);
+---
+
+<section
+  class="mcp-configurator"
+  data-mcp-configurator
+  data-initial-client={initialClient.id}
+  aria-labelledby="mcp-configurator-title"
+>
+  <div class="mcp-configurator__header">
+    <div>
+      <p class="mcp-configurator__eyebrow">Private, local configuration</p>
+      <h3 id="mcp-configurator-title">Build your client configuration</h3>
+      <p>
+        Generation happens in this browser tab. WePROXA’s token is never requested, read, stored,
+        or sent by this page.
+      </p>
+    </div>
+    <span class="mcp-configurator__local-badge">Runs locally</span>
+  </div>
+
+  <div class="mcp-configurator__field">
+    <label for="mcp-endpoint">Endpoint URL</label>
+    <input
+      id="mcp-endpoint"
+      type="url"
+      inputmode="url"
+      value={DEFAULT_MCP_ENDPOINT}
+      aria-describedby="mcp-endpoint-help mcp-endpoint-error"
+      autocomplete="off"
+      autocapitalize="none"
+      spellcheck="false"
+      data-endpoint-input
+    />
+    <p id="mcp-endpoint-help" class="mcp-configurator__help">
+      Port <code>8765</code> is preferred, not guaranteed. Copy the exact endpoint shown in
+      WePROXA—if that port is busy, the server uses another local port.
+    </p>
+    <p id="mcp-endpoint-error" class="mcp-configurator__error" role="alert" hidden data-endpoint-error>
+    </p>
+  </div>
+
+  <div class="mcp-configurator__field">
+    <span class="mcp-configurator__label" id="mcp-client-label">AI client</span>
+    <div class="mcp-client-tabs" role="tablist" aria-labelledby="mcp-client-label">
+      {
+        clientProfiles.map((profile, index) => (
+          <button
+            type="button"
+            id={`mcp-client-tab-${profile.id}`}
+            role="tab"
+            aria-selected={index === 0 ? 'true' : 'false'}
+            aria-controls={`mcp-client-panel-${profile.id}`}
+            tabindex={index === 0 ? 0 : -1}
+            data-client-tab={profile.id}
+            data-format={profile.format}
+          >
+            {profile.shortLabel}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <fieldset class="mcp-scope" data-scope-fieldset>
+    <legend>Configuration scope</legend>
+    <label>
+      <input type="radio" name="mcp-scope" value="user" checked data-scope-input />
+      <span>
+        <strong>User</strong>
+        <small>Available across projects</small>
+      </span>
+    </label>
+    <label>
+      <input type="radio" name="mcp-scope" value="workspace" data-scope-input />
+      <span>
+        <strong>Workspace</strong>
+        <small>Limited to one project</small>
+      </span>
+    </label>
+  </fieldset>
+
+  <div class="mcp-client-panels">
+    {
+      clientProfiles.map((profile, index) => (
+        <section
+          id={`mcp-client-panel-${profile.id}`}
+          class="mcp-client-panel"
+          role="tabpanel"
+          aria-labelledby={`mcp-client-tab-${profile.id}`}
+          tabindex="0"
+          hidden={index !== 0}
+          data-client-panel={profile.id}
+        >
+          <div class="mcp-client-panel__intro">
+            <div>
+              <p class="mcp-client-panel__kicker">Selected client</p>
+              <h4>{profile.label}</h4>
+            </div>
+            <code>{profile.format}</code>
+          </div>
+          <p>{profile.surfaces}</p>
+          <dl class="mcp-client-facts">
+            <div>
+              <dt>Store or enter it</dt>
+              <dd data-scope-location="user">{profile.storage.user}</dd>
+              <dd data-scope-location="workspace" hidden>{profile.storage.workspace}</dd>
+            </div>
+            <div>
+              <dt>Manual fallback</dt>
+              <dd>{profile.manual}</dd>
+            </div>
+            <div>
+              <dt>Verify</dt>
+              <dd>{profile.verify}</dd>
+            </div>
+            <div>
+              <dt>Remove or disable</dt>
+              <dd>{profile.remove}</dd>
+            </div>
+            <div>
+              <dt>Client-specific troubleshooting</dt>
+              <dd>{profile.troubleshoot}</dd>
+            </div>
+          </dl>
+        </section>
+      ))
+    }
+  </div>
+
+  <div class="mcp-config-output">
+    <div class="mcp-config-output__header">
+      <div>
+        <p class="mcp-client-panel__kicker">Generated format</p>
+        <h4 data-format-label>{initialClient.format}</h4>
+      </div>
+      <span>Token placeholder only</span>
+    </div>
+    <pre tabindex="0" aria-label="Generated WePROXA MCP configuration"><code data-config-output>{initialConfiguration}</code></pre>
+  </div>
+
+  <div class="mcp-config-actions">
+    <button type="button" class="mcp-button mcp-button--primary" data-copy-configuration>
+      Copy configuration
+    </button>
+    <a
+      class="mcp-button mcp-button--secondary"
+      href="weproxa://mcp/connect?client=vscode&scope=user"
+      data-open-weproxa
+    >
+      Open WePROXA to connect
+    </a>
+  </div>
+
+  <p class="mcp-configurator__status" role="status" aria-live="polite" data-copy-status></p>
+
+  <div class="mcp-token-guidance">
+    <h4>Copy the auth token from WePROXA</h4>
+    <ol>
+      <li>Open <strong>Settings → MCP Server</strong> in WePROXA.</li>
+      <li>Choose <strong>Copy Auth Token</strong>. The documentation page never receives it.</li>
+      <li>
+        Replace <code>&lt;WEPROXA_AUTH_TOKEN&gt;</code> in the copied configuration, then save or
+        run it locally.
+      </li>
+    </ol>
+  </div>
+
+  <div class="mcp-handoff-note">
+    The app handoff sends only the selected client and scope. It never includes the endpoint,
+    token, configuration, or a file path.
+  </div>
+
+  <div class="mcp-handoff-fallback" hidden data-handoff-fallback>
+    <strong>WePROXA did not open?</strong>
+    Open the app manually and go to <strong>Settings → MCP Server</strong>, or
+    <a href="weproxa://settings?section=mcpServer">open MCP Server settings</a>.
+  </div>
+</section>
+
+<script>
+  import {
+    createMcpHandoffUrl,
+    generateConfiguration,
+    isClientScope,
+    isClientTarget,
+    validateMcpEndpoint,
+    type ClientScope,
+    type ClientTarget,
+  } from './mcp/config';
+
+  function queryRequired<T extends Element>(root: ParentNode, selector: string): T {
+    const element = root.querySelector<T>(selector);
+    if (!element) {
+      throw new Error(`Missing MCP configurator element: ${selector}`);
+    }
+    return element;
+  }
+
+  async function copyText(value: string): Promise<boolean> {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return true;
+      } catch {
+        // Continue to the browser-compatible fallback.
+      }
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.readOnly = true;
+    textarea.style.position = 'fixed';
+    textarea.style.inset = '-9999px auto auto -9999px';
+    document.body.append(textarea);
+    textarea.select();
+
+    try {
+      return document.execCommand('copy');
+    } finally {
+      textarea.remove();
+    }
+  }
+
+  function initializeConfigurator(root: HTMLElement): void {
+    if (root.dataset.initialized === 'true') {
+      return;
+    }
+    root.dataset.initialized = 'true';
+
+    const endpointInput = queryRequired<HTMLInputElement>(root, '[data-endpoint-input]');
+    const endpointError = queryRequired<HTMLElement>(root, '[data-endpoint-error]');
+    const output = queryRequired<HTMLElement>(root, '[data-config-output]');
+    const formatLabel = queryRequired<HTMLElement>(root, '[data-format-label]');
+    const copyButton = queryRequired<HTMLButtonElement>(root, '[data-copy-configuration]');
+    const copyStatus = queryRequired<HTMLElement>(root, '[data-copy-status]');
+    const openWeproxa = queryRequired<HTMLAnchorElement>(root, '[data-open-weproxa]');
+    const handoffFallback = queryRequired<HTMLElement>(root, '[data-handoff-fallback]');
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-client-tab]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-client-panel]'));
+    const scopeInputs = Array.from(root.querySelectorAll<HTMLInputElement>('[data-scope-input]'));
+
+    const initialClient = root.dataset.initialClient ?? '';
+    let client: ClientTarget = isClientTarget(initialClient) ? initialClient : 'vscode';
+    let scope: ClientScope = 'user';
+    let fallbackTimer: number | undefined;
+    let handoffPending = false;
+
+    const render = (): void => {
+      const validation = validateMcpEndpoint(endpointInput.value);
+      const activeTab = tabs.find((tab) => tab.dataset.clientTab === client);
+
+      for (const tab of tabs) {
+        const selected = tab.dataset.clientTab === client;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      }
+
+      for (const panel of panels) {
+        panel.hidden = panel.dataset.clientPanel !== client;
+      }
+
+      for (const location of root.querySelectorAll<HTMLElement>('[data-scope-location]')) {
+        location.hidden = location.dataset.scopeLocation !== scope;
+      }
+
+      formatLabel.textContent = activeTab?.dataset.format ?? 'MCP configuration';
+      openWeproxa.href = createMcpHandoffUrl(client, scope);
+      endpointInput.setAttribute('aria-invalid', String(!validation.valid));
+      endpointError.hidden = validation.valid;
+      endpointError.textContent = validation.valid ? '' : validation.error;
+      copyButton.disabled = !validation.valid;
+
+      if (validation.valid) {
+        output.textContent = generateConfiguration(client, validation.endpoint, scope);
+      } else {
+        output.textContent = 'Enter a valid local WePROXA endpoint to generate configuration.';
+      }
+
+      copyStatus.textContent = '';
+    };
+
+    const selectClient = (nextClient: string, focus: boolean): void => {
+      if (!isClientTarget(nextClient)) {
+        return;
+      }
+      client = nextClient;
+      render();
+      if (focus) {
+        tabs.find((tab) => tab.dataset.clientTab === client)?.focus();
+      }
+    };
+
+    for (const [index, tab] of tabs.entries()) {
+      tab.addEventListener('click', () => selectClient(tab.dataset.clientTab ?? '', false));
+      tab.addEventListener('keydown', (event) => {
+        const lastIndex = tabs.length - 1;
+        let nextIndex: number | undefined;
+
+        switch (event.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+            nextIndex = index === lastIndex ? 0 : index + 1;
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+            nextIndex = index === 0 ? lastIndex : index - 1;
+            break;
+          case 'Home':
+            nextIndex = 0;
+            break;
+          case 'End':
+            nextIndex = lastIndex;
+            break;
+        }
+
+        if (nextIndex !== undefined) {
+          event.preventDefault();
+          selectClient(tabs[nextIndex]?.dataset.clientTab ?? '', true);
+        }
+      });
+    }
+
+    for (const input of scopeInputs) {
+      input.addEventListener('change', () => {
+        if (input.checked && isClientScope(input.value)) {
+          scope = input.value;
+          render();
+        }
+      });
+    }
+
+    endpointInput.addEventListener('input', render);
+
+    copyButton.addEventListener('click', async () => {
+      const validation = validateMcpEndpoint(endpointInput.value);
+      if (!validation.valid) {
+        render();
+        endpointInput.focus();
+        return;
+      }
+
+      const copied = await copyText(generateConfiguration(client, validation.endpoint, scope));
+      copyStatus.textContent = copied
+        ? `${formatLabel.textContent ?? 'Configuration'} copied. Replace the token placeholder locally.`
+        : 'Copy failed. Select the generated configuration and copy it manually.';
+    });
+
+    const dismissPendingHandoff = (): void => {
+      if (!handoffPending) {
+        return;
+      }
+      handoffPending = false;
+      window.clearTimeout(fallbackTimer);
+      handoffFallback.hidden = true;
+    };
+
+    window.addEventListener('blur', dismissPendingHandoff);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        dismissPendingHandoff();
+      }
+    });
+
+    openWeproxa.addEventListener('click', () => {
+      handoffPending = true;
+      handoffFallback.hidden = true;
+      window.clearTimeout(fallbackTimer);
+      fallbackTimer = window.setTimeout(() => {
+        handoffPending = false;
+        handoffFallback.hidden = false;
+      }, 1400);
+    });
+
+    render();
+  }
+
+  for (const configurator of document.querySelectorAll<HTMLElement>('[data-mcp-configurator]')) {
+    initializeConfigurator(configurator);
+  }
+</script>
+
+<style>
+  .mcp-configurator {
+    display: grid;
+    gap: 1.25rem;
+    margin-block: 1.5rem 2.5rem;
+    padding: clamp(1rem, 3vw, 1.75rem);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1rem;
+    background:
+      linear-gradient(
+        145deg,
+        color-mix(in oklab, var(--sl-color-accent-low), transparent 62%),
+        transparent 42%
+      ),
+      var(--sl-color-gray-6);
+    box-shadow: 0 1.1rem 2.5rem -2rem color-mix(in oklab, var(--sl-color-black), transparent 28%);
+  }
+
+  .mcp-configurator__header,
+  .mcp-client-panel__intro,
+  .mcp-config-output__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .mcp-configurator__header h3,
+  .mcp-client-panel h4,
+  .mcp-config-output h4,
+  .mcp-token-guidance h4 {
+    margin: 0;
+    color: var(--sl-color-white);
+  }
+
+  .mcp-configurator__header > div > p:last-child,
+  .mcp-client-panel > p {
+    margin-block: 0.5rem 0;
+    color: var(--sl-color-gray-2);
+    line-height: 1.6;
+  }
+
+  .mcp-configurator__eyebrow,
+  .mcp-client-panel__kicker {
+    margin: 0 0 0.35rem;
+    color: var(--sl-color-accent-high);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mcp-configurator__local-badge,
+  .mcp-config-output__header > span {
+    flex: none;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid color-mix(in oklab, var(--sl-color-accent), transparent 35%);
+    border-radius: 999px;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .mcp-configurator__field {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .mcp-configurator__field label,
+  .mcp-configurator__label,
+  .mcp-scope legend {
+    color: var(--sl-color-white);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .mcp-configurator__field input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.65rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-white);
+    font: inherit;
+    font-family: var(--__sl-font-mono);
+  }
+
+  .mcp-configurator__field input:focus-visible,
+  .mcp-client-tabs button:focus-visible,
+  .mcp-scope label:has(input:focus-visible),
+  .mcp-button:focus-visible,
+  .mcp-config-output pre:focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--sl-color-accent), transparent 30%);
+    outline-offset: 2px;
+  }
+
+  .mcp-configurator__field input[aria-invalid='true'] {
+    border-color: #f87171;
+  }
+
+  .mcp-configurator__help,
+  .mcp-configurator__error,
+  .mcp-configurator__status {
+    margin: 0;
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .mcp-configurator__help {
+    color: var(--sl-color-gray-3);
+  }
+
+  .mcp-configurator__error {
+    color: #fca5a5;
+    font-weight: 600;
+  }
+
+  .mcp-client-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .mcp-client-tabs button {
+    min-height: 2.5rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.65rem;
+    background: var(--sl-color-black);
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 650;
+  }
+
+  .mcp-client-tabs button[aria-selected='true'] {
+    border-color: var(--sl-color-accent);
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+  }
+
+  .mcp-scope {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .mcp-scope legend {
+    margin-bottom: 0.5rem;
+  }
+
+  .mcp-scope label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    min-width: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.7rem;
+    background: color-mix(in oklab, var(--sl-color-black), transparent 25%);
+    cursor: pointer;
+  }
+
+  .mcp-scope label:has(input:checked) {
+    border-color: var(--sl-color-accent);
+  }
+
+  .mcp-scope input {
+    margin-top: 0.25rem;
+    accent-color: var(--sl-color-accent);
+  }
+
+  .mcp-scope span {
+    display: grid;
+    min-width: 0;
+  }
+
+  .mcp-scope strong {
+    color: var(--sl-color-white);
+    font-size: 0.9rem;
+  }
+
+  .mcp-scope small {
+    color: var(--sl-color-gray-3);
+  }
+
+  .mcp-client-panel {
+    padding: 1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.8rem;
+    background: color-mix(in oklab, var(--sl-color-black), transparent 17%);
+  }
+
+  .mcp-client-panel__intro > code {
+    flex: none;
+    max-width: 45%;
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+
+  .mcp-client-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin-block: 1rem 0;
+    border-block-start: 1px solid var(--sl-color-gray-5);
+  }
+
+  .mcp-client-facts > div {
+    padding: 0.85rem 0.85rem 0.85rem 0;
+    border-block-end: 1px solid var(--sl-color-gray-5);
+  }
+
+  .mcp-client-facts > div:nth-child(even) {
+    padding-inline-start: 0.85rem;
+    border-inline-start: 1px solid var(--sl-color-gray-5);
+  }
+
+  .mcp-client-facts dt {
+    color: var(--sl-color-white);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .mcp-client-facts dd {
+    margin: 0.3rem 0 0;
+    color: var(--sl-color-gray-2);
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+
+  .mcp-config-output {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.8rem;
+    background: var(--sl-color-black);
+  }
+
+  .mcp-config-output__header {
+    padding: 0.8rem 1rem;
+    border-block-end: 1px solid var(--sl-color-gray-5);
+  }
+
+  .mcp-config-output pre {
+    max-width: 100%;
+    max-height: 24rem;
+    margin: 0;
+    padding: 1rem;
+    overflow: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .mcp-config-output code {
+    font-size: 0.82rem;
+  }
+
+  .mcp-config-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .mcp-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.7rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.65rem;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .mcp-button--primary {
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+  }
+
+  .mcp-button--secondary {
+    border-color: var(--sl-color-gray-4);
+    background: var(--sl-color-black);
+    color: var(--sl-color-white);
+  }
+
+  .mcp-button:hover {
+    filter: brightness(1.08);
+  }
+
+  .mcp-button:disabled {
+    cursor: not-allowed;
+    filter: none;
+    opacity: 0.5;
+  }
+
+  .mcp-configurator__status {
+    min-height: 1.3rem;
+    color: var(--sl-color-accent-high);
+    font-weight: 650;
+  }
+
+  .mcp-token-guidance,
+  .mcp-handoff-note,
+  .mcp-handoff-fallback {
+    padding: 0.9rem 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .mcp-token-guidance {
+    border: 1px solid color-mix(in oklab, var(--sl-color-accent), transparent 55%);
+    background: color-mix(in oklab, var(--sl-color-accent-low), transparent 42%);
+  }
+
+  .mcp-token-guidance ol {
+    margin-block: 0.65rem 0;
+    padding-inline-start: 1.25rem;
+  }
+
+  .mcp-token-guidance li {
+    margin-block: 0.35rem;
+    color: var(--sl-color-gray-2);
+  }
+
+  .mcp-handoff-note {
+    border-inline-start: 3px solid var(--sl-color-accent);
+    background: color-mix(in oklab, var(--sl-color-black), transparent 25%);
+    color: var(--sl-color-gray-2);
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  .mcp-handoff-fallback {
+    border: 1px solid #f59e0b;
+    background: color-mix(in oklab, #f59e0b, transparent 88%);
+    color: var(--sl-color-white);
+  }
+
+  @media (max-width: 42rem) {
+    .mcp-configurator__header,
+    .mcp-client-panel__intro,
+    .mcp-config-output__header {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .mcp-configurator__local-badge,
+    .mcp-config-output__header > span {
+      align-self: flex-start;
+    }
+
+    .mcp-scope,
+    .mcp-client-facts {
+      grid-template-columns: 1fr;
+    }
+
+    .mcp-client-facts > div,
+    .mcp-client-facts > div:nth-child(even) {
+      padding-inline: 0;
+      border-inline-start: 0;
+    }
+
+    .mcp-client-panel__intro > code {
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .mcp-config-actions {
+      display: grid;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mcp-client-tabs button,
+    .mcp-button {
+      transition:
+        background-color 120ms ease,
+        border-color 120ms ease,
+        filter 120ms ease;
+    }
+  }
+</style>
