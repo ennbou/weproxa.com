@@ -1,0 +1,440 @@
+---
+title: Agent Skills
+description: Reusable SKILL.md playbooks that teach an AI agent how to drive WePROXA through MCP.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+## Overview
+
+[MCP Integration](/guide/guides/mcp-integration/) gives an AI agent *capabilities*: it can list captured traffic, create rules, and activate Scenarios. A **skill** gives it *procedure*: which tools to call, in what order, what to confirm first, and what to clean up afterwards.
+
+A skill is a folder containing a `SKILL.md` file — YAML frontmatter with a `name` and a `description`, followed by Markdown instructions. The agent keeps only the description in context and loads the body when a task matches it, so a set of skills costs almost nothing until one is needed.
+
+Skills are worth writing when a WePROXA workflow is repeatable and easy to get wrong: mocking an endpoint from a real capture, running an app against fixtures with no network access, or packaging a bug into a Scenario.
+
+:::note[Prerequisites]
+Every skill on this page assumes the WePROXA MCP server is running and your client is connected. Start it in **Settings → MCP Server** and verify the connection first. Starting the server is a **Pro** feature.
+:::
+
+## Install a skill
+
+<Steps>
+
+1. Create a folder named after the skill.
+
+   ```bash
+   mkdir -p ~/.claude/skills/weproxa-triage-failures
+   ```
+
+2. Save the skill as `SKILL.md` inside it.
+
+   ```text
+   ~/.claude/skills/weproxa-triage-failures/SKILL.md
+   ```
+
+3. Restart the client, or reload its skill list, and confirm the skill is listed.
+
+4. Trigger it with a task that matches its description, such as “find out why the checkout API is failing.”
+
+</Steps>
+
+Claude Code reads `~/.claude/skills/<skill-name>/SKILL.md` for personal skills and `.claude/skills/<skill-name>/SKILL.md` for skills committed to a project. Check your own client's documentation for its path and whether it supports the format.
+
+A client with no skill support can still use these files. The instructions name MCP tools rather than client features, so the body works as a project rules file — `.cursor/rules/` in Cursor, `.github/instructions/` for GitHub Copilot — or as a prompt you paste when you need the workflow.
+
+:::caution
+A skill is instruction, not permission. It never grants an agent access it does not already have, and your client still applies its own approval rules to each tool call. Keep destructive steps behind an explicit confirmation inside the skill as well.
+:::
+
+## Anatomy of a skill
+
+```markdown
+---
+name: weproxa-example
+description: What this does. Use when <the situation that should trigger it>.
+---
+
+# Title
+
+## Prerequisites
+## Procedure
+## Guardrails
+```
+
+- **`name`** — kebab-case, matching the folder name.
+- **`description`** — the only part the agent sees before loading the skill. State what it does *and* when to use it; a vague description means the skill never triggers.
+- **Body** — numbered steps with exact tool names, the checks that come before a state change, and the cleanup that follows. Keep it short; a skill that reads like a manual gets skimmed.
+
+Tool names and parameters used below come from the [available tools reference](/guide/guides/mcp-integration/#available-tools). Parameters are `camelCase`, and `urlPattern` values use WePROXA glob syntax such as `**/api/orders/*`.
+
+## Example: triage failing requests
+
+A read-only diagnosis skill. It reads captured traffic, explains the failures, and changes nothing — a safe first skill to install.
+
+````markdown
+---
+name: weproxa-triage-failures
+description: Diagnose failing HTTP traffic captured by WePROXA. Use when asked why an API call fails, which endpoints return 4xx or 5xx, or what broke a page load. Read-only — never changes WePROXA state.
+---
+
+# Triage failing requests in WePROXA
+
+## Prerequisites
+
+- Call `weproxa_proxy_status`. If the proxy is not running, report that and stop.
+  Do not start it.
+- This skill is read-only. Never call a tool that creates, updates, removes,
+  activates, clears, starts, or stops anything.
+
+## Procedure
+
+1. Call `weproxa_requests_list` with `limit: 50`, `order: "newestFirst"`, and the
+   failure filter below.
+2. If nothing matches, widen the run: report that no failing request was
+   captured and ask which flow to exercise.
+3. Group results by host, path, method, and status. Report the counts before any
+   detail, so the largest problem is visible first.
+4. Pick at most five representative requests. For each, call
+   `weproxa_requests_getRequest` and `weproxa_requests_getResponse` with
+   `bodySizeLimit: 32768`.
+5. Explain each failure from its status, headers, and body — an auth header that
+   never arrived, a 404 on a path the client built wrong, an upstream 500 with an
+   error payload, a timeout with no response at all.
+6. End with the single most likely root cause and the next check that would
+   confirm it.
+
+## Failure filter
+
+```json
+{
+  "id": "failures",
+  "combinator": "and",
+  "rules": [
+    {
+      "id": "status",
+      "field": "statusCode",
+      "operator": "greaterThanOrEqual",
+      "value": 400
+    }
+  ]
+}
+```
+
+Narrow it by adding rules to the same group — `host` `equals`, `path`
+`startsWith`, or `duration` `greaterThan` for slow calls rather than failed ones.
+
+## Guardrails
+
+- `weproxa_requests_list` never returns response bodies. Fetch a body only for
+  the requests you actually explain.
+- Values may be redacted when **Hide sensitive data** is enabled. Report a
+  redacted value as redacted; never ask the user to disable the protection.
+- Do not repeat credentials, tokens, or card numbers in your summary even when
+  they arrive unredacted.
+````
+
+## Example: mock an endpoint from a real capture
+
+Turns a captured response into an inline Map Local rule. Inline rules carry the body in the rule itself, so there is no fixture file to write, place, or keep in sync.
+
+````markdown
+---
+name: weproxa-mock-from-capture
+description: Turn a response WePROXA already captured into a Map Local rule that serves it back. Use when asked to mock, stub, or freeze an endpoint, reproduce a response offline, or force an error or empty state for an API the app already called.
+---
+
+# Mock an endpoint from a captured response
+
+## Prerequisites
+
+- Call `weproxa_tools_getEnabled`. If `mapLocalEnabled` is false, say so and ask
+  before calling `weproxa_tools_setEnabled` with `tool: "mapLocal"`.
+- Call `weproxa_mapLocal_listRules` and check whether a rule already covers the
+  endpoint. Update that rule instead of adding a second one.
+
+## Procedure
+
+1. Find the capture with `weproxa_requests_list`, filtering on `host` and `path`.
+   If several match, use the most recent successful one unless told otherwise.
+2. Read it with `weproxa_requests_getResponse`. Keep the status, the
+   `content-type`, and the body.
+3. Show the exact rule you intend to create and wait for confirmation. This
+   changes what the app receives.
+4. Create it with `weproxa_mapLocal_addRule`:
+
+   ```json
+   {
+     "name": "Orders — frozen list",
+     "urlPattern": "**/api/orders",
+     "method": "GET",
+     "sourceType": "inline",
+     "statusCode": 200,
+     "responseHeaders": [
+       { "name": "content-type", "value": "application/json" }
+     ],
+     "body": "{\"orders\":[]}"
+   }
+   ```
+
+5. Ask the user to trigger the call again, then confirm with
+   `weproxa_requests_list` that the newest matching request lists `map-local` in
+   its `responseTools`. Without that marker the rule did not answer.
+
+## One endpoint, several fixtures
+
+Add `match` conditions when the same URL needs different answers:
+
+```json
+{
+  "name": "Orders — page 2",
+  "urlPattern": "**/api/orders",
+  "sourceType": "inline",
+  "match": { "queryParams": [{ "name": "page", "op": "equals", "value": "2" }] },
+  "body": "{\"orders\":[],\"page\":2}"
+}
+```
+
+Conditions also read headers (`headers`), a request-body substring
+(`bodyContains`), and JSON fields (`bodyJsonPath`, e.g. `user.email`). Each
+condition takes `op: "equals" | "exists" | "absent"`.
+
+**Order matters.** When two rules match the same request, the oldest one answers.
+Create narrow rules first and the catch-all last, or the catch-all wins.
+
+## Guardrails
+
+- Do not copy captured credentials, tokens, cookies, or card numbers into a
+  fixture body. Replace them with obvious placeholders.
+- Keep `statusCode` and `content-type` explicit. A fixture that returns the wrong
+  content type fails in ways that look like an app bug.
+- Report the returned rule `id`, and remove it with `weproxa_mapLocal_removeRule`
+  when the user is done with it.
+````
+
+## Example: build fixtures with the network contained
+
+The longest workflow, and the one worth automating: run the app with every unmocked call blocked, then work through the endpoints it needed until nothing is unmatched. Pass-through containment guarantees a missing mock cannot silently reach production.
+
+````markdown
+---
+name: weproxa-offline-fixtures
+description: Run an app against WePROXA with unmocked traffic blocked, then build Map Local fixtures until the flow works fully offline. Use when asked to mock a whole flow, work without a backend, contain traffic during exploration, or find which endpoints are still unmocked.
+---
+
+# Build a full fixture set under containment
+
+## Prerequisites
+
+- `weproxa_proxy_status` — the proxy must be running and the app must be using it.
+- `weproxa_tools_getEnabled` — `mapLocalEnabled` must be true. In
+  `denyUnmatched`, a disabled Map Local means nothing can match, so every request
+  is denied.
+- Explain containment before enabling it and get explicit approval.
+
+## Procedure
+
+1. Open a run: `weproxa_session_start` with a descriptive `name` such as
+   `checkout-happy-path`. Keep the returned `sessionId`. Any open session is
+   closed automatically. Use a session rather than
+   `weproxa_requests_clear` whenever runs need to be compared.
+2. Contain the network: `weproxa_passthrough_setMode` with
+   `mode: "denyUnmatched"` and an `allowHosts` list for anything that must stay
+   reachable, for example `["localhost", "*.internal.test"]`. `allowHosts`
+   replaces the previous list.
+3. Ask the user to exercise the flow, then wait. Do not guess which endpoints the
+   app calls — capture them.
+4. Read the work queue: `weproxa_requests_listUnmatched` with the `sessionId`.
+   Each entry is an endpoint no rule answers, with a ready-to-use `urlPattern`, an
+   `exampleRequestId`, and the statuses observed.
+5. For each endpoint, decide the response:
+   - A recorded status means a real answer exists — read it with
+     `weproxa_requests_getResponse` on `exampleRequestId` and mock that.
+   - No status means containment denied it before it reached the origin. Ask what
+     the endpoint should return, or capture it once with `mode: "allow"`.
+6. Create the rule with `weproxa_mapLocal_addRule`, passing the reported
+   `urlPattern` unchanged and `sourceType: "inline"`.
+7. Repeat from step 4 until `totalCount` is 0. New endpoints appear as fixtures
+   unblock later screens, so expect several passes.
+8. Close the run: `weproxa_session_end`, then
+   `weproxa_passthrough_setMode` with `mode: "allow"`.
+9. Report the fixture set: every rule id, its pattern, and its status.
+
+## HTTPS and tunnels
+
+`weproxa_requests_listUnmatched` hides CONNECT entries by default. Call it with
+`includeTunnels: true` to find hosts WePROXA could not decrypt — those name a host
+to add with `weproxa_ssl_addHost`, not an endpoint to mock. A tunnel that stays
+encrypted can never match a rule.
+
+## Guardrails
+
+- `denyAll` blocks everything, including endpoints that do have rules. Use
+  `denyUnmatched` unless the user asks for a total block.
+- Containment is not persisted. It resets to `allow` when WePROXA restarts —
+  never assume a run is still contained, call `weproxa_passthrough_getMode`.
+- Always restore `allow` at the end, including when the run fails. Leaving
+  containment on looks like a broken network.
+````
+
+## Example: package a bug as a Scenario
+
+Scenarios keep a reproduction — its rules, tool states, and acceptance criteria — so a bug can be handed to someone else and switched on in one action.
+
+````markdown
+---
+name: weproxa-scenario-from-ticket
+description: Capture a bug reproduction as a WePROXA Scenario with its rules and acceptance criteria. Use when asked to reproduce a ticket, save a debugging setup, share a repro with the team, or switch between debugging configurations.
+---
+
+# Package a reproduction as a Scenario
+
+## Prerequisites
+
+- `weproxa_workspaces_list` — note the active Workspace id. Rule tools operate on
+  the active Workspace, and new rules are assigned to its active Scenario.
+- `weproxa_scenarios_list` — check whether a Scenario for this ticket exists
+  before creating another.
+
+## Procedure
+
+1. Create the Scenario with `weproxa_scenarios_create`, passing `workspaceId` and
+   `metadata`:
+
+   ```json
+   {
+     "workspaceId": "<id>",
+     "metadata": {
+       "name": "Checkout retries on a 503",
+       "acceptanceCriteria": "The checkout screen shows a retry action when the order API returns 503.",
+       "expectedOutcome": "Retry appears within 2s and a second POST is sent.",
+       "ticketUrl": "https://tracker.example.com/PROJ-1234"
+     }
+   }
+   ```
+
+   Creating a Scenario does not change live traffic.
+2. New rules land in the **active** Scenario, so activate the new one before
+   adding them. Call `weproxa_scenarios_previewActivation` first, report the rule
+   and tool-state changes it predicts, and ask for confirmation.
+3. Activate with `weproxa_scenarios_activate`. Activation is atomic and replaces
+   the live setup, including releasing anything paused at a breakpoint.
+4. Add the rules that reproduce the bug — `weproxa_mapLocal_addRule` for a forced
+   response, `weproxa_networkConditioning_addRule` for a slow one,
+   `weproxa_blockList_addRule` for an unreachable one.
+5. Set the tools the Scenario needs with `weproxa_tools_setEnabled`.
+6. Verify: ask the user to run the flow, then confirm from
+   `weproxa_requests_list` that the affected requests carry the expected tool
+   markers (`map-local`, `network-conditioning`, `block-list`).
+7. Report the Scenario id, its rules, and how to hand it over: **Export scenario**
+   in the Workspaces sidebar produces a portable `.weproxa-scenario.json`.
+
+## Guardrails
+
+- Never activate a Workspace or Scenario without previewing and confirming first.
+  It changes what live traffic does immediately.
+- Do not delete a Scenario to "clean up". Activating a different Scenario is
+  enough, and the last Scenario in a Workspace cannot be deleted anyway.
+- Free licences cap Scenarios per Workspace. If creation is rejected for a limit,
+  report it rather than deleting an existing Scenario to make room.
+````
+
+## Example: run a resilience drill
+
+Adds latency and failures on purpose, then removes what it added. The cleanup step is the point — a drill that leaves rules behind turns into a bug report the next day.
+
+````markdown
+---
+name: weproxa-resilience-drill
+description: Test how an app behaves under slow, failing, or unreachable APIs using WePROXA Network Conditioning and the Block List. Use when asked to test timeouts, spinners, retry logic, offline handling, or error states for a specific endpoint.
+---
+
+# Drive an app through slow and failing responses
+
+## Prerequisites
+
+- `weproxa_proxy_status` and `weproxa_tools_getEnabled`.
+- Agree on the target `urlPattern` and the behaviour to test before creating
+  anything. Keep a list of every rule id you create — you will remove them all.
+
+## Procedure
+
+1. **Slow response.** `weproxa_networkConditioning_addRule` with
+   `responseDelayMs: 8000` on the target pattern. Ask the user what the UI does:
+   spinner, timeout, duplicate request, or nothing at all.
+2. **Server error.** `weproxa_mapLocal_addRule` with `sourceType: "inline"`,
+   `statusCode: 503`, and a realistic error body for the same pattern.
+3. **Unreachable.** `weproxa_blockList_addRule` on the pattern, so the request
+   fails at the connection rather than with a status.
+4. Run one variant at a time. Disable or remove the previous rule before adding
+   the next, otherwise the result cannot be attributed to a single cause.
+5. After each variant, read the traffic with `weproxa_requests_list` and report
+   what the app actually sent — retries, backoff, or a request storm.
+6. **Clean up.** Remove every rule you created with
+   `weproxa_networkConditioning_removeRule`, `weproxa_mapLocal_removeRule`, and
+   `weproxa_blockList_removeRule`. Confirm with the matching `listRules` call that
+   nothing is left, and restore any tool state you changed.
+
+## Guardrails
+
+- Delays are capped at 300,000 ms (five minutes) per rule. A longer value is
+  rejected.
+- A delay long enough to exceed the client's own timeout tests the timeout path,
+  not the slow path. Say which one you are testing.
+- Report cleanup explicitly. If a removal fails, name the rule that is still
+  active instead of assuming the drill ended cleanly.
+````
+
+## Example: check HTTPS capture readiness
+
+A short skill for the most common cause of missing traffic: the request was never decrypted.
+
+````markdown
+---
+name: weproxa-https-readiness
+description: Check whether WePROXA can decrypt HTTPS for a host, and fix it when it cannot. Use when captured traffic is missing, a host only shows CONNECT entries, bodies are unreadable, or an iOS simulator does not trust the WePROXA CA.
+---
+
+# Verify HTTPS capture for a host
+
+## Procedure
+
+1. `weproxa_proxy_status` — confirm the proxy is running and note the port.
+2. `weproxa_certs_getCaInfo` — read the CA path, fingerprint, expiry, and whether
+   macOS trusts it. An untrusted or expired CA explains every decryption failure;
+   report it and stop rather than adding hosts.
+3. `weproxa_ssl_listHosts` — check the host is covered. Add it with
+   `weproxa_ssl_addHost` using `host: "*.example.com"` for a whole domain.
+4. `weproxa_requests_listUnmatched` with `includeTunnels: true` — anything still
+   listed as a tunnel is a host WePROXA is not decrypting.
+5. For an iOS simulator, call `weproxa_certs_installToIosSimulator`. It targets
+   the booted simulator and needs a `udid` when several are booted.
+6. Ask the user to retry the request and confirm a decrypted entry appears with a
+   readable body.
+
+## Guardrails
+
+- Confirm with the user before installing a certificate into any trust store.
+- Intercept only the hosts being debugged. A broad `*` pattern decrypts unrelated
+  traffic, including other apps on the machine.
+````
+
+## Write your own
+
+Start from a workflow you have already run by hand twice, then write down what you had to remember:
+
+<Steps>
+
+1. **Name the trigger.** Put the user's words in the description — “mock”, “stub”, “why is this failing”, “test the timeout” — not internal vocabulary.
+2. **Read before writing.** Open with the status calls that prove the setup is right: `weproxa_proxy_status`, `weproxa_tools_getEnabled`, the relevant `listRules`.
+3. **Gate the state changes.** Anything that starts or stops the proxy, activates a Workspace or Scenario, changes containment, or clears traffic gets an explicit confirmation step.
+4. **Verify from traffic.** A tool call that returns `success: true` proves the rule exists, not that it answered. Confirm from `weproxa_requests_list` and the tool markers on the request.
+5. **Clean up.** Say which rules to remove, which tool states to restore, and that containment returns to `allow`.
+
+</Steps>
+
+Keep each skill to one job. Two narrow skills with sharp descriptions trigger reliably; one broad skill that covers mocking, triage, and Scenarios triggers unpredictably and gets ignored.
+
+:::note
+Skills are files you own — nothing is stored in WePROXA. Commit them to a project so a team shares one set of debugging procedures, and keep the descriptions in sync with the [tool reference](/guide/guides/mcp-integration/#available-tools) as WePROXA adds tools.
+:::

@@ -88,6 +88,7 @@ export default defineConfig({
 									{ label: 'iOS Simulator', slug: 'guide/guides/ios-simulator' },
 									{ label: 'Remote Devices', slug: 'guide/guides/remote-devices' },
 									{ label: 'MCP Integration', slug: 'guide/guides/mcp-integration' },
+									{ label: 'Agent Skills', slug: 'guide/guides/agent-skills' },
 									{ label: 'Toolbar & Tray', slug: 'guide/guides/tray-and-toolbar' },
 									{ label: 'Keyboard Shortcuts', slug: 'guide/guides/keyboard-shortcuts' },
 									{ label: 'Troubleshooting', slug: 'guide/guides/troubleshooting' },
