@@ -79,9 +79,15 @@ After a rule saves successfully, the action button briefly changes to a saved co
 | Move selection up / down | `↑` / `↓` |
 | Expand the details panel if collapsed | `Enter` |
 
-## Content-Type Quick Filter
+## Modifier Clicks
 
-Hold `⌘` (macOS) or `Ctrl` (other platforms) while clicking a content-type chip above the request list to toggle multi-select.
+`⌘` (macOS) or `Ctrl` (other platforms) is WePROXA's primary modifier. Holding it selects the *alternate* variant of a click:
+
+| Click target | Plain click | With `⌘` / `Ctrl` |
+|---|---|---|
+| Content-type chip above the request list | Select only that type | Toggle multi-select |
+| Toolbar filter icon | Expand the query builder | Enable or disable the filter without clearing your rules |
+| **Add to Filters** entry in the request context menu | Extend the current query | Replace the current query — see [Advanced Filtering](/guide/features/advanced-filtering/#extend-or-replace) |
 
 ## Tips
 

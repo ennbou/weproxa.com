@@ -29,6 +29,12 @@ The default layout opens with the source sidebar visible and the **URL** column 
 
 Columns are sortable (click headers), draggable (reorder by dragging), resizable, and can be shown or hidden via the column visibility picker.
 
+### Column Widths
+
+Drag the border between two column headers to resize a column. Widths are **remembered across restarts**, alongside column order and visibility.
+
+A column can never be dragged narrower than its own header title, and that minimum is measured from the header as it is actually drawn — so it stays correct when you switch language or change the UI font size. If a wider header makes a stored width too small, WePROXA clamps it for display but keeps the stored value, so the size you chose is still there to go back to.
+
 ### Keyboard Navigation
 
 - **Arrow Up / Arrow Down** — Navigate between requests
@@ -54,7 +60,7 @@ When you're viewing **Saved Requests**, request and response body search is unav
 
 Right-click any request to access quick actions. Related actions are grouped into nested submenus you can navigate with the mouse or keyboard:
 
-- **Add to Filters** — append **Same Host**, **Same Path**, **Same Endpoint**, **Similar Requests**, or **Same Client** conditions to the advanced filter (Pro; see [Advanced Filtering](/guide/features/advanced-filtering/#filter-from-the-context-menu))
+- **Add to Filters** — append **Same Host**, **Same Path**, **Same Endpoint**, **Similar Requests**, or **Same Client** conditions to the advanced filter, or hold **⌘** / **Ctrl** to replace the current query instead (Pro; see [Advanced Filtering](/guide/features/advanced-filtering/#filter-from-the-context-menu))
 - **Copy as cURL** — Copy the request as a `curl` command
 - **Enable / Disable SSL for {host}** — Toggle HTTPS interception for the request's host
 - **Repeat** — Choose **Repeat Now** to re-execute immediately, or **Repeat with Edit...** to modify the request first
@@ -117,12 +123,16 @@ When a WebSocket connection is captured, WePROXA displays the request as `ws://`
 
 If a tool modified the response (e.g., Map Local, Breakpoint), a "Modified By" indicator is shown.
 
+When a Map Local rule produced the response, the same line also names it as **Answering rule**. It shows the rule's [external key](/guide/features/scenarios/#tags-and-external-keys) when it has one and its ID otherwise, with the full ID always available on hover. With several overlapping rules in play this is the fastest way to confirm which one actually answered rather than which one you expected to — and the attribution is preserved in saved snapshots.
+
+A request refused by [Pass-Through containment](/guide/features/pass-through/) is marked with the **Pass-Through** tool, keeping it distinct from a Block List rule and from a genuine `403` returned by a real server.
+
 ## Source View
 
 Toggle to the source/tree view in the sidebar to see requests organized into sections:
 
 - **All** — Every captured request
-- **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, Scripting, or Repeat), so you can see exactly what each rule touched. Requests you replayed appear under the **Repeat** group. Long lists collapse behind a **Show N more** control
+- **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, Scripting, Pass-Through, or Repeat), so you can see exactly what each rule touched. Requests you replayed appear under the **Repeat** group, and requests refused by [Pass-Through containment](/guide/features/pass-through/) under **Pass-Through**. Long lists collapse behind a **Show N more** control
 - **Saved Requests** — Persistent HTTPS request snapshots you explicitly saved from the details panel
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)
 - **SSL** — Hosts with SSL interception enabled (toggle via right-click)

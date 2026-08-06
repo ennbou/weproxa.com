@@ -17,7 +17,7 @@ The server:
 - binds to the loopback interface, so it is available only on your computer;
 - uses a dynamic endpoint such as `http://127.0.0.1:8765/mcp`;
 - requires a bearer token on every connection;
-- exposes captured-traffic, Workspace, Scenario, proxy, rule-management, SSL-host, and tool-state capabilities.
+- exposes captured-traffic, saved-request, capture-session, request-replay, Workspace, Scenario, bundle, proxy, rule-management, paused-breakpoint, containment, certificate, SSL-host, and tool-state capabilities.
 
 :::note
 Starting the MCP server is a **Pro** feature. Free accounts can view its settings but cannot start the server.
@@ -224,6 +224,9 @@ Trust the project where required, confirm the configuration is in that client’
 - An optional `method` limits a rule to one HTTP method; omitting it matches all methods.
 - Add operations return a UUID that can be passed to the corresponding update or remove operation.
 - Rule limits, Scenario limits, validation, active-Workspace ownership, and active-Scenario assignment are enforced by WePROXA.
+- Every `listRules` tool accepts an optional `workspaceId` to inspect a Workspace **without activating it**. Omit it to use the active Workspace.
+- Listings are returned in [precedence order](/guide/features/scenarios/#rule-precedence): the rule listed first is the rule that will answer.
+- `priority`, `externalKey`, and `tags` are deliberately **not** part of the update tools. Those tools replace the whole rule, so they would wipe those fields on every unrelated edit. Use `weproxa_rules_setPriority` and `weproxa_rules_annotate` instead.
 
 ### Captured traffic
 
@@ -238,6 +241,66 @@ Get one captured request by ID, including headers and a bounded body. Sensitive 
 #### `weproxa_requests_getResponse`
 
 Get the captured response for a request ID, including headers and a bounded body. Sensitive values are redacted when MCP privacy protection is enabled.
+
+#### `weproxa_requests_clear`
+
+Delete every captured request from the traffic log and return how many were cleared. Call it at the start of an exploration pass so captured traffic reflects only the current run. When runs need to be **compared** rather than discarded, open a [capture session](#capture-sessions) instead.
+
+#### `weproxa_requests_listUnmatched`
+
+List captured requests that matched **no** Map Local rule, deduplicated by method and URL pattern. This is the work queue for fixture generation: each entry names an endpoint the app asked for that you have not mocked, with a `urlPattern` glob you can pass straight to `weproxa_mapLocal_addRule`, an `exampleRequestId`, and the statuses observed.
+
+CONNECT entries are hidden by default. Pass `includeTunnels: true` to surface hosts WePROXA could not decrypt — each names a host to add with `weproxa_ssl_addHost`, not an endpoint to mock. A tunnel that stays encrypted can never match a rule.
+
+#### `weproxa_requests_replay`
+
+Resend a request and return the response — status, headers, a bounded body, and the round-trip duration.
+
+Either start from a captured request with `requestId` and edit it (`method`, `url`, `setHeaders` / `removeHeaders`, `body`), or state one outright with `method` and `url`. Anything else is rejected rather than guessed at: a request sent to the wrong place cannot be taken back.
+
+Headers are a **patch**, so you never restate the ones you are not changing and never echo back a redacted value. An unmodified captured body is resent as the bytes that crossed the wire; replacing the body drops the `Content-Encoding` and `Transfer-Encoding` that described the bytes it replaced.
+
+The replay runs through the same executor as the Repeat editor, so it is logged as a new request (its ID is returned), timed, attributed to the original's client, and marked with the **Repeat** tool wherever it came from. A failure that got as far as dialing still returns the ID it was logged under — a failed replay *is* a record in the traffic log, and the one exchange you most need to read back in full.
+
+### Saved requests
+
+#### `weproxa_savedRequests_list`
+
+List saved snapshots newest first with bounded pagination. Bodies are omitted.
+
+#### `weproxa_savedRequests_save`
+
+Save a captured HTTPS request and its current response as an immutable snapshot. SSL interception must be enabled for the request. Repeating the call for the same captured request is idempotent.
+
+#### `weproxa_savedRequests_getRequest`
+
+Get one saved request by saved-request ID, including headers and a bounded body.
+
+#### `weproxa_savedRequests_getResponse`
+
+Get the response stored with a saved request, including headers, a bounded body, tool markers, and the [Map Local rule that answered it](/guide/features/inspect-requests/#response-section).
+
+#### `weproxa_savedRequests_remove`
+
+Permanently remove one saved snapshot by its saved-request ID.
+
+### Capture sessions
+
+A capture session tags every request observed while it is open, so several exploration runs can share one traffic log and still be told apart. Sessions live in memory for the lifetime of the app, like the traffic they describe.
+
+#### `weproxa_session_start`
+
+Open a named session and tag subsequent captures with its ID. Any session still open is closed first, and reported. Returns `sessionId`.
+
+#### `weproxa_session_end`
+
+Close a session and return its summary. Defaults to the open session.
+
+#### `weproxa_session_summary`
+
+Return a session's summary **without** closing it. Defaults to the open session.
+
+Both summaries report the request count, the duration, an overlapping per-tool breakdown of what handled each response, and `answeredByOriginCount` — how many requests the upstream origin actually answered. That last number is the false-pass signal: in a run that is supposed to be fully mocked, it should be zero. [Pass-Through](#pass-through-containment) denials are counted under `passthrough`.
 
 ### Workspaces
 
@@ -269,7 +332,7 @@ List a Workspace’s Scenarios, active Scenario ID, Shared Rule references, and 
 
 #### `weproxa_scenarios_create`
 
-Create an empty Scenario without activating it.
+Create an empty Scenario without activating it. It starts with **all five rule tools enabled** unless `initialToolStates` says otherwise, so its rules answer traffic as soon as it is activated. Containment, SSL prerequisites, and tags can be declared here instead of through their own tools; an invalid declaration creates nothing rather than a half-configured Scenario.
 
 #### `weproxa_scenarios_update`
 
@@ -285,11 +348,74 @@ Delete a Scenario. The last Scenario in a Workspace cannot be deleted.
 
 #### `weproxa_scenarios_previewActivation`
 
-Preview effective-rule counts and tool-state changes before activation.
+Preview effective-rule counts and tool-state changes before activation. Also reports [provably shadowed rules](/guide/features/scenarios/#verify-a-scenario-actually-answers), the containment it would install, declared SSL hosts this machine does not decrypt, and warnings — rules sitting under a tool the Scenario switches off would never fire.
 
 #### `weproxa_scenarios_activate`
 
-Activate a Scenario in the active Workspace and atomically apply its effective rules and tool states.
+Activate a Scenario in the active Workspace and atomically apply its effective rules, tool states, and [Pass-Through containment](/guide/features/pass-through/).
+
+Returns the containment now in force, any declared SSL host this machine does not decrypt, and warnings about rules that cannot fire under the Scenario's own tool switches. Each of those is a rule that will silently never match, which is what makes a run green for the wrong reason.
+
+Re-activating the live Scenario re-asserts its containment, which is how you return to a sealed proxy after a manual override.
+
+#### `weproxa_scenarios_setPassthrough`
+
+Declare the [Pass-Through containment](/guide/features/pass-through/) a Scenario installs when activated, so a sealed environment travels with the Scenario and its bundle instead of being set by hand on every machine. It takes effect immediately if the Scenario is live.
+
+Omit `passthrough` to clear the declaration. A Scenario that declares nothing reverts containment a *previous Scenario* installed but leaves a manually set policy alone. Containment is never restored at launch — WePROXA always starts in `allow`.
+
+#### `weproxa_scenarios_setSslPrerequisites`
+
+Declare the hosts a Scenario needs WePROXA to decrypt for its HTTPS rules to match. The list travels in the bundle, and import and activation report which of them this machine does not intercept. Nothing is applied automatically, because SSL host configuration is global rather than Workspace-scoped.
+
+#### `weproxa_scenarios_setTags`
+
+Replace a Scenario's free-form key/value labels. They are sorted on write, so a bundle exported before and after an unrelated change still diffs cleanly.
+
+### Scenario bundles
+
+A bundle is always a **file path**, never a tool payload: it embeds every referenced rule and Map Local fixture and can reach 128 MiB, and its purpose is to be committed next to the code it mocks. See [Bundles as a committed artifact](/guide/features/scenarios/#bundles-as-a-committed-artifact).
+
+#### `weproxa_scenarios_export`
+
+Write a Scenario to a bundle file at an absolute path. The parent directory must exist. Returns the path, the exact file SHA-256, a portable content SHA-256 that normalizes generated rule IDs, timestamps, and embedded-file source paths, the content-normalization version that must be stored with that digest, its size, and warnings worth fixing before the file is committed. **Requires WePROXA Pro.**
+
+#### `weproxa_scenarios_importPreview`
+
+Dry-run an import: the rules it would create, the fixtures it would write, whether the Scenario name collides, and — for unlicensed Workspaces — the exact per-tool limit arithmetic (`existing + incoming` vs allowed). Nothing is written. Set `sharedRules` to `omit` to see what dropping the source's Shared Rules would leave behind.
+
+#### `weproxa_scenarios_import`
+
+Import a bundle file as a new Scenario with fresh rule IDs. The Scenario is created but **not activated**. Import is available to unlicensed Workspaces, subject to the per-tool rule limits — run `weproxa_scenarios_importPreview` first to see them. `sharedRules: "omit"` imports only what the Scenario references directly and reports every rule it dropped.
+
+### Cross-tool rule management
+
+#### `weproxa_rules_list`
+
+List Map Local, Breakpoint, Block List, Network Conditioning, and Scripting rules in **one** call. Filters apply across every tool, results identify the inspected Workspace, and every rule is tagged with its owning tool. Rules report their hit counts, so a fixture with zero hits after a run is dead or shadowed.
+
+#### `weproxa_rules_createBatch`
+
+Create, refresh, or explicitly prune with up to **200 operations** across all five rule tools in one atomic call. The whole batch is validated first and committed together — one disk write and one matcher rebuild per affected tool instead of one per rule — so a failure never leaves a half-built Scenario, which is itself a false green.
+
+Entries use the same shape as the single-rule `add` tools, tagged with `tool`, so there is no second schema to learn.
+
+- An entry whose `externalKey` already belongs to a rule in the target Workspace is **content-compared**: changed content refreshes that rule in place, preserving its ID, creation time, priority, and Scenario membership; content identical to the stored rule keeps its `updatedAt` and hit counter and is reported as unchanged. A repeated authoring pass is therefore idempotent and does not reshuffle the matcher.
+- Pass stale keys in `pruneExternalKeys` to delete their rules and Scenario references in the same transaction. Missing keys are successful no-ops.
+- **Submission order decides precedence** among newly created rules sharing the neutral priority band, so list narrow fixtures before catch-alls.
+- Pass `workspaceId` to author into a Workspace without activating it; omit it to use the active one.
+
+#### `weproxa_rules_setPriority`
+
+Set a rule's explicit precedence so it wins or loses against overlapping rules. Higher priority wins; rules sharing a band still resolve oldest-first, which is how every rule behaves until a priority is set. Omit `priority` to clear it.
+
+#### `weproxa_rules_annotate`
+
+Set or clear a rule's `externalKey` and free-form `tags`. Omitted fields are left alone; an empty string clears the key and an empty object clears the tags. External keys are unique across the **Workspace**, not per tool.
+
+#### `weproxa_rules_assign`
+
+Assign an existing rule to a Scenario or to the Workspace's Shared set, or unassign it. This is how one rule answers traffic in several Scenarios — without it, a baseline fixture has to be duplicated per Scenario. Pass `assigned: false` to remove the reference; removing the last one leaves the rule in the Rule Library, stored but matching nothing.
 
 ### Proxy lifecycle
 
@@ -309,7 +435,24 @@ Read the current running state, port, and LAN-access state without changing anyt
 
 #### `weproxa_mapLocal_addRule`
 
-Add a rule that serves a local file or remote HTTP(S) asset for matching requests.
+Add a rule that serves an **inline body**, a local file, or a remote HTTP(S) asset for matching requests.
+
+Set `sourceType: "inline"` and pass `body` to author a fixture in one call, with no file to write or keep in sync. `statusCode` and `responseHeaders` override whatever the source returned, whichever source that is, and `match` narrows the rule to some of the requests its URL pattern accepts:
+
+```json
+{
+  "name": "Orders — page 2",
+  "urlPattern": "**/api/orders",
+  "method": "GET",
+  "sourceType": "inline",
+  "statusCode": 200,
+  "responseHeaders": [{ "name": "content-type", "value": "application/json" }],
+  "match": { "queryParams": [{ "name": "page", "op": "equals", "value": "2" }] },
+  "body": "{\"orders\":[],\"page\":2}"
+}
+```
+
+`match` also reads request `headers`, a request-body substring (`bodyContains`), and JSON fields (`bodyJsonPath`, such as `user.email`). Every condition takes `op: "equals" | "exists" | "absent"`, and all of them must hold. See [Request Match Conditions](/guide/features/map-local/#request-match-conditions).
 
 #### `weproxa_mapLocal_updateRule`
 
@@ -340,6 +483,32 @@ Remove a Breakpoint rule by ID.
 #### `weproxa_breakpoints_listRules`
 
 List Breakpoint rules.
+
+### Paused breakpoints
+
+A Breakpoint rule only arms the trap. These tools act on requests it is actually holding, which is what makes the intercept-and-modify loop reachable from an AI client rather than only from the breakpoint editor window.
+
+#### `weproxa_breakpoints_listPending`
+
+List the requests and responses currently held paused, oldest first. This surface is **poll-shaped** on purpose: a request can sit paused for up to five minutes, which is the wrong thing to hold an HTTP tool call open for.
+
+Poll it after arming a rule — a paused request blocks its client until something releases it. Each entry reports the deadline after which WePROXA releases it as aborted, and whether the Breakpoints tool is even enabled.
+
+#### `weproxa_breakpoints_resolve`
+
+Release a paused request or response, optionally rewriting it first.
+
+Headers are a **patch** (`setHeaders` / `removeHeaders`) applied to the paused message, so you never restate the ones you are not changing and never echo back a `[REDACTED]` value that would then go out on the wire. A request hit takes `url`; a response hit takes `statusCode`; both take `body`.
+
+Naming a field the paused phase cannot apply — `url` on a response, `statusCode` on a request, a status outside 100–599 — is **rejected and leaves the request paused**, rather than being silently dropped. Replacing the body drops the `Content-Encoding` and `Transfer-Encoding` that described the bytes it replaced; WePROXA restates `Content-Length`.
+
+#### `weproxa_breakpoints_cancel`
+
+Abort a paused request or response. Its client receives a `499`, exactly as it would from the **Abort** button in the breakpoint editor. Use it to test how a client handles a dropped call.
+
+:::note
+Resolving from anywhere emits the same event the editor window listens for, so a breakpoint editor opened for a hit that MCP released stops offering buttons that can no longer do anything.
+:::
 
 ### Block List
 
@@ -415,6 +584,30 @@ Remove an SSL host by ID.
 
 List SSL hosts configured for interception.
 
+### Certificates
+
+#### `weproxa_certs_getCaInfo`
+
+Return the local CA certificate's file path, SHA-256 fingerprint, expiry, and whether the macOS keychain currently trusts it. An untrusted or expired CA explains every decryption failure, so check this before adding hosts or installing anywhere.
+
+#### `weproxa_certs_installToIosSimulator`
+
+Install the WePROXA CA into a booted iOS Simulator's trust store. Accepts an optional `udid`; it defaults to the booted simulator and **requires** one when several are booted. See [iOS Simulator](/guide/guides/ios-simulator/).
+
+### Pass-Through containment
+
+Governs what the proxy does with a request no Map Local rule answered. See [Pass-Through Containment](/guide/features/pass-through/) for the full behavior.
+
+#### `weproxa_passthrough_setMode`
+
+Set the mode: `allow` forwards upstream (the default), `denyUnmatched` refuses any request no rule answered without contacting the origin, and `denyAll` blocks every request regardless of matching. Accepts an optional `allowHosts` list of hosts that must stay reachable, which **replaces** the previous list.
+
+Use `denyUnmatched` during exploration so a missing mock cannot reach production. The mode resets to `allow` when WePROXA restarts.
+
+#### `weproxa_passthrough_getMode`
+
+Return the current mode, its source (`default`, `manual`, or `scenario`), and any host allow-list. Call it before a run rather than assuming containment survived — it never survives a restart.
+
 ### Tool enable/disable
 
 #### `weproxa_tools_getEnabled`
@@ -423,4 +616,4 @@ Read the enabled state of Map Local, Breakpoints, Block List, Network Conditioni
 
 #### `weproxa_tools_setEnabled`
 
-Enable or disable one debugging tool. This changes the active tool state.
+Enable or disable one debugging tool. A tool switch belongs to a **Scenario**, not to the app: pass `workspaceId` and `scenarioId` to configure a Scenario you have not activated, or omit both to flip the live Scenario's switch.

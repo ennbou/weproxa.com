@@ -35,6 +35,14 @@ You can build or extend a filter straight from a captured request without constr
 
 Each choice adds its exact-match conditions to the current query, enables the advanced filter when needed, and opens the builder so you can review the result. Existing AND rules are preserved, duplicate active conditions are skipped, and complex OR or NOT expressions are grouped before the new conditions are applied. The menu label shows the current active-rule count once filters are in use.
 
+### Extend or Replace
+
+A plain click **extends** the current query. Hold **⌘** (macOS) or **Ctrl** (Windows/Linux) while choosing an entry to **replace** it instead, discarding the rules already in the builder.
+
+Replacing matters because these conditions are combined with AND. Picking **Same Host** while rules from an unrelated investigation are still in place usually intersects to nothing, leaving an empty request list with no obvious cause. A ⌘/Ctrl-click starts clean in one action instead.
+
+The **Add to Filters** entry shows a **+clear** hint whenever there is something to replace. Inactive rules count toward that: they are still what a ⌘/Ctrl-click would discard, and they resume filtering the moment the panel is enabled.
+
 Because these shortcuts use the query builder, filtering from the context menu is a **Pro** feature.
 
 ## Query Builder

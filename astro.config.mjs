@@ -33,6 +33,7 @@ export default defineConfig({
 			],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/ennbou/weproxa.com' },
+				{ icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/weproxa' },
 			],
 			customCss: ['./src/styles/custom.css'],
 			plugins: [
@@ -72,6 +73,7 @@ export default defineConfig({
 									{ label: 'Repeat Requests', slug: 'guide/features/repeat-requests' },
 									{ label: 'Diff Requests', slug: 'guide/features/diff-requests' },
 									{ label: 'Block List', slug: 'guide/features/block-list' },
+									{ label: 'Pass-Through Containment', slug: 'guide/features/pass-through' },
 									{ label: 'Network Conditioning', slug: 'guide/features/network-conditioning' },
 									{ label: 'Scripting', slug: 'guide/features/scripting' },
 									{ label: 'Network Performance Metrics', slug: 'guide/features/network-performance-metrics' },

@@ -86,7 +86,28 @@ If a decrypted host fails with a certificate error that isn't about the WePROXA 
 
 - The rule is disabled. Toggle it on.
 - The URL pattern doesn't match — patterns are glob-style (`*`), not regex. `https://api.example.com/users` won't match `api.example.com/users` (add `*` or the scheme).
-- Another enabled rule matches first. The oldest rule wins when multiple patterns match.
+- Another enabled rule matches first. Higher [priority](/guide/features/map-local/#rule-precedence) wins, and within one priority band the oldest rule wins. The rule listed first in the panel is the one that will answer.
+- The rule has [request match conditions](/guide/features/map-local/#request-match-conditions) that don't all hold. Every condition must match, and a request body that isn't valid JSON satisfies no JSON path condition — including `absent`.
+- The rule sits under a tool the active Scenario switched off. Activation reports these as warnings.
+- The host isn't decrypted, so there is nothing to match against. A `CONNECT` entry with no decrypted traffic can never match a rule — see above.
+
+Check the response's **Answering rule** in the details panel to see which rule actually replied, and the rule's hit count (via `weproxa_rules_list`) to confirm whether it ever fired at all.
+
+## Every Request Returns 403
+
+If requests fail with a `403` carrying an `X-WePROXA-Passthrough` header, [Pass-Through containment](/guide/features/pass-through/) is sealing the proxy — WePROXA refused to forward the request rather than an origin rejecting it.
+
+- Read the current mode with `weproxa_passthrough_getMode` and set it back to `allow` when the run is over.
+- Under `denyUnmatched`, a **disabled Map Local tool** means no rule can match, so every request is denied.
+- Containment never survives a restart. If it is active, something in this session set it.
+
+## A Settings or Rules File Was Corrupted
+
+If a state file cannot be parsed at startup — after a crash, a full disk, or an external edit — WePROXA moves it aside instead of silently overwriting it, and starts with that file's defaults.
+
+The original bytes are preserved next to the file with a `.corrupt-<timestamp>` suffix, in the app data directory. Recover values from it by hand if you need them; WePROXA never reads a quarantined file again, and it is safe to delete once you are done. The failure is also logged with both paths.
+
+State files are written atomically — to a temporary sibling that is then renamed over the target — so an interrupted write leaves either the whole old file or the whole new one, never a half-written mix.
 
 ## Breakpoint Never Fires
 
@@ -108,7 +129,7 @@ You can find your build details and check for updates in **Settings** → **Abou
 
 Include the following when opening a [GitHub issue](https://github.com/ennbou/weproxa.com/issues):
 
-- WePROXA version (**Settings** → **About**)
+- WePROXA version and the build commit shown next to it (**Settings** → **About**)
 - Operating system version and hardware details (macOS Apple Silicon / Intel, or Windows version)
 - A short description of what you expected and what happened
 - Steps to reproduce — ideally with a public URL, a mock server, or the command you're running

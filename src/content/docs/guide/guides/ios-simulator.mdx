@@ -27,6 +27,21 @@ Traffic from iOS Simulator appears in the request list alongside regular traffic
 
 When WePROXA can resolve the Simulator app bundle, the **Apps** source view can show the app's icon next to its traffic. This makes it easier to distinguish multiple Simulator apps while debugging.
 
+## Install the certificate from an AI client
+
+If you drive WePROXA through [MCP](/guide/guides/mcp-integration/), the same install is available as a tool call:
+
+1. Call `weproxa_certs_getCaInfo` to confirm which certificate you are about to install — it returns the CA's path, SHA-256 fingerprint, expiry, and whether macOS currently trusts it.
+2. Call `weproxa_certs_installToIosSimulator`.
+
+It targets the **booted** simulator and needs an explicit `udid` when several are booted. The call fails with a clear message when no simulator is booted, when the requested `udid` is not booted, when the CA has not been generated yet (start the proxy once to create it), or when `simctl` rejects the certificate. It returns the UDID, the device name reported by `simctl`, and the certificate path that was installed.
+
+Both the certificate menu and the MCP tool run the same install, so they select simulators and report errors identically.
+
+:::caution
+Confirm with the user before installing a certificate into any trust store.
+:::
+
 ## Tips
 
 - Make sure the system proxy is enabled in WePROXA for automatic routing

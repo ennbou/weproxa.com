@@ -199,8 +199,10 @@ Conditions also read headers (`headers`), a request-body substring
 (`bodyContains`), and JSON fields (`bodyJsonPath`, e.g. `user.email`). Each
 condition takes `op: "equals" | "exists" | "absent"`.
 
-**Order matters.** When two rules match the same request, the oldest one answers.
-Create narrow rules first and the catch-all last, or the catch-all wins.
+**Order matters.** When two rules match the same request, the one with the higher
+`priority` answers; among rules sharing a priority the oldest answers. Create
+narrow rules first and the catch-all last, or promote the narrow one with
+`weproxa_rules_setPriority`.
 
 ## Guardrails
 
