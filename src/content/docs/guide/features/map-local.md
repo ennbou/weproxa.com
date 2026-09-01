@@ -95,7 +95,7 @@ This is useful for:
 
 Each Map Local rule serves its response from one of three sources:
 
-- **Local file** — serve JSON, text, images, video, or audio from a file on disk. WePROXA watches the file, so external edits are picked up immediately, and this source works offline. This is the default.
+- **Local file** — serve JSON, text, images, video, or audio from a file on disk. Paths selected in the file dialog, typed by hand, or authored through MCP all use the same backend reader, so the editor and preview see the same file the proxy serves. WePROXA watches the file for external edits, and this source works offline. This is the default.
 - **Inline body** — the response body is stored on the rule itself and **nothing is written to disk**. There is no file to place, no path to keep valid, and no file to lose when the rule moves between machines. Best for small JSON fixtures and forced error payloads.
 - **Remote URL** — point the rule at an HTTP or HTTPS URL. WePROXA fetches that asset **on demand** the first time a matching request arrives; the response is **not saved to disk**, and a bounded in-memory cache keeps repeat matches fast. This is handy for swapping in a replacement image, script, or bundle hosted elsewhere without downloading it first.
 
@@ -197,9 +197,17 @@ The editor supports **autocompletion for HTTP headers** — just start typing a 
 
 ## Editing Response Files
 
-The Map Local panel includes a built-in **Monaco editor** with syntax highlighting for editing your response files directly. The editor auto-detects the language (JSON, HTML, etc.) from the file content.
+The Map Local panel includes a built-in **Monaco editor** with syntax highlighting for editing text response files directly. The editor auto-detects the language (JSON, HTML, etc.) from the file content.
+
+A typed or MCP-authored path loads after the field settles, just like a path chosen with **Browse**. While a path is still changing, saving is disabled so a half-typed filename cannot be created or overwritten. If the target does not exist yet, the editor keeps your content and creates the file when you save the rule; its parent directory must already exist.
 
 Press **Cmd+S** (macOS) or **Ctrl+S** (Windows/Linux) to save changes to the file. The save button and inline saved indicator confirm when the file has been written.
+
+Saves are atomic: WePROXA writes the complete replacement beside the target and renames it into place. The proxy and file watcher therefore see either the previous complete fixture or the new complete fixture, never a partially written response.
+
+The text editor reads and writes UTF-8 files up to **8 MiB**. WePROXA refuses to overwrite a path it could not safely read and reports the specific reason inline: permission denied, path is not a regular file, file is too large, content is not text, or another I/O failure.
+
+Recognized image, video, and audio files use the media preview instead of the text editor. Raw previews are limited to **24 MiB**; larger media remains available to the proxy but is not decoded in the window. Unsupported binary formats show an explanatory placeholder rather than being interpreted as text.
 
 When the response body is JSON, the editor validates it as you type. A subtle **Valid JSON** indicator confirms well-formed content, and a malformed body shows an inline **Invalid JSON** message with the parser error and a **Line _n_, Col _n_** link that jumps straight to the problem.
 

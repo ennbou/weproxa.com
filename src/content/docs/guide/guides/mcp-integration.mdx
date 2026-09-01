@@ -10,13 +10,14 @@ import McpConfigGenerator from '../../../../components/McpConfigGenerator.astro'
 
 ## Overview
 
-WePROXA runs a **local [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) MCP server** that lets compatible AI tools inspect captured traffic and operate WePROXA’s debugging features.
+WePROXA runs a **local MCP server over stdio** that lets compatible AI tools inspect captured traffic and operate WePROXA’s debugging features. The client launches the bundled `weproxa-mcp` helper and exchanges MCP messages through its standard input and output; the helper relays them to the running app over an OS-protected Unix socket on macOS or named pipe on Windows.
 
 The server:
 
-- binds to the loopback interface, so it is available only on your computer;
-- uses a dynamic endpoint such as `http://127.0.0.1:8765/mcp`;
-- requires a bearer token on every connection;
+- has no TCP port, URL, or bearer token to configure;
+- accepts local connections through an endpoint restricted to the current OS user;
+- ships the helper command with the app on macOS and Windows;
+- reports the WePROXA server name and version during the MCP handshake;
 - exposes captured-traffic, saved-request, capture-session, request-replay, Workspace, Scenario, bundle, proxy, rule-management, paused-breakpoint, containment, certificate, SSL-host, and tool-state capabilities.
 
 :::note
@@ -35,21 +36,21 @@ MCP tools can both **read data** and **change WePROXA state**. Review an AI clie
 2. Select **MCP Server**.
 3. Keep **Hide sensitive data** enabled unless you have a specific reason to expose unredacted captured values.
 4. Choose **Start**.
-5. Copy the exact **Endpoint URL** shown in WePROXA.
+5. Open **AI Connections** to generate the command-only configuration for your client.
 
 </Steps>
 
 ![WePROXA MCP Server settings](@assets/generated/screenshots/settings/mcp-server.png)
 
-:::caution
-`8765` is the preferred port, not a fixed port. If it is unavailable, WePROXA falls back to another local port. Always copy the current endpoint from **Settings → MCP Server**.
+:::note
+A normal installed configuration contains only the helper’s `command`. Do not add a URL, token, or `--socket` argument: the bundled helper finds the private endpoint belonging to the WePROXA build it shipped with.
 :::
 
 <span id="connecting-an-ai-client"></span>
 
 ## Connect an AI tool
 
-Choose your client, scope, and endpoint below. The generator creates the client’s own configuration format rather than applying one JSON shape everywhere.
+Choose your client and scope below. The generator creates the client’s own stdio configuration format rather than applying one JSON shape everywhere. Its helper path is a placeholder because this website cannot inspect where WePROXA is installed; the in-app generator fills the path automatically.
 
 <McpConfigGenerator />
 
@@ -62,28 +63,28 @@ The generated formats follow each client’s current MCP contract:
 
 ## Generate the configuration inside WePROXA
 
-**Settings → MCP Server → AI Connections** does the same job without leaving the app. It builds the configuration from the live endpoint and the token currently in use, so there is nothing to paste in by hand and nothing to keep in sync.
+**Settings → MCP Server → AI Connections** is the preferred setup path. It builds the configuration from the helper installed with the running app, so the executable path is exact and there is no endpoint or credential to keep in sync.
 
 <Steps>
 
 1. Start the MCP server.
 2. Open **Settings → MCP Server** and go to **AI Connections**.
 3. Select your client and a **User** or **Workspace** configuration scope.
-4. Choose **View configuration** to review it, then **Copy configuration**. Use **Copy token** when a client only needs the bearer token.
+4. Choose **View configuration** to review it, then **Copy configuration**.
 5. Paste it into your client. **Open client instructions** explains where that file lives and how to remove the entry later.
 
 </Steps>
 
 :::caution
-A generated configuration contains the current bearer token. Store it privately and keep it out of source control.
+The generated command names this machine’s installed application path. Prefer user or private workspace scope, and do not commit a machine-specific command into a shared project configuration.
 :::
 
 Each client shows its own status:
 
 - **Not configured** — nothing has been copied for the selected scope yet.
-- **Setup copied** — you copied a configuration that still matches the running server.
+- **Setup copied** — you copied a configuration that still matches the available helper.
 - **Connected** — the client completed a real MCP handshake. WePROXA shows its reported version and the last connection time.
-- **Needs attention** — the copied setup is stale because the server stopped, its endpoint changed, or the token was regenerated. Start the server and copy a fresh configuration.
+- **Needs attention** — the server stopped, the bundled helper is unavailable, or the copied command no longer matches this installation. Start the server and copy a fresh configuration.
 
 Only **Connected** reflects a verified connection; the other states describe your setup progress. If a client that WePROXA does not recognize completes a handshake, the panel reports it generically rather than retaining the arbitrary name it sent.
 
@@ -91,7 +92,7 @@ Only **Connected** reflects a verified connection; the other states describe you
 AI Connections requires an active **Pro** license, like starting the server itself.
 :::
 
-The **Open WePROXA to connect** button in the generator above hands the selected client and scope to this panel through a `weproxa://` deep link. The link only preselects those two values — it never starts the server and never carries credentials.
+The **Open WePROXA to connect** button in the generator above hands the selected client and scope to this panel through a `weproxa://` deep link. The link only preselects those two values — it never starts the server or carries the helper path.
 
 ## Verify the connection
 
@@ -108,7 +109,7 @@ Expected client checks:
 - **JetBrains AI Assistant:** check the connection status and open the available-tools list.
 - **Other clients:** use the client’s MCP server-status and tool-discovery view.
 
-A configured entry is not proof of a working connection. Confirm that the server is connected, authenticated, and advertising `weproxa_proxy_status`.
+A configured entry is not proof of a working connection. Confirm that the helper starts, WePROXA reports the client as connected, and the client advertises `weproxa_proxy_status`.
 
 ## Example debugging workflows
 
@@ -172,33 +173,32 @@ Rule-management tools operate on the selected Workspace. New rules are assigned 
 
 ## Security
 
-- Treat the bearer token like a password. The documentation generator never asks for it and never connects to localhost.
 - Configuration generation runs entirely in the browser. Nothing is submitted to WePROXA’s website or another server.
-- Generated examples contain only `<WEPROXA_AUTH_TOKEN>`. Replace that placeholder locally after copying the token from WePROXA.
-- The app handoff URL contains only a controlled client and scope. It never contains an endpoint, token, configuration, hostname, port, or file path.
-- Client configuration files may store the `Authorization` header locally. Restrict file access and never commit a real token to version control.
+- Generated examples contain only `<WEPROXA_MCP_HELPER_PATH>`. Replace it locally or copy the completed configuration from the app.
+- The app handoff URL contains only a controlled client and scope. It never contains a command, configuration, credential, hostname, or file path.
+- The private app endpoint is a Unix socket or named pipe restricted to the current OS user; it is not a network listener.
+- Client configuration files contain a machine-specific executable path. Keep that path in user or private local configuration rather than committing it for a team.
 - **Hide sensitive data** redacts likely credentials and payment-card values in traffic returned through MCP. Binary bodies that cannot be inspected safely are omitted.
 - Request and response bodies returned by detail tools are bounded. Request listings do not include response bodies.
-- Regenerating the token immediately invalidates the previous token. Update every configured client after regeneration.
-- The server listens on loopback only. A client running on another computer, VM, container, or remote development host cannot use the host machine’s `127.0.0.1` endpoint directly.
+- A client running as another OS user, on another computer, or inside an isolated VM or container cannot open the host user’s private endpoint directly.
 
 ## Troubleshooting
 
-**The endpoint refuses the connection**
+**The helper command cannot be launched**
 
-Confirm the MCP server is running and copy its current endpoint again. Port `8765` may have been busy, causing WePROXA to choose another port.
+Confirm WePROXA is installed at the path in the configuration, then start the MCP server and copy a fresh configuration from **AI Connections**. Moving or replacing the application can make an older command stale.
 
-**The client reports Unauthorized or HTTP 401**
+**WePROXA says the helper is unavailable**
 
-Copy the current auth token from **Settings → MCP Server** and replace the placeholder or stale header locally. If the token was regenerated, every old client configuration is invalid.
+Use an installed build that includes `weproxa-mcp`. If a development or packaging build omits the helper, WePROXA leaves configuration actions unavailable and reports the reason instead of generating a command that cannot run.
 
 **The server connects but tools are missing**
 
-Restart or refresh the server from the client. VS Code can run **MCP: Reset Cached Tools**. Also confirm you connected to `/mcp` using Streamable HTTP rather than a legacy `/sse` transport.
+Restart or refresh the server from the client. VS Code can run **MCP: Reset Cached Tools**. Confirm the entry is a local `stdio` server with the exact generated command, not an old HTTP or SSE configuration.
 
-**The generated endpoint is rejected**
+**An older WePROXA configuration no longer connects**
 
-Only loopback `http://` URLs with an explicit port and the exact `/mcp` path are accepted. Credentials, query parameters, and fragments do not belong in the endpoint.
+Remove its `url`, `headers`, and bearer token, then regenerate the entry from **Settings → MCP Server → AI Connections**. Version 3.8.0 uses the bundled stdio helper instead of the previous loopback HTTP transport.
 
 **The app handoff does not open**
 
@@ -210,7 +210,7 @@ Trust the project where required, confirm the configuration is in that client’
 
 **A remote or containerized client cannot connect**
 
-`127.0.0.1` refers to the client’s own environment. Run the MCP client on the same host as WePROXA. Do not expose the local MCP server through a public tunnel.
+Run the MCP client on the same host and as the same OS user as WePROXA. The private socket or named pipe is deliberately not exposed over TCP; do not bridge it through a public tunnel.
 
 <span id="available-tools"></span>
 
@@ -219,6 +219,9 @@ Trust the project where required, confirm the configuration is in that client’
 ### Conventions
 
 - Tool names start with `weproxa_` and parameters use `camelCase`.
+- Tool results default to one text JSON content block. Every call accepts `responseShape: "text" | "structured" | "both"` when a client needs structured content or both representations.
+- Tool catalogs omit output schemas to keep discovery small. Pass `includeOutputSchema: true` on a call to receive that tool's output schema with the result.
+- Supported listing tools accept `view: "full" | "compact"`. `full` is the backward-compatible default; `compact` keeps only identifying fields so a client can select one record before fetching details.
 - Responses include a success or state result; validation failures include an error message.
 - `urlPattern` values use WePROXA glob syntax such as `**/api/*.json`.
 - An optional `method` limits a rule to one HTTP method; omitting it matches all methods.
@@ -232,7 +235,7 @@ Trust the project where required, confirm the configuration is in that client’
 
 #### `weproxa_requests_list`
 
-List captured HTTP requests using advanced query filters, bounded pagination, and newest/oldest ordering. Response bodies are not included.
+List captured HTTP requests using advanced query filters, bounded pagination, and newest/oldest ordering. Filters can target ordinary request/response fields plus `sessionId`, `scenarioId`, `client`, `answeredByOrigin`, `answeringRuleId`, `answeringRuleKey`, `responseTool`, and `weproxaInternal`. Response bodies are not included.
 
 #### `weproxa_requests_getRequest`
 
@@ -248,7 +251,7 @@ Delete every captured request from the traffic log and return how many were clea
 
 #### `weproxa_requests_listUnmatched`
 
-List captured requests that matched **no** Map Local rule, deduplicated by method and URL pattern. This is the work queue for fixture generation: each entry names an endpoint the app asked for that you have not mocked, with a `urlPattern` glob you can pass straight to `weproxa_mapLocal_addRule`, an `exampleRequestId`, and the statuses observed.
+List captured requests that matched **no** Map Local rule, deduplicated by method and URL pattern. This is the work queue for fixture generation: each entry names an endpoint the app asked for that you have not mocked, with a `urlPattern` glob you can pass straight to `weproxa_mapLocal_addRule`, an `exampleRequestId`, and the statuses observed. Pass `sessionId` to restrict discovery to one capture run.
 
 CONNECT entries are hidden by default. Pass `includeTunnels: true` to surface hosts WePROXA could not decrypt — each names a host to add with `weproxa_ssl_addHost`, not an endpoint to mock. A tunnel that stays encrypted can never match a rule.
 
@@ -300,7 +303,9 @@ Close a session and return its summary. Defaults to the open session.
 
 Return a session's summary **without** closing it. Defaults to the open session.
 
-Both summaries report the request count, the duration, an overlapping per-tool breakdown of what handled each response, and `answeredByOriginCount` — how many requests the upstream origin actually answered. That last number is the false-pass signal: in a run that is supposed to be fully mocked, it should be zero. [Pass-Through](#pass-through-containment) denials are counted under `passthrough`.
+Both summary tools accept the same advanced `filter` shape as `weproxa_requests_list`. Scope a machine-wide capture by client, Scenario, host, or another stable field before treating its totals as the app under test.
+
+Summaries report the request count, duration, an overlapping per-tool breakdown, `answeredByOriginCount`, and `weproxaInternalCount`. `answeredByOriginCount` is the false-pass signal: in a fully mocked run it should be zero. `weproxaInternalCount` is reported separately and excluded from every other total because WePROXA's certificate service is not application traffic. [Pass-Through](#pass-through-containment) denials are counted under `passthrough`.
 
 ### Workspaces
 
@@ -514,7 +519,9 @@ Resolving from anywhere emits the same event the editor window listens for, so a
 
 #### `weproxa_blockList_addRule`
 
-Add a rule that blocks matching HTTP requests.
+Add a rule that blocks matching traffic. `action` defaults to `{ "type": "forbidden" }`; use `{ "type": "closeConnection" }` for an immediate transport failure or `{ "type": "hang", "holdMs": 90000 }` to hold before dropping, up to five minutes.
+
+Use `client` to restrict the rule to one local application (`{ "type": "application", "name": "Safari" }`) or one remote device IP (`{ "type": "remoteIp", "ip": "192.168.1.5" }`). Application matching is exact and can fail open when the owning process cannot be resolved; use the rule's hit count to verify it fired.
 
 #### `weproxa_blockList_updateRule`
 
@@ -526,7 +533,7 @@ Remove a Block List rule by ID.
 
 #### `weproxa_blockList_listRules`
 
-List Block List rules.
+List Block List rules, including non-default actions, client scope, and `tunnelGap` advice for a rule that cannot match an undecrypted CONNECT tunnel.
 
 ### Network Conditioning
 

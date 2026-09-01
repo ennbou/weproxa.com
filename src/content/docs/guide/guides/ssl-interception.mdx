@@ -137,6 +137,10 @@ When WePROXA decrypts a host, it makes its own HTTPS connection to the origin se
 
 If you add a certificate to macOS system trust for a private or internal server, WePROXA picks it up without extra configuration.
 
+If the system rejects an origin certificate because its issuer is untrusted, its hostname is wrong, or its validity dates have failed, WePROXA reproduces that certificate problem for the client instead of hiding it behind a trusted WePROXA certificate and a generic `502`. A browser therefore shows its normal certificate warning and keeps ownership of the decision to stop or proceed.
+
+Completing the handshake after that warning records acceptance only for the exact origin certificate the client was shown. WePROXA can then connect to that certificate, but a replacement certificate is checked independently and produces a new warning when it is still invalid.
+
 ## Troubleshooting
 
 ### HTTPS requests show as CONNECT tunnels
@@ -146,7 +150,7 @@ No matching host or app SSL rule is enabled. Add the host, enable SSL for the cl
 Make sure the WePROXA Root CA is trusted. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
 
 ### Upstream server shows a certificate error
-This means WePROXA could not verify the **origin server's** certificate (separate from trusting the WePROXA Root CA). On macOS, verification uses the system trust store — if the server is internal or uses a private CA, add that CA to macOS system trust and try again.
+This means WePROXA could not verify the **origin server's** certificate (separate from trusting the WePROXA Root CA). Current versions preserve the origin's trust, hostname, or validity problem so the client shows the warning it would have shown without the proxy. On macOS, verification uses the system trust store — if the server is internal or uses a private CA, add that CA to macOS system trust and try again. Only bypass a warning when you control the server and have verified the certificate another way.
 
 ### Wildcard patterns
 Use `*.example.com` to match all subdomains (e.g., `api.example.com`, `cdn.example.com`). The exact host `example.com` itself is not matched by a wildcard — add it separately if needed. Wildcards only apply to host rules, not app rules.

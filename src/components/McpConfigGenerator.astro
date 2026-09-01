@@ -1,6 +1,6 @@
 ---
 import {
-  DEFAULT_MCP_ENDPOINT,
+  DEFAULT_MCP_COMMAND,
   generateConfiguration,
   type ClientTarget,
 } from './mcp/config';
@@ -60,7 +60,7 @@ const clientProfiles = [
     remove:
       'Turn off WePROXA in MCP settings, or remove its entry from the selected mcp.json.',
     troubleshoot:
-      'Recheck the endpoint and header, then restart the server from MCP settings. A changed WePROXA token requires an updated header.',
+      'Confirm the helper command still exists and is executable, then restart WePROXA from MCP settings.',
   },
   {
     id: 'codex',
@@ -81,7 +81,7 @@ const clientProfiles = [
     remove:
       'Run “codex mcp remove weproxa” for a user server, or remove the table from the selected config.toml.',
     troubleshoot:
-      'Restart Codex after editing config.toml. Check for duplicate tables, a stale token, or a project that has not been trusted.',
+      'Restart Codex after editing config.toml. Check for duplicate tables, a missing helper command, or a project that has not been trusted.',
   },
   {
     id: 'claude-code',
@@ -93,10 +93,10 @@ const clientProfiles = [
     storage: {
       user: 'The generated command uses Claude Code’s user scope for all projects.',
       workspace:
-        'The generated command uses Claude Code’s project scope and writes a shareable .mcp.json entry.',
+        'The generated command uses Claude Code’s private project-local scope for this workspace.',
     },
     manual:
-      'Replace the token placeholder locally, run the generated command, and review project-server trust when Claude Code prompts.',
+      'Replace the helper placeholder locally, run the generated command, and review project-server trust when Claude Code prompts.',
     verify:
       'Run “claude mcp list” or open “/mcp” in Claude Code and confirm WePROXA reports Connected.',
     remove:
@@ -108,7 +108,7 @@ const clientProfiles = [
     id: 'jetbrains',
     label: 'JetBrains AI Assistant',
     shortLabel: 'JetBrains',
-    format: 'JetBrains HTTP MCP JSON',
+    format: 'JetBrains stdio MCP JSON',
     surfaces:
       'JetBrains AI Assistant uses its MCP settings and JSON paste/import flow for supported JetBrains IDEs.',
     storage: {
@@ -116,40 +116,40 @@ const clientProfiles = [
       workspace: 'Choose the current-project server level in the JetBrains MCP dialog.',
     },
     manual:
-      'Open Settings → Tools → AI Assistant → Model Context Protocol (MCP), add an HTTP server, paste the JSON, and choose the server level.',
+      'Open Settings → Tools → AI Assistant → Model Context Protocol (MCP), add a stdio server, paste the JSON, and choose the server level.',
     verify:
       'Click Apply, check the Status column, then open the available-tools control for WePROXA.',
     remove:
       'Clear its checkbox and click Apply to disable it, or remove the WePROXA row from MCP settings.',
     troubleshoot:
-      'Use Reconnect, confirm Streamable HTTP is selected, and inspect the IDE mcp logs if the status does not become connected.',
+      'Use Reconnect, confirm stdio is selected, and inspect the IDE mcp logs if the status does not become connected.',
   },
   {
     id: 'generic',
     label: 'Other MCP client',
     shortLabel: 'Other',
-    format: 'Streamable HTTP mcpServers JSON',
+    format: 'stdio mcpServers JSON',
     surfaces:
-      'Use this portable shape only when your client accepts mcpServers JSON with Streamable HTTP and custom headers.',
+      'Use this portable shape when your client accepts mcpServers JSON with a local stdio command.',
     storage: {
       user: 'Use the client’s user/global MCP configuration if it supports one.',
       workspace: 'Use the client’s project/workspace MCP configuration if it supports one.',
     },
     manual:
-      'Open your client’s MCP documentation, confirm its HTTP field names, and merge the generated server without deleting existing entries.',
+      'Open your client’s MCP documentation, confirm its stdio field names, and merge the generated server without deleting existing entries.',
     verify:
       'Inspect the client’s server status and discovered tools. The exact screen or command depends on the client.',
     remove:
       'Disable the server or remove the weproxa entry using the client’s MCP settings.',
     troubleshoot:
-      'Confirm the client supports Streamable HTTP and custom Authorization headers—not only stdio or legacy SSE.',
+      'Confirm the client supports local stdio servers and can launch the generated helper command.',
   },
 ] satisfies readonly ClientProfile[];
 
 const initialClient = clientProfiles[0];
 const initialConfiguration = generateConfiguration(
   initialClient.id,
-  DEFAULT_MCP_ENDPOINT,
+  DEFAULT_MCP_COMMAND,
   'user',
 );
 ---
@@ -165,31 +165,30 @@ const initialConfiguration = generateConfiguration(
       <p class="mcp-configurator__eyebrow">Private, local configuration</p>
       <h3 id="mcp-configurator-title">Build your client configuration</h3>
       <p>
-        Generation happens in this browser tab. WePROXA’s token is never requested, read, stored,
-        or sent by this page.
+        Generation happens in this browser tab. No endpoint or credential is requested, stored, or
+        sent by this page.
       </p>
     </div>
     <span class="mcp-configurator__local-badge">Runs locally</span>
   </div>
 
   <div class="mcp-configurator__field">
-    <label for="mcp-endpoint">Endpoint URL</label>
+    <label for="mcp-command">Helper command</label>
     <input
-      id="mcp-endpoint"
-      type="url"
-      inputmode="url"
-      value={DEFAULT_MCP_ENDPOINT}
-      aria-describedby="mcp-endpoint-help mcp-endpoint-error"
+      id="mcp-command"
+      type="text"
+      value={DEFAULT_MCP_COMMAND}
+      aria-describedby="mcp-command-help mcp-command-error"
       autocomplete="off"
       autocapitalize="none"
       spellcheck="false"
-      data-endpoint-input
+      data-command-input
     />
-    <p id="mcp-endpoint-help" class="mcp-configurator__help">
-      Port <code>8765</code> is preferred, not guaranteed. Copy the exact endpoint shown in
-      WePROXA—if that port is busy, the server uses another local port.
+    <p id="mcp-command-help" class="mcp-configurator__help">
+      The in-app generator supplies the installed helper path automatically. For this template,
+      replace <code>&lt;WEPROXA_MCP_HELPER_PATH&gt;</code> with that command locally.
     </p>
-    <p id="mcp-endpoint-error" class="mcp-configurator__error" role="alert" hidden data-endpoint-error>
+    <p id="mcp-command-error" class="mcp-configurator__error" role="alert" hidden data-command-error>
     </p>
   </div>
 
@@ -287,7 +286,7 @@ const initialConfiguration = generateConfiguration(
         <p class="mcp-client-panel__kicker">Generated format</p>
         <h4 data-format-label>{initialClient.format}</h4>
       </div>
-      <span>Token placeholder only</span>
+      <span>No credentials</span>
     </div>
     <pre tabindex="0" aria-label="Generated WePROXA MCP configuration"><code data-config-output>{initialConfiguration}</code></pre>
   </div>
@@ -307,21 +306,21 @@ const initialConfiguration = generateConfiguration(
 
   <p class="mcp-configurator__status" role="status" aria-live="polite" data-copy-status></p>
 
-  <div class="mcp-token-guidance">
-    <h4>Copy the auth token from WePROXA</h4>
+  <div class="mcp-command-guidance">
+    <h4>Prefer the live configuration from WePROXA</h4>
     <ol>
       <li>Open <strong>Settings → MCP Server</strong> in WePROXA.</li>
-      <li>Choose <strong>Copy Auth Token</strong>. The documentation page never receives it.</li>
+      <li>Open <strong>AI Connections</strong>, select the same client and scope, then choose <strong>View configuration</strong>.</li>
       <li>
-        Replace <code>&lt;WEPROXA_AUTH_TOKEN&gt;</code> in the copied configuration, then save or
-        run it locally.
+        Copy that configuration directly, or replace the helper placeholder above with its
+        <code>command</code> value.
       </li>
     </ol>
   </div>
 
   <div class="mcp-handoff-note">
-    The app handoff sends only the selected client and scope. It never includes the endpoint,
-    token, configuration, or a file path.
+    The app handoff sends only the selected client and scope. It never includes a command,
+    configuration, credential, or file path.
   </div>
 
   <div class="mcp-handoff-fallback" hidden data-handoff-fallback>
@@ -337,7 +336,7 @@ const initialConfiguration = generateConfiguration(
     generateConfiguration,
     isClientScope,
     isClientTarget,
-    validateMcpEndpoint,
+    validateMcpCommand,
     type ClientScope,
     type ClientTarget,
   } from './mcp/config';
@@ -381,8 +380,8 @@ const initialConfiguration = generateConfiguration(
     }
     root.dataset.initialized = 'true';
 
-    const endpointInput = queryRequired<HTMLInputElement>(root, '[data-endpoint-input]');
-    const endpointError = queryRequired<HTMLElement>(root, '[data-endpoint-error]');
+    const commandInput = queryRequired<HTMLInputElement>(root, '[data-command-input]');
+    const commandError = queryRequired<HTMLElement>(root, '[data-command-error]');
     const output = queryRequired<HTMLElement>(root, '[data-config-output]');
     const formatLabel = queryRequired<HTMLElement>(root, '[data-format-label]');
     const copyButton = queryRequired<HTMLButtonElement>(root, '[data-copy-configuration]');
@@ -400,7 +399,7 @@ const initialConfiguration = generateConfiguration(
     let handoffPending = false;
 
     const render = (): void => {
-      const validation = validateMcpEndpoint(endpointInput.value);
+      const validation = validateMcpCommand(commandInput.value);
       const activeTab = tabs.find((tab) => tab.dataset.clientTab === client);
 
       for (const tab of tabs) {
@@ -419,15 +418,15 @@ const initialConfiguration = generateConfiguration(
 
       formatLabel.textContent = activeTab?.dataset.format ?? 'MCP configuration';
       openWeproxa.href = createMcpHandoffUrl(client, scope);
-      endpointInput.setAttribute('aria-invalid', String(!validation.valid));
-      endpointError.hidden = validation.valid;
-      endpointError.textContent = validation.valid ? '' : validation.error;
+      commandInput.setAttribute('aria-invalid', String(!validation.valid));
+      commandError.hidden = validation.valid;
+      commandError.textContent = validation.valid ? '' : validation.error;
       copyButton.disabled = !validation.valid;
 
       if (validation.valid) {
-        output.textContent = generateConfiguration(client, validation.endpoint, scope);
+        output.textContent = generateConfiguration(client, validation.command, scope);
       } else {
-        output.textContent = 'Enter a valid local WePROXA endpoint to generate configuration.';
+        output.textContent = 'Enter the WePROXA helper command to generate configuration.';
       }
 
       copyStatus.textContent = '';
@@ -483,19 +482,19 @@ const initialConfiguration = generateConfiguration(
       });
     }
 
-    endpointInput.addEventListener('input', render);
+    commandInput.addEventListener('input', render);
 
     copyButton.addEventListener('click', async () => {
-      const validation = validateMcpEndpoint(endpointInput.value);
+      const validation = validateMcpCommand(commandInput.value);
       if (!validation.valid) {
         render();
-        endpointInput.focus();
+        commandInput.focus();
         return;
       }
 
-      const copied = await copyText(generateConfiguration(client, validation.endpoint, scope));
+      const copied = await copyText(generateConfiguration(client, validation.command, scope));
       copyStatus.textContent = copied
-        ? `${formatLabel.textContent ?? 'Configuration'} copied. Replace the token placeholder locally.`
+        ? `${formatLabel.textContent ?? 'Configuration'} copied. Replace the helper placeholder locally.`
         : 'Copy failed. Select the generated configuration and copy it manually.';
     });
 
@@ -563,7 +562,7 @@ const initialConfiguration = generateConfiguration(
   .mcp-configurator__header h3,
   .mcp-client-panel h4,
   .mcp-config-output h4,
-  .mcp-token-guidance h4 {
+  .mcp-command-guidance h4 {
     margin: 0;
     color: var(--sl-color-white);
   }
@@ -849,24 +848,24 @@ const initialConfiguration = generateConfiguration(
     font-weight: 650;
   }
 
-  .mcp-token-guidance,
+  .mcp-command-guidance,
   .mcp-handoff-note,
   .mcp-handoff-fallback {
     padding: 0.9rem 1rem;
     border-radius: 0.75rem;
   }
 
-  .mcp-token-guidance {
+  .mcp-command-guidance {
     border: 1px solid color-mix(in oklab, var(--sl-color-accent), transparent 55%);
     background: color-mix(in oklab, var(--sl-color-accent-low), transparent 42%);
   }
 
-  .mcp-token-guidance ol {
+  .mcp-command-guidance ol {
     margin-block: 0.65rem 0;
     padding-inline-start: 1.25rem;
   }
 
-  .mcp-token-guidance li {
+  .mcp-command-guidance li {
     margin-block: 0.35rem;
     color: var(--sl-color-gray-2);
   }

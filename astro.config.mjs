@@ -34,6 +34,7 @@ export default defineConfig({
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/ennbou/weproxa.com' },
 				{ icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/weproxa' },
+				{ icon: 'x.com', label: 'X', href: 'https://x.com/WePROXA' },
 			],
 			customCss: ['./src/styles/custom.css'],
 			plugins: [

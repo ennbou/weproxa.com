@@ -12,98 +12,38 @@ export const CLIENT_SCOPES = ['user', 'workspace'] as const;
 export type ClientTarget = (typeof CLIENT_TARGETS)[number];
 export type ClientScope = (typeof CLIENT_SCOPES)[number];
 
-export type EndpointValidation =
-  | { valid: true; endpoint: string }
+export type CommandValidation =
+  | { valid: true; command: string }
   | { valid: false; error: string };
 
-export const DEFAULT_MCP_ENDPOINT = 'http://127.0.0.1:8765/mcp';
-export const AUTH_TOKEN_PLACEHOLDER = '<WEPROXA_AUTH_TOKEN>';
+export const MCP_HELPER_PLACEHOLDER = '<WEPROXA_MCP_HELPER_PATH>';
+export const DEFAULT_MCP_COMMAND = MCP_HELPER_PLACEHOLDER;
 
-const LOOPBACK_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1', '[::1]']);
-
-function hasExplicitPort(endpoint: string): boolean {
-  const authority = endpoint.match(/^http:\/\/([^/?#]+)/i)?.[1];
-  if (!authority) {
-    return false;
+export function validateMcpCommand(value: string): CommandValidation {
+  const command = value.trim();
+  if (!command) {
+    return { valid: false, error: 'Enter the helper command from WePROXA.' };
   }
 
-  return authority.startsWith('[')
-    ? /^\[[^\]]+\]:\d+$/.test(authority)
-    : /^[^:]+:\d+$/.test(authority);
+  if (/[\r\n]/.test(command)) {
+    return { valid: false, error: 'The helper command must be one path on one line.' };
+  }
+
+  return { valid: true, command };
 }
 
-function isLoopbackHostname(hostname: string): boolean {
-  const normalizedHostname = hostname.toLowerCase();
-  if (LOOPBACK_HOSTNAMES.has(normalizedHostname)) {
-    return true;
-  }
-
-  const octets = normalizedHostname.split('.');
-  return (
-    octets.length === 4 &&
-    octets[0] === '127' &&
-    octets.every((octet) => /^\d{1,3}$/.test(octet) && Number(octet) <= 255)
-  );
-}
-
-export function validateMcpEndpoint(value: string): EndpointValidation {
-  const endpoint = value.trim();
-  if (!endpoint) {
-    return { valid: false, error: 'Enter the endpoint shown in WePROXA.' };
-  }
-
-  let parsed: URL;
-  try {
-    parsed = new URL(endpoint);
-  } catch {
-    return { valid: false, error: 'Enter a complete URL, including http:// and a port.' };
-  }
-
-  if (parsed.protocol !== 'http:') {
-    return { valid: false, error: 'The local WePROXA endpoint must use http://.' };
-  }
-
-  if (parsed.username || parsed.password) {
-    return { valid: false, error: 'Do not place credentials in the endpoint URL.' };
-  }
-
-  if (!isLoopbackHostname(parsed.hostname)) {
-    return {
-      valid: false,
-      error: 'Use a loopback host: 127.0.0.1, localhost, or [::1].',
-    };
-  }
-
-  if (!hasExplicitPort(endpoint)) {
-    return { valid: false, error: 'Include the exact port shown in WePROXA.' };
-  }
-
-  if (parsed.pathname !== '/mcp') {
-    return { valid: false, error: 'The endpoint path must be exactly /mcp.' };
-  }
-
-  if (parsed.search || parsed.hash) {
-    return { valid: false, error: 'Remove query parameters and fragments from the endpoint.' };
-  }
-
-  return { valid: true, endpoint };
-}
-
-function authorizationHeaders() {
+function serverEntry(command: string, explicitType: boolean): Record<string, string> {
   return {
-    Authorization: `Bearer ${AUTH_TOKEN_PLACEHOLDER}`,
+    ...(explicitType ? { type: 'stdio' } : {}),
+    command,
   };
 }
 
-function generateVsCodeConfiguration(endpoint: string): string {
+function generateVsCodeConfiguration(command: string): string {
   return JSON.stringify(
     {
       servers: {
-        weproxa: {
-          type: 'http',
-          url: endpoint,
-          headers: authorizationHeaders(),
-        },
+        weproxa: serverEntry(command, true),
       },
     },
     null,
@@ -111,14 +51,11 @@ function generateVsCodeConfiguration(endpoint: string): string {
   );
 }
 
-function generateCursorConfiguration(endpoint: string): string {
+function generateMcpJsonConfiguration(command: string): string {
   return JSON.stringify(
     {
       mcpServers: {
-        weproxa: {
-          url: endpoint,
-          headers: authorizationHeaders(),
-        },
+        weproxa: serverEntry(command, true),
       },
     },
     null,
@@ -126,75 +63,39 @@ function generateCursorConfiguration(endpoint: string): string {
   );
 }
 
-function generateCodexConfiguration(endpoint: string): string {
+function generateCodexConfiguration(command: string): string {
   return [
     '[mcp_servers.weproxa]',
-    `url = ${JSON.stringify(endpoint)}`,
-    `http_headers = { Authorization = "Bearer ${AUTH_TOKEN_PLACEHOLDER}" }`,
+    `command = ${JSON.stringify(command)}`,
+    'enabled = true',
   ].join('\n');
 }
 
-function generateClaudeCodeConfiguration(endpoint: string, scope: ClientScope): string {
-  const claudeScope = scope === 'workspace' ? 'project' : 'user';
-
-  return [
-    'claude mcp add --transport http weproxa \\',
-    `  --scope ${claudeScope} \\`,
-    `  --header "Authorization: Bearer ${AUTH_TOKEN_PLACEHOLDER}" \\`,
-    `  "${endpoint}"`,
-  ].join('\n');
+function shellQuote(value: string): string {
+  return `'${value.split("'").join("'\"'\"'")}'`;
 }
 
-function generateJetBrainsConfiguration(endpoint: string): string {
-  return JSON.stringify(
-    {
-      mcpServers: {
-        weproxa: {
-          type: 'streamable-http',
-          url: endpoint,
-          headers: authorizationHeaders(),
-        },
-      },
-    },
-    null,
-    2,
-  );
-}
-
-function generateGenericConfiguration(endpoint: string): string {
-  return JSON.stringify(
-    {
-      mcpServers: {
-        weproxa: {
-          type: 'http',
-          url: endpoint,
-          headers: authorizationHeaders(),
-        },
-      },
-    },
-    null,
-    2,
-  );
+function generateClaudeCodeConfiguration(command: string, scope: ClientScope): string {
+  const claudeScope = scope === 'workspace' ? 'local' : 'user';
+  return `claude mcp add --scope ${claudeScope} weproxa -- ${shellQuote(command)}`;
 }
 
 export function generateConfiguration(
   client: ClientTarget,
-  endpoint: string,
+  command: string,
   scope: ClientScope,
 ): string {
   switch (client) {
     case 'vscode':
-      return generateVsCodeConfiguration(endpoint);
+      return generateVsCodeConfiguration(command);
     case 'cursor':
-      return generateCursorConfiguration(endpoint);
-    case 'codex':
-      return generateCodexConfiguration(endpoint);
-    case 'claude-code':
-      return generateClaudeCodeConfiguration(endpoint, scope);
     case 'jetbrains':
-      return generateJetBrainsConfiguration(endpoint);
     case 'generic':
-      return generateGenericConfiguration(endpoint);
+      return generateMcpJsonConfiguration(command);
+    case 'codex':
+      return generateCodexConfiguration(command);
+    case 'claude-code':
+      return generateClaudeCodeConfiguration(command, scope);
   }
 }
 

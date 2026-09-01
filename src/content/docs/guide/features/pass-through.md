@@ -39,6 +39,15 @@ Use it for the things a contained run genuinely needs — a local dev server, an
 
 Setting the mode replaces the previous allow-list rather than adding to it.
 
+## WePROXA Services Stay Reachable
+
+Containment does not lock you out of the controls and setup services needed to operate WePROXA:
+
+- The certificate and PAC listener remains reachable on the exact local addresses and port WePROXA is actively serving. This lets a device open the certificate installation page even while the run is sealed.
+- MCP uses a private Unix socket or named pipe rather than HTTP through the proxy, so an agent can still inspect or change containment without an allow-list entry.
+
+These are not broad localhost exemptions. An unrelated local development server is still unmatched traffic and is denied unless you explicitly add its host to the allow-list. The certificate/PAC exception also disappears when that WePROXA service stops listening.
+
 ## HTTPS and CONNECT tunnels
 
 Under either deny mode, WePROXA also refuses **blind CONNECT tunnels** — HTTPS connections to hosts it is not decrypting. Traffic WePROXA cannot decrypt cannot be matched against a Map Local rule, so letting the tunnel through would be an unmatched request escaping containment through a channel nobody can inspect.

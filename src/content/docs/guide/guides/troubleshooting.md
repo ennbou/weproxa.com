@@ -50,7 +50,7 @@ Current versions reset proxy state in platform-specific ways so the system is le
 
 ## Window Flashes While Resizing
 
-WePROXA 3.0.0 improves macOS resize and maximize behavior by synchronizing the window backdrop during size changes. If you still see rendering flashes, update to the latest build and include your macOS version, display scale, and whether the window was maximized when reporting the issue.
+WePROXA synchronizes the macOS window backdrop during size changes and reapplies the measured title-bar alignment after native move, resize, and fullscreen events. If you still see rendering flashes or the red, yellow, and green traffic-light controls drift vertically, update to the latest build and include your macOS version, display scale, and whether the window was maximized when reporting the issue.
 
 ## Request List Feels Slow
 
@@ -59,6 +59,14 @@ WePROXA keeps up to 10,000 requests in memory. Large payload buffers plus thousa
 - Click **Clear** (`⌘ K`) to drop old entries.
 - Use the [advanced filter](/guide/features/advanced-filtering/) to narrow the list to the traffic you care about.
 - Collapse the details panel (`⌘ J`) when not needed.
+
+## Requests Return 503 or 504 Under Tunnel Load
+
+WePROXA bounds long-lived CONNECT, WebSocket, and upgraded tunnels from the process capacity available at startup. If that global budget is full, a new tunnel is refused with `503 Service Unavailable` and a message naming the concurrent-tunnel limit instead of waiting indefinitely or exhausting resources for every connection.
+
+Close unused browser tabs, WebSockets, emulators, or devices that are holding tunnels open, then let the client retry. Repeated overload warnings are rate-limited, so one warning can represent several refusals during the same busy interval.
+
+A `504 Gateway Timeout` instead means DNS resolution, a direct TCP connection, or a parent-proxy dial exceeded its bounded deadline. Check the destination hostname, network reachability, VPN, and parent proxy. The timeout closes the pending dial so stalled upstreams do not permanently consume tunnel capacity.
 
 ## Remote Device Can't Reach This Computer
 
@@ -74,13 +82,16 @@ macOS asks apps for permission before they access the local network. WePROXA onl
 
 ## Upstream (Origin) Server Certificate Errors
 
-If a decrypted host fails with a certificate error that isn't about the WePROXA Root CA, WePROXA could not verify the **origin server's** certificate. On macOS, this verification uses the system trust store, so add the server's private or internal CA to macOS system trust. See [SSL Interception → How WePROXA Trusts Upstream Servers](/guide/guides/ssl-interception/#how-weproxa-trusts-upstream-servers).
+If a decrypted host fails with a certificate error that isn't about the WePROXA Root CA, WePROXA could not verify the **origin server's** certificate. Current versions mirror the origin's trust, hostname, or validity failure so the client shows its normal certificate warning instead of receiving a generic proxy error.
+
+On macOS, verification uses the system trust store. Add a private or internal CA to macOS system trust when you administer and trust it. If a user or client explicitly proceeds past a warning, WePROXA accepts only that exact origin certificate; a changed invalid certificate must be reviewed again. See [SSL Interception → How WePROXA Trusts Upstream Servers](/guide/guides/ssl-interception/#how-weproxa-trusts-upstream-servers).
 
 ## MCP Server Won't Start
 
 - **Not on Pro** — starting the MCP server requires a Pro license. See [Pricing](/pricing/).
-- **Port range unavailable** — WePROXA starts at its preferred local port and automatically tries subsequent ports. Close conflicting local services, start the MCP server again, and use the exact **Endpoint URL** shown in **Settings** → **MCP Server**.
-- **Wrong bearer token in the client** — copy the **Auth Token** from WePROXA again. The token persists across server restarts and changes only when you choose **Regenerate Token**.
+- **Bundled helper unavailable** — use an installed build that includes `weproxa-mcp`. Development or incomplete packaging builds may not provide a command WePROXA can advertise.
+- **Stale client command** — moving or replacing the app can invalidate an older machine-specific helper path. Start the server, then copy a fresh stdio configuration from **Settings → MCP Server → AI Connections**.
+- **Old HTTP configuration** — remove `url`, `headers`, and bearer-token settings left from versions before 3.8.0. The current transport launches the local helper command and uses no TCP port or token.
 
 ## Map Local Rule Doesn't Fire
 
@@ -117,13 +128,13 @@ State files are written atomically — to a temporary sibling that is then renam
 
 ## Reset WePROXA to Defaults
 
-If WePROXA ends up in a confusing state, you can start fresh. Open **Settings** → **Reset** and choose **Reset all settings**. This clears every setting, preference, and workspace rule — theme, language, layout, proxy config, SSL hosts, MCP server config and access token, breakpoints, Map Local, block list, throttling, and scripts — then restarts the app.
+If WePROXA ends up in a confusing state, you can start fresh. Open **Settings** → **Reset** and choose **Reset all settings**. This clears every setting, preference, and workspace rule — theme, language, layout, proxy config, SSL hosts, MCP server state, breakpoints, Map Local, block list, throttling, and scripts — then restarts the app.
 
 Your **license**, **installed certificate**, and **saved requests** are preserved. The reset cannot be undone, so WePROXA asks you to confirm first.
 
 ## Still Stuck?
 
-You can find your build details and check for updates in **Settings** → **About**.
+You can find your build details and check for updates in **Settings** → **About**. The same panel links Windows users to the macOS installation guide and links users on other platforms to WePROXA in the Microsoft Store.
 
 ![WePROXA About settings](@assets/generated/screenshots/settings/about.png)
 
