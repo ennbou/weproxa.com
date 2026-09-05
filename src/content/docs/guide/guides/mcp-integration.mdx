@@ -36,7 +36,7 @@ MCP tools can both **read data** and **change WePROXA state**. Review an AI clie
 2. Select **MCP Server**.
 3. Keep **Hide sensitive data** enabled unless you have a specific reason to expose unredacted captured values.
 4. Choose **Start**.
-5. Open **AI Connections** to generate the command-only configuration for your client.
+5. Install the plugin below for your supported client, or open **AI Connections** to generate a manual configuration.
 
 </Steps>
 
@@ -49,6 +49,68 @@ A normal installed configuration contains only the helper’s `command`. Do not 
 <span id="connecting-an-ai-client"></span>
 
 ## Connect an AI tool
+
+### Install the MCP and skills plugin
+
+The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the MCP connection and three skills together: connection diagnosis, captured-traffic inspection, and mock-scenario authoring. It finds the helper in standard app installation locations, so you do not need to copy JSON or TOML.
+
+The plugin supports **Codex**, **Claude Code**, **VS Code with GitHub Copilot**, **GitHub Copilot CLI**, and **Cursor**. Use a client version with agent plugin support; Cursor uses the Agent Plugins 1.0 format.
+
+Run your AI client on the same **macOS or Windows host** as WePROXA, with **Node.js 20 or later** available in its PATH. Open WePROXA and start its **Pro MCP server** before using the plugin.
+
+**Codex**
+
+```sh
+codex plugin marketplace add ennbou/weproxa-plugin
+codex plugin add weproxa@weproxa-plugins
+```
+
+Start a new Codex session and ask: **“Use WePROXA to check my connection without changing anything.”**
+
+**Claude Code**
+
+```sh
+claude plugin marketplace add ennbou/weproxa-plugin
+claude plugin install weproxa@weproxa-plugins
+```
+
+Start a new Claude Code session and run `/weproxa:connect`. The other skills are `/weproxa:inspect-traffic` and `/weproxa:mock-scenario`; the agent can also select them when relevant to your task.
+
+**GitHub Copilot CLI**
+
+```sh
+copilot plugin marketplace add ennbou/weproxa-plugin
+copilot plugin install weproxa@weproxa-plugins
+```
+
+Start a new Copilot session and ask: **“Use WePROXA to check my connection without changing anything.”** Run `copilot plugin list` to confirm installation and use `/mcp` to inspect its connection.
+
+**VS Code + GitHub Copilot**
+
+1. Ensure agent plugins are enabled in VS Code (`chat.plugins.enabled`).
+2. Add `ennbou/weproxa-plugin` to **Chat: Plugins: Marketplaces** in Settings (`chat.plugins.marketplaces`), preserving existing entries.
+3. In Extensions, search `@agentPlugins` and install **weproxa** from **weproxa-plugins**.
+4. Open a new Copilot chat in Agent mode and ask it to check the WePROXA connection.
+
+VS Code also discovers plugins installed through Copilot CLI. If you used the CLI commands above, check **Agent Plugins - Installed** first. See [VS Code's plugin guide](https://code.visualstudio.com/docs/agent-customization/agent-plugins).
+
+**Cursor**
+
+For a local installation on macOS, run these commands from the directory where you want to keep the plugin checkout:
+
+```sh
+git clone https://github.com/ennbou/weproxa-plugin.git
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)/weproxa-plugin/plugins/weproxa" ~/.cursor/plugins/local/weproxa
+```
+
+On Windows, clone the repository and copy the complete `plugins/weproxa/` directory, including hidden directories, to `%USERPROFILE%\.cursor\plugins\local\weproxa\`. Reload Cursor and check **Customize** for the MCP server and three skills, then ask it to check your WePROXA connection. Managed accounts require local plugin imports to be allowed.
+
+Teams can import the repository through **Dashboard → Plugins → Add Marketplace → Import from Repo** and install it from their team marketplace. Public Cursor Marketplace listing requires a separate review; the plugin is not yet listed there. See [Cursor's plugin installation guide](https://cursor.com/docs/plugins).
+
+Plugin installation registers the connection and skills. It does not launch WePROXA or change your system proxy settings. If you already configured WePROXA manually, verify the plugin connection before disabling the old entry to avoid duplicate tools. For a custom app location, see the plugin's [helper discovery instructions](https://github.com/ennbou/weproxa-plugin#helper-discovery).
+
+### Configure an MCP client manually
 
 Choose your client and scope below. The generator creates the client’s own stdio configuration format rather than applying one JSON shape everywhere. Its helper path is a placeholder because this website cannot inspect where WePROXA is installed; the in-app generator fills the path automatically.
 
@@ -63,7 +125,7 @@ The generated formats follow each client’s current MCP contract:
 
 ## Generate the configuration inside WePROXA
 
-**Settings → MCP Server → AI Connections** is the preferred setup path. It builds the configuration from the helper installed with the running app, so the executable path is exact and there is no endpoint or credential to keep in sync.
+For manual setup, use **Settings → MCP Server → AI Connections**. It builds the configuration from the helper installed with the running app, so the executable path is exact and there is no endpoint or credential to keep in sync.
 
 <Steps>
 
@@ -103,6 +165,7 @@ Use the client-specific verification guidance in the selector, then run this har
 Expected client checks:
 
 - **VS Code / GitHub Copilot:** run **MCP: List Servers**, select WePROXA, and inspect its tools.
+- **GitHub Copilot CLI:** run `copilot plugin list`, then use `/mcp` in a new session.
 - **Cursor:** open MCP settings and confirm WePROXA’s tools are enabled.
 - **Codex CLI or VS Code extension:** run `codex mcp list` or use `/mcp`.
 - **Claude Code terminal or VS Code extension:** run `claude mcp list` or use `/mcp`.
