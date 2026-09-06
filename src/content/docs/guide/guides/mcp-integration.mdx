@@ -56,12 +56,39 @@ The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the MCP 
 
 The plugin supports **Codex**, **Claude Code**, **VS Code with GitHub Copilot**, **GitHub Copilot CLI**, and **Cursor**. Use a client version with agent plugin support; Cursor uses the Agent Plugins 1.0 format.
 
-Run your AI client on the same **macOS or Windows host** as WePROXA, with **`weproxa-mcp`** available in its PATH. Node.js is not required by plugin 0.3.0. Open WePROXA and start its **Pro MCP server** before using the plugin.
+#### Requirements
 
-- **macOS:** move the app out of the DMG into Applications, launch it, and accept **Install command**. macOS requests administrator permission to create `/usr/local/bin/weproxa-mcp`, a link to the helper inside the app. Retry or repair a moved-app link from **Settings → MCP Server → Install / repair weproxa-mcp command**. The command-line installer also registers it.
-- **Windows:** standalone installers register the install directory on PATH. Microsoft Store installs provide the `weproxa-mcp.exe` execution alias; enable it in Windows app execution alias settings if disabled.
+The plugin's MCP entry is `"command": "weproxa-mcp"` — a bare command name with no path and no fallback. Every requirement below exists because of that one line.
 
-Fully quit and reopen your AI client after command setup, then check `weproxa-mcp --version` in a new terminal. These setup actions require an app build containing command-registration support. Older builds, development builds, and clients with restricted PATH can still use the manual absolute-path configuration from **AI Connections**.
+<Steps>
+
+1. **WePROXA runs on the same macOS or Windows host** as your AI client. This transport is local; a cloud agent, remote SSH host, Linux container, or WSL environment cannot reach it.
+2. **The `weproxa-mcp` command is registered** — see [Register the command](#register-the-command) below.
+3. **The MCP server is running** in **Settings → MCP Server**, with an active Pro license.
+4. **Verify before you install the plugin.** Open a new terminal and run:
+
+   ```sh
+   weproxa-mcp --version
+   ```
+
+   If that fails, stop and register the command first. Node.js is not required.
+
+</Steps>
+
+:::caution
+Installing the plugin without the command still appears to work. The plugin installs, its skills load, and then the connection reports as closed with no `weproxa_*` tools. If you cannot register the command, skip the plugin and use the [manual absolute-path configuration](#configure-an-mcp-client-manually) instead, which needs nothing on PATH.
+:::
+
+#### Register the command
+
+**Settings → MCP Server** shows what `weproxa-mcp` currently resolves to on this machine, and whether it points at this copy of WePROXA or a different one.
+
+- **macOS:** move the app out of the DMG into Applications, launch it, and accept **Install command**. macOS requests administrator permission to create `/usr/local/bin/weproxa-mcp`, a link to the helper inside the app. Retry, or repair a moved-app link, from the same panel. The command-line installer also registers it.
+- **Windows:** standalone installers register the install directory on PATH. Microsoft Store installs provide the `weproxa-mcp.exe` execution alias; turn it on in Windows app execution alias settings if it is disabled.
+
+Fully quit and reopen your AI client afterwards — a running process keeps the PATH it started with, so restarting the MCP server alone is not enough. A desktop client's PATH can also differ from a terminal's. These setup actions require an app build with command-registration support; older builds and development builds use the manual absolute-path configuration instead.
+
+#### Install the plugin
 
 **Codex**
 
@@ -137,7 +164,7 @@ For manual setup, use **Settings → MCP Server → AI Connections**. It builds 
 1. Start the MCP server.
 2. Open **Settings → MCP Server** and go to **AI Connections**.
 3. Select your client and a **User** or **Workspace** configuration scope.
-4. Choose **View configuration** to review it, then **Copy configuration**.
+4. Review the **Configuration preview**, then copy it with the copy button in its top-right corner.
 5. Paste it into your client. **Open client instructions** explains where that file lives and how to remove the entry later.
 
 </Steps>
@@ -251,6 +278,18 @@ Rule-management tools operate on the selected Workspace. New rules are assigned 
 - A client running as another OS user, on another computer, or inside an isolated VM or container cannot open the host user’s private endpoint directly.
 
 ## Troubleshooting
+
+<span id="command-not-found"></span>
+
+**The client cannot find `weproxa-mcp`**
+
+The client reports `spawn weproxa-mcp ENOENT`, `command not found`, or `is not recognized as an internal or external command`, and no `weproxa_*` tools appear. The command is not registered on the PATH that client was launched with.
+
+Open **Settings → MCP Server**. The command row names the current state and, on macOS, offers **Install / repair**. On Windows, re-run the installer or turn on the execution alias. Then fully quit and reopen the client. If you cannot register the command, use the [manual absolute-path configuration](#configure-an-mcp-client-manually), which needs nothing on PATH.
+
+**`weproxa-mcp` runs but connects to the wrong app**
+
+The command answers `--version` but the tools act on a different copy of WePROXA, or report that nothing is running. The registered command points at another install — usually after moving the app. **Settings → MCP Server** names the path it resolves to and offers a repair.
 
 **The helper command cannot be launched**
 
