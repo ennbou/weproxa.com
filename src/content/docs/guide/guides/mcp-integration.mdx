@@ -52,11 +52,16 @@ A normal installed configuration contains only the helper’s `command`. Do not 
 
 ### Install the MCP and skills plugin
 
-The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the MCP connection and three skills together: connection diagnosis, captured-traffic inspection, and mock-scenario authoring. It finds the helper in standard app installation locations, so you do not need to copy JSON or TOML.
+The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the MCP connection and three skills together: connection diagnosis, captured-traffic inspection, and mock-scenario authoring. Plugin 0.3.0 launches the installed `weproxa-mcp` command directly, so you do not need to copy JSON or TOML.
 
 The plugin supports **Codex**, **Claude Code**, **VS Code with GitHub Copilot**, **GitHub Copilot CLI**, and **Cursor**. Use a client version with agent plugin support; Cursor uses the Agent Plugins 1.0 format.
 
-Run your AI client on the same **macOS or Windows host** as WePROXA, with **Node.js 20 or later** available in its PATH. Open WePROXA and start its **Pro MCP server** before using the plugin.
+Run your AI client on the same **macOS or Windows host** as WePROXA, with **`weproxa-mcp`** available in its PATH. Node.js is not required by plugin 0.3.0. Open WePROXA and start its **Pro MCP server** before using the plugin.
+
+- **macOS:** move the app out of the DMG into Applications, launch it, and accept **Install command**. macOS requests administrator permission to create `/usr/local/bin/weproxa-mcp`, a link to the helper inside the app. Retry or repair a moved-app link from **Settings → MCP Server → Install / repair weproxa-mcp command**. The command-line installer also registers it.
+- **Windows:** standalone installers register the install directory on PATH. Microsoft Store installs provide the `weproxa-mcp.exe` execution alias; enable it in Windows app execution alias settings if disabled.
+
+Fully quit and reopen your AI client after command setup, then check `weproxa-mcp --version` in a new terminal. These setup actions require an app build containing command-registration support. Older builds, development builds, and clients with restricted PATH can still use the manual absolute-path configuration from **AI Connections**.
 
 **Codex**
 
@@ -108,7 +113,7 @@ On Windows, clone the repository and copy the complete `plugins/weproxa/` direct
 
 Teams can import the repository through **Dashboard → Plugins → Add Marketplace → Import from Repo** and install it from their team marketplace. Public Cursor Marketplace listing requires a separate review; the plugin is not yet listed there. See [Cursor's plugin installation guide](https://cursor.com/docs/plugins).
 
-Plugin installation registers the connection and skills. It does not launch WePROXA or change your system proxy settings. If you already configured WePROXA manually, verify the plugin connection before disabling the old entry to avoid duplicate tools. For a custom app location, see the plugin's [helper discovery instructions](https://github.com/ennbou/weproxa-plugin#helper-discovery).
+Plugin installation registers the connection and skills. It does not launch WePROXA or change your system proxy settings. If you already configured WePROXA manually, verify the plugin connection before disabling the old entry to avoid duplicate tools. For a custom app location, see the plugin's [native command setup instructions](https://github.com/ennbou/weproxa-plugin#native-command-setup).
 
 ### Configure an MCP client manually
 

@@ -197,6 +197,19 @@ main() {
 
   log "Installed $APP_NAME $version to $destination_app"
 
+  # The script is part of the signed app bundle, not downloaded/executed from
+  # a separate source. Older releases do not contain command registration yet.
+  local command_installer="$destination_app/Contents/Resources/install-mcp-command.sh"
+  if [[ -f "$command_installer" ]]; then
+    log 'Installing /usr/local/bin/weproxa-mcp (administrator permission may be required)'
+    if [[ "$EUID" -eq 0 || -w /usr/local/bin ]]; then
+      /bin/sh "$command_installer" "$destination_app/Contents/MacOS/weproxa-mcp" /usr/local/bin
+    else
+      sudo /bin/sh "$command_installer" "$destination_app/Contents/MacOS/weproxa-mcp" /usr/local/bin
+    fi
+    log 'Command installed. Fully quit and reopen your AI client before reconnecting.'
+  fi
+
   if [[ "$LAUNCH_AFTER_INSTALL" == 'true' ]]; then
     log "Launching $APP_NAME"
     open "$destination_app"
