@@ -153,6 +153,8 @@ body with the earlier 503 capture. Do not make any further changes.
 <!-- Screenshot file: docs/public/images/blog/ai-debugging/05-map-local-verified.png -->
 ![The mocked 200 response and Map Local attribution in WePROXA](/images/blog/ai-debugging/05-map-local-verified.png)
 
+![The mocked 200 response appear in WePROXA](/images/blog/ai-debugging/05-map-local-request.png)
+
 *The Map Local marker proves that the local rule—not the origin—returned the new response.*
 
 When the exercise is finished, disable or remove only the new rule. The agent should have reported its rule ID, which gives cleanup a precise target:
