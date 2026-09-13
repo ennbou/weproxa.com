@@ -109,6 +109,19 @@ For Cursor, the installer copies the packaged Agent Plugin to
 WePROXA marketplace and installs the plugin through the client's own CLI. The
 npm package never downloads or replaces the native `weproxa-mcp` helper.
 
+The VS Code target installs through the GitHub Copilot CLI, which owns the
+install for both surfaces. Without `copilot` on PATH there is nothing to run.
+
+To undo an install, use `mcp remove` with the same options:
+
+```sh
+npx @weproxa/wizard@latest mcp remove --client cursor
+```
+
+Removal does not need the `weproxa-mcp` helper, so it still works when the
+helper is what broke. It leaves the WePROXA marketplace configured, because you
+may have added it by hand.
+
 #### Install manually
 
 **Codex**
