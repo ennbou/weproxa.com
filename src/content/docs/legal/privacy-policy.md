@@ -23,15 +23,16 @@ We have **no access** to your intercepted traffic or local configuration.
 
 ## Data We Collect
 
-### Analytics (Umami)
+### Website Analytics (PostHog)
 
-We use [Umami](https://umami.is), a privacy-focused analytics service, to collect anonymous usage statistics on our documentation website (weproxa.com). Umami does not use cookies, does not track users across websites, and does not collect personal information. Data collected includes:
+We use [PostHog](https://posthog.com) to collect anonymous usage statistics on our website (weproxa.com). Data is processed in the European Union. Data collected includes:
 
-- Page views and referrer URLs
-- Browser type and operating system
-- Country (based on anonymized IP)
+- Page views, page duration, and referrer URLs
+- Clicks and other interactions with page elements
+- Browser type, device type, and operating system
+- Country and region (derived from your IP address, which is not stored with the event)
 
-No personally identifiable information is collected by Umami.
+PostHog runs in cookieless mode on our website. It stores **no cookies and no data of any kind** in your browser, and it does not track you across other websites. Repeat visits are counted using a privacy-preserving hash computed on PostHog's servers, which is rotated regularly and cannot be used to identify you. We do not create user profiles for website visitors, and session recording is disabled. We do not collect names, email addresses, or any other personally identifiable information from website visitors.
 
 ### Error Tracking (Sentry)
 
@@ -78,7 +79,7 @@ Desktop analytics and feature-flag requests do **not** include intercepted reque
 
 | Service | Purpose | Data Shared |
 |---------|---------|-------------|
-| Umami | Website analytics | Anonymous page views |
+| PostHog | Website analytics | Anonymous page views and interactions |
 | Sentry | Crash reporting | Error details, app version |
 | Lemon Squeezy | License & payments | License key, payment info |
 | PostHog | Desktop app analytics and feature flags | Anonymous install/session IDs, selected usage events, and app/platform metadata |

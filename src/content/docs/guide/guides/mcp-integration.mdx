@@ -52,7 +52,7 @@ A normal installed configuration contains only the helper’s `command`. Do not 
 
 ### Install the MCP and skills plugin
 
-The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the MCP connection and three skills together: connection diagnosis, captured-traffic inspection, and mock-scenario authoring. Plugin 0.3.0 launches the installed `weproxa-mcp` command directly, so you do not need to copy JSON or TOML.
+The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the MCP connection and three skills together: connection diagnosis, captured-traffic inspection, and mock-scenario authoring. Plugin 0.4.0 launches the installed `weproxa-mcp` command directly, so you do not need to copy JSON or TOML.
 
 The plugin supports **Codex**, **Claude Code**, **VS Code with GitHub Copilot**, **GitHub Copilot CLI**, and **Cursor**. Use a client version with agent plugin support; Cursor uses the Agent Plugins 1.0 format.
 
@@ -71,7 +71,8 @@ The plugin's MCP entry is `"command": "weproxa-mcp"` — a bare command name wit
    weproxa-mcp --version
    ```
 
-   If that fails, stop and register the command first. Node.js is not required.
+   If that fails, stop and register the command first. Node.js is only required
+   for the automatic installer, not for the installed MCP connection.
 
 </Steps>
 
@@ -88,7 +89,27 @@ Installing the plugin without the command still appears to work. The plugin inst
 
 Fully quit and reopen your AI client afterwards — a running process keeps the PATH it started with, so restarting the MCP server alone is not enough. A desktop client's PATH can also differ from a terminal's. These setup actions require an app build with command-registration support; older builds and development builds use the manual absolute-path configuration instead.
 
-#### Install the plugin
+#### Quick install
+
+With Node.js 20 or newer, run:
+
+```sh
+npx @weproxa/wizard@latest mcp add
+```
+
+The installer verifies the native helper, detects supported clients, shows the
+targets, and asks before making changes. It installs the MCP connection and all
+three skills together. Use `--client codex`, `--client claude`, `--client
+copilot`, or `--client cursor` to choose a target; repeat the option for several
+targets. `--dry-run` previews every action and `--yes` supports non-interactive
+installation.
+
+For Cursor, the installer copies the packaged Agent Plugin to
+`~/.cursor/plugins/local/weproxa`. For the other clients, it registers the
+WePROXA marketplace and installs the plugin through the client's own CLI. The
+npm package never downloads or replaces the native `weproxa-mcp` helper.
+
+#### Install manually
 
 **Codex**
 

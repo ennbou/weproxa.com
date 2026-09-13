@@ -48,23 +48,13 @@ If the command is missing, use **Install / repair** in the MCP settings on macOS
 
 ## 2. Install the MCP and skills plugin
 
-The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the connection together with skills for connection checks, traffic inspection, and mock-scenario authoring.
-
-For Codex:
+The [WePROXA plugin](https://github.com/ennbou/weproxa-plugin) installs the connection together with skills for connection checks, traffic inspection, and mock-scenario authoring. With Node.js 20 or newer, run:
 
 ```sh
-codex plugin marketplace add ennbou/weproxa-plugin
-codex plugin add weproxa@weproxa-plugins
+npx @weproxa/wizard@latest mcp add
 ```
 
-For Claude Code:
-
-```sh
-claude plugin marketplace add ennbou/weproxa-plugin
-claude plugin install weproxa@weproxa-plugins
-```
-
-For GitHub Copilot and Cursor, follow the current [client-specific installation steps](/guide/guides/mcp-integration/#install-the-plugin). Fully quit and reopen the AI client after installation so it inherits the current command path.
+The installer supports Codex, Claude Code, GitHub Copilot CLI / VS Code, and Cursor. Use `--client <name>` to choose one target, or follow the [manual installation steps](/guide/guides/mcp-integration/#install-manually). Fully quit and reopen the AI client after installation so it inherits the current command path.
 
 Start with a harmless connection check:
 
