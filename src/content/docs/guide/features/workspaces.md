@@ -21,6 +21,8 @@ Scenarios reference these definitions and store their own tool-level enabled sta
 
 The left sidebar has two tabs: **Explorer** (the traffic and source tree) and **Workspaces** (the workspace manager). Open the **Workspaces** tab to see every workspace, create new ones, and select any workspace to view and edit its rules.
 
+Each workspace row shows its Scenario count and whether it is active. Use the arrow to expand or collapse the selected workspace's Scenarios, Shared Rules, and Rule Library. Selecting or expanding a workspace is an editing action only; it never changes which rules handle live traffic.
+
 ![WePROXA Workspaces tab with the active workspace selected](@assets/generated/screenshots/features/workspaces/tab.png)
 
 ## Switching Workspaces
@@ -29,7 +31,7 @@ Only one workspace is active at a time, and only the active workspace's rules ma
 
 1. Open the **Workspaces** tab.
 2. Select the workspace you want to apply.
-3. Choose **Set as active**.
+3. Use the row's activation control to apply it to live traffic.
 
 WePROXA saves the workspace you are leaving and loads the selected workspace's rules and tool enabled states. If a request is paused at a breakpoint when you switch, WePROXA releases that breakpoint before loading the next workspace.
 
@@ -39,11 +41,12 @@ If you prefer switching from the toolbar, enable **Show workspace and scenario s
 
 ## Creating and Managing Workspaces
 
-From the **Workspaces** tab you can create, rename, delete, and set the active workspace.
+From the **Workspaces** tab you can create, rename, delete, and set the active workspace. Row actions appear when the row is hovered or focused, keeping the list compact without hiding the controls from keyboard users.
 
-- **Create** - Enter a name to create an empty workspace.
-- **Rename** - Change the workspace name without affecting its rules.
-- **Delete** - Remove a workspace and its saved rules. The last remaining workspace cannot be deleted.
+- **Create** - Choose **New workspace** at the bottom of the sidebar and enter a name.
+- **Activate** - Apply an inactive workspace and its selected Scenario to live traffic.
+- **Rename** - Edit the name inline without affecting its rules.
+- **Delete** - Confirm the inline delete action to remove a workspace and its saved rules. The last remaining workspace cannot be deleted.
 
 Deleting the active workspace switches to another available workspace first. Managed Map Local response files owned by the deleted workspace are removed, while files you selected from elsewhere on your computer are left untouched.
 

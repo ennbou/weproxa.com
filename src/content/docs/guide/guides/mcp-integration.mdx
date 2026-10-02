@@ -89,6 +89,19 @@ Installing the plugin without the command still appears to work. The plugin inst
 
 Fully quit and reopen your AI client afterwards — a running process keeps the PATH it started with, so restarting the MCP server alone is not enough. A desktop client's PATH can also differ from a terminal's. These setup actions require an app build with command-registration support; older builds and development builds use the manual absolute-path configuration instead.
 
+#### Use the setup shown in WePROXA
+
+Open **Settings → MCP Server → AI Connections** and select your client. For Codex, Claude Code, VS Code with GitHub Copilot, and Cursor, WePROXA shows a **WePROXA plugin** card above the manual configuration:
+
+- **Automatic installer** is the recommended one-line `npx @weproxa/wizard@latest mcp add --client …` command with the selected client already filled in.
+- **Client CLI alternative** shows the equivalent native marketplace and install commands when that client provides them.
+- Cursor shows the automatic installer plus a note linking to its repository-import and local-checkout alternatives, because Cursor has no plugin CLI.
+- VS Code explains that its native alternative requires GitHub Copilot CLI, which owns the install for both surfaces.
+
+The copy buttons stay disabled until the `weproxa-mcp` status at the top of the settings page is **Installed** and resolves to the running copy of WePROXA. If the command is missing, belongs to another installation, or cannot be registered by this build, use the manual configuration shown lower in the same client panel; it names the helper by absolute path and does not depend on PATH.
+
+After either plugin installation method, fully quit and reopen the client so it inherits the registered command and discovers the plugin.
+
 #### Quick install
 
 With Node.js 20 or newer, run:

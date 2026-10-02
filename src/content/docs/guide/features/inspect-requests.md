@@ -64,8 +64,9 @@ Right-click any request to access quick actions. Related actions are grouped int
 - **Copy as cURL** — Copy the request as a `curl` command
 - **Enable / Disable SSL for {host}** — Toggle HTTPS interception for the request's host
 - **Repeat** — Choose **Repeat Now** to re-execute immediately, or **Repeat with Edit...** to modify the request first
-- **Tools** — Create a rule from the request:
+- **Tools** — Open a utility or create a rule from the request:
   - **Add to Diff** — Select requests to compare side by side
+  - **Inspect JSON** — Send the response body to the [JSON Tools](/guide/features/json-tools/) workbench
   - **Map Local** — Create a Map Local rule pre-filled with the request's URL
   - **Add Breakpoint** — Create a breakpoint rule for the request's URL pattern
   - **Add Block Rule** — Block requests matching this URL
@@ -118,6 +119,8 @@ If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" i
 - **Frames** — WebSocket frames for successful `101 Switching Protocols` responses, with sent/received filters, payload search, opcodes, sizes, and timestamps
 
 For large text or media responses, WePROXA shows the response metadata first and lets you click **Load body** only when you actually need the full content. The response **Download** action is available from both the body and raw views.
+
+When the response has a body, select **Inspect JSON** beside the response tabs to open it in the standalone [JSON Tools](/guide/features/json-tools/) workbench. WePROXA does not rely on the response's content type: malformed JSON and incorrectly labeled API responses still open, and the workbench explains the parse error. The same action is available under **Tools → Inspect JSON** in the request context menu.
 
 When a WebSocket connection is captured, WePROXA displays the request as `ws://` or `wss://` and opens the Frames tab automatically. See [WebSocket Inspection](/guide/features/websocket-inspection/) for details.
 

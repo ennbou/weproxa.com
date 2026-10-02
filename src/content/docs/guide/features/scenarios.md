@@ -48,6 +48,17 @@ The sidebar, the native **Workspaces** menu, and the tray all show the active Wo
 
 ![Workspace navigation with Scenarios and reusable rule sources](@assets/generated/screenshots/features/workspaces/tab.png)
 
+### Scenario row actions
+
+Each Scenario row shows whether it is **Active** for live traffic or the saved **Default** that will run when its currently inactive Workspace is activated. Hover or focus the row to use its inline actions:
+
+- **Activate** applies the Scenario when its Workspace is already active. Activate the Workspace first when it is not.
+- **Rename** edits the Scenario name inline.
+- **Duplicate** asks for the copy's name, then creates it from the same metadata and rule references. Free Workspaces can contain up to three Scenarios.
+- **Delete** removes the Scenario when the Workspace has another Scenario to retain.
+
+Selecting a Scenario opens it for editing; it does not activate it. This distinction lets you prepare or duplicate a setup without changing the rules currently handling traffic.
+
 ## Reuse and Diverge Safely
 
 Rule cards show whether a definition is Shared and how many Scenarios reference it. Editing a reused definition intentionally updates every referencing Scenario.

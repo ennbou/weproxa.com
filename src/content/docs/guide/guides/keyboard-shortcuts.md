@@ -52,8 +52,9 @@ The Explorer and Workspaces shortcuts expand the left panel first if it is colla
 | Open Network Conditioning | `⌘ ⇧ N` / `Ctrl + Shift + N` |
 | Open Scripting | `⌘ ⇧ S` / `Ctrl + Shift + S` |
 | Open Diff | `⌘ ⇧ D` / `Ctrl + Shift + D` |
+| Open JSON Tools | `⌘ ⇧ J` / `Ctrl + Shift + J` |
 
-Tool shortcuts open the matching tool window. Use the toolbar, tray, or tool panel toggle to enable or disable a tool's rules.
+Tool shortcuts open the matching tool window. Use the toolbar, tray, or tool panel toggle to enable or disable a tool's rules. JSON Tools and Diff are standalone utilities, so opening them does not change traffic handling.
 
 ## Tool Rule Forms
 

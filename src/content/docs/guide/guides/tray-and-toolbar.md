@@ -12,7 +12,7 @@ The main toolbar includes:
 - **Clear** - remove the requests currently shown in the list. When a filter is active, Clear removes only the displayed matches and leaves the rest of the session intact; with no filter it clears every captured request. The button's tooltip reflects which of the two it will do.
 - **Remote capture / LAN access** - use the device button to choose whether the proxy listens only on `127.0.0.1` or on your local network address.
 - **Start / stop proxy** - toggle capture on the configured proxy port.
-- **Tool buttons** - open Map Local, Breakpoints, Block List, Network Conditioning, Scripting, and Diff.
+- **Tool buttons** - open Map Local, Breakpoints, Block List, Network Conditioning, Scripting, Diff, and [JSON Tools](/guide/features/json-tools/).
 - **Certificate menu** - manage SSL host and app rules and open certificate setup.
 - **Settings** - open WePROXA settings.
 - **Workspace and scenario switcher** - optional, hidden by default. See [Show the Workspace and Scenario Switcher](#show-the-workspace-and-scenario-switcher).
@@ -37,7 +37,7 @@ Use toolbar customization when you want a quieter workspace or only use a subset
 2. Go to **Appearance**.
 3. In **Toolbar Tools**, check the tools you want shown in the toolbar.
 
-On a fresh install, **Map Local**, **Breakpoints**, and **Diff** are visible; **Block List**, **Network Conditioning**, and **Scripting** remain available from the application menu until you add them. Your selection is saved automatically and synced across WePROXA windows. Existing installations keep their saved toolbar layout during upgrades.
+On a fresh install, **Map Local**, **Breakpoints**, and **Diff** are visible; **Block List**, **Network Conditioning**, **Scripting**, and **JSON Tools** remain available from the application menu until you add them. Your selection is saved automatically and synced across WePROXA windows. Existing installations keep their saved toolbar layout during upgrades.
 
 ## Show the Workspace and Scenario Switcher
 

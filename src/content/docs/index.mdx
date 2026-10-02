@@ -49,6 +49,9 @@ WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React
   <Card title="Inspect Requests" icon="magnifier">
     View detailed request and response information including headers, body, timing, and more — all in a clean, responsive interface.
   </Card>
+  <Card title="Explore JSON" icon="seti:json">
+    Format payloads, browse trees, infer schemas, and query captured responses with jq or JSONPath.
+  </Card>
   <Card title="WebSocket Frames" icon="seti:purescript">
     Inspect WebSocket upgrades frame by frame with direction filters, payload search, opcodes, and live message updates.
   </Card>
@@ -69,6 +72,9 @@ WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React
   </Card>
   <Card title="Advanced Filtering" icon="seti:config">
     Powerful query builder to filter and find exactly the requests you're looking for — by method, status, host, path, and more.
+  </Card>
+  <Card title="Monitor Network Health" icon="warning">
+    Detect proxy stops, system proxy conflicts, and network changes with configurable recovery alerts.
   </Card>
   <Card title="Diff Requests" icon="random">
     Compare any two captured requests side by side — headers and bodies, request and response — to pinpoint what changed.
@@ -101,6 +107,11 @@ WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React
     href="/guide/features/inspect-requests/"
   />
   <LinkCard
+    title="JSON Tools"
+    description="Format, browse, query, and derive schemas from JSON payloads."
+    href="/guide/features/json-tools/"
+  />
+  <LinkCard
     title="Workspaces"
     description="Keep tool rules organized by project or environment."
     href="/guide/features/workspaces/"
@@ -119,6 +130,11 @@ WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React
     title="Remote Devices"
     description="Capture traffic from iPhone, iPad, or Android over your local network."
     href="/guide/guides/remote-devices/"
+  />
+  <LinkCard
+    title="Network Health"
+    description="Watch for local proxy and network changes that can interrupt capture."
+    href="/guide/features/network-health/"
   />
   <LinkCard
     title="Keyboard Shortcuts"

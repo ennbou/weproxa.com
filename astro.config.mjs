@@ -82,6 +82,7 @@ export default defineConfig({
 								label: 'Features',
 								items: [
 									{ label: 'Inspect Requests', slug: 'guide/features/inspect-requests' },
+									{ label: 'JSON Tools', slug: 'guide/features/json-tools' },
 									{ label: 'Workspaces', slug: 'guide/features/workspaces' },
 									{ label: 'Scenarios', slug: 'guide/features/scenarios' },
 									{ label: 'WebSocket Inspection', slug: 'guide/features/websocket-inspection' },
@@ -92,6 +93,7 @@ export default defineConfig({
 									{ label: 'Block List', slug: 'guide/features/block-list' },
 									{ label: 'Pass-Through Containment', slug: 'guide/features/pass-through' },
 									{ label: 'Network Conditioning', slug: 'guide/features/network-conditioning' },
+									{ label: 'Network Health Monitoring', slug: 'guide/features/network-health' },
 									{ label: 'Scripting', slug: 'guide/features/scripting' },
 									{ label: 'Network Performance Metrics', slug: 'guide/features/network-performance-metrics' },
 									{ label: 'Advanced Filtering', slug: 'guide/features/advanced-filtering' },
