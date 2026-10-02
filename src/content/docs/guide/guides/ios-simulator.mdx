@@ -13,7 +13,7 @@ WePROXA can capture HTTP/HTTPS traffic from iOS Simulator, making it easy to deb
 
 1. **Start WePROXA** and ensure the proxy is running.
 
-2. **Install the CA certificate** on the simulator — WePROXA provides a one-click option to install its certificate on the iOS Simulator. Look for the iOS Simulator option in the certificate menu.
+2. **Install the CA certificate** on the simulator — WePROXA provides a one-click option to install its certificate on the iOS Simulator. Look for the iOS Simulator option in the certificate menu. It installs into **every booted simulator** at once. If one simulator rejects the certificate, the others still get it, and the message names the one that failed.
 
 3. **Configure the simulator proxy** — iOS Simulator respects the macOS system proxy settings. When WePROXA's system proxy is enabled, simulator traffic will flow through WePROXA automatically.
 
@@ -36,7 +36,7 @@ If you drive WePROXA through [MCP](/guide/guides/mcp-integration/), the same ins
 
 It targets the **booted** simulator and needs an explicit `udid` when several are booted. The call fails with a clear message when no simulator is booted, when the requested `udid` is not booted, when the CA has not been generated yet (start the proxy once to create it), or when `simctl` rejects the certificate. It returns the UDID, the device name reported by `simctl`, and the certificate path that was installed.
 
-Both the certificate menu and the MCP tool run the same install, so they select simulators and report errors identically.
+The certificate menu and the MCP tool list simulators and report errors the same way. They differ in one point: the menu button installs into every booted simulator, while the MCP tool installs into one and asks for a `udid` when several are booted.
 
 :::caution
 Confirm with the user before installing a certificate into any trust store.
