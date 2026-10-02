@@ -1,0 +1,316 @@
+---
+title: Android Emulator
+description: Configure Android Emulator to capture and decrypt HTTP/HTTPS traffic with WePROXA.
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+WePROXA can capture traffic from Android Emulator, but Android certificate trust works
+differently from iOS Simulator. There is no universal one-click equivalent to the iOS
+Simulator trust command: the standard Android flow installs the WePROXA CA as a **user
+certificate**, and modern apps must explicitly trust user certificates in their debug
+configuration.
+
+This guide uses the safe, supported path for an app you control. It also explains the limits of
+Google Play emulator images, system certificates, custom TLS stacks, and certificate pinning.
+
+:::tip[Recommended setup]
+Install the CA as a user certificate, allow user certificates only in your app's **debug**
+network security configuration, and point the Android system proxy at `10.0.2.2`.
+:::
+
+## What is different from a physical Android device?
+
+The certificate has the same meaning on an emulator as it does on a physical Android device:
+it is added to that Android installation's user trust store. The emulator adds a few useful
+development conveniences:
+
+- `10.0.2.2` is a special address for the development computer's loopback interface.
+- `adb` can copy the certificate directly into the emulator's Downloads folder.
+- An emulator can be wiped and recreated if you want to remove all test state.
+- Some non-Google-Play system images support root access for advanced testing.
+
+For a physical phone or tablet, use [Remote Devices](/guide/guides/remote-devices/) instead.
+It requires LAN access and uses the computer's local network address rather than `10.0.2.2`.
+
+## Before you start
+
+You need:
+
+- WePROXA running on the same computer as Android Emulator.
+- A booted Android Virtual Device (AVD).
+- The Android SDK's `adb` command for the terminal-based certificate transfer below.
+- A debug build of your app if it targets Android 7.0 (API 24) or newer.
+
+You do **not** need to enable WePROXA LAN access for the emulator-only setup in this guide.
+Android Emulator maps `10.0.2.2` to the host's `127.0.0.1`, where WePROXA listens in local-only
+mode. Keep LAN access disabled unless you are also capturing a physical device.
+
+:::caution
+Only install a debugging CA in an emulator you control. Anyone who controls a trusted CA's
+private key can create certificates that the configured client accepts. WePROXA keeps its CA
+private key on your computer and exports only the public certificate.
+:::
+
+## 1. Export the WePROXA CA certificate
+
+<Steps>
+
+1. Start WePROXA and start the proxy once so the local CA exists.
+2. Open **Settings** → **CA Certificate**.
+3. Select **Download certificate** and save it as `weproxa-ca.crt`.
+4. Keep the certificate available on the development computer for the next step.
+
+</Steps>
+
+If **Download certificate** is disabled, start the proxy once to generate the CA, then reopen
+the certificate settings.
+
+## 2. Copy the certificate into the emulator
+
+First, confirm that `adb` can see the emulator:
+
+```bash
+adb devices -l
+```
+
+The device should be listed with the state `device`, often with a serial such as
+`emulator-5554`. Then copy the exported certificate into Android's Downloads folder:
+
+```bash
+adb push "/path/to/weproxa-ca.crt" /sdcard/Download/weproxa-ca.crt
+```
+
+When more than one emulator or Android device is connected, select the intended emulator by
+serial:
+
+```bash
+adb -s emulator-5554 push "/path/to/weproxa-ca.crt" /sdcard/Download/weproxa-ca.crt
+```
+
+Replace the sample path and serial with the values from your computer. Do not install the CA
+into a physical device accidentally.
+
+### Transfer without `adb`
+
+You can also use WePROXA's browser-based certificate server:
+
+1. Enable **LAN access**, restart the proxy, and open **Settings** → **Remote Access**.
+2. Select **Show certificate and setup**.
+3. Open the displayed certificate URL in the emulator's browser.
+4. Download the Android CA certificate.
+
+This alternative exposes the proxy on your local network, so use it only on a trusted network.
+For an emulator on the same computer, `adb push` keeps the proxy local and is usually simpler.
+
+## 3. Install the user CA in Android
+
+Android menu names vary slightly by release and device skin. On current Android versions:
+
+<Steps>
+
+1. In the emulator, open **Settings**.
+2. Open **Security & privacy** → **More security settings** → **Encryption & credentials**.
+3. Select **Install a certificate** → **CA certificate**.
+4. Acknowledge Android's warning about monitoring network traffic.
+5. Choose `weproxa-ca.crt` from **Downloads** and confirm the installation.
+6. If Android requests a PIN, pattern, or password, configure or enter the emulator's screen
+   lock as instructed.
+
+</Steps>
+
+On older Android releases, search Settings for **Install a certificate**, **CA certificate**, or
+**Encryption & credentials**. Android 11 and newer require CA installation through Settings;
+an ordinary app cannot silently approve this trust change. See Android's
+[`KeyChain.createInstallIntent` reference](https://developer.android.com/reference/android/security/KeyChain#createInstallIntent())
+for the platform restriction.
+
+To verify the result, search Settings for **Trusted credentials**, open the **User** tab, and
+look for the current **WePROXA Root CA**. Its name includes identity information when it was
+generated, which helps distinguish it from an older WePROXA CA.
+
+## 4. Allow your debug app to trust user certificates
+
+Installing a user CA is enough only for clients that use Android's user trust store. By default,
+apps targeting Android 7.0 (API 24) or newer trust system CAs but not user-added CAs.
+
+For an app you control, declare a [Network Security Configuration](https://developer.android.com/privacy-and-security/security-config)
+on the `<application>` element in `AndroidManifest.xml`:
+
+```xml
+<application
+    android:networkSecurityConfig="@xml/network_security_config"
+    ...>
+</application>
+```
+
+Create or update `app/src/main/res/xml/network_security_config.xml`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>
+```
+
+`debug-overrides` is active only when `android:debuggable` is `true`, which is normally true
+for debug builds and false for release builds. This keeps the broader test trust out of the app
+you distribute.
+
+:::caution[Keep this debug-only]
+Do not add `src="user"` to a release-wide `base-config` merely to make interception work. Do
+not ship a release build with `android:debuggable="true"`. If the project already has a network
+security configuration, merge the `debug-overrides` block into it instead of replacing its
+existing domain, cleartext, certificate-transparency, or trust rules.
+:::
+
+Some frameworks and networking libraries use their own trust store or TLS implementation. In
+that case, Android's network security configuration may not control the connection; consult the
+library's debug trust configuration.
+
+## 5. Configure the correct Android proxy
+
+Use the **Android system proxy**, which is configured inside Android's Wi-Fi settings. Do not
+use Android Studio's HTTP Proxy setting, Emulator **Extended controls** → **Proxy**, or the
+emulator `-http-proxy` option for HTTPS inspection. Those configure the separate Emulator Proxy,
+which tunnels TLS without giving WePROXA the HTTP messages to decrypt.
+
+<Steps>
+
+1. Confirm that the WePROXA proxy is running and note its port under **Settings** →
+   **Proxy Config**. The default port is `4545`.
+2. In the emulator, open **Settings** → **Network & internet** → **Internet**.
+3. Open the active virtual Wi-Fi network, then edit its advanced options. Depending on the
+   Android version, you may need to select the pencil icon or **Modify network**.
+4. Set **Proxy** to **Manual**.
+5. Set **Proxy hostname** to `10.0.2.2`.
+6. Set **Proxy port** to the port shown by WePROXA, for example `4545`.
+7. Leave proxy authentication disabled and save the network.
+
+</Steps>
+
+Inside Android Emulator, `127.0.0.1` means the emulator itself. Always use `10.0.2.2` to reach
+WePROXA on the development computer. See Android's official
+[emulator address-space reference](https://developer.android.com/studio/run/emulator-networking-address)
+and [proxy-mode comparison](https://developer.android.com/studio/run/emulator-networking-proxy).
+
+Apps are still free to ignore Android's system proxy. An app with a hard-coded proxy, direct
+sockets, a VPN, or a custom network stack may require its own development configuration.
+
+## 6. Enable SSL interception and test
+
+<Steps>
+
+1. In WePROXA, add the test host to **SSL Interception Hosts** using the lock icon, or capture
+   its `CONNECT` request and choose **Enable SSL** from the context menu.
+2. In the emulator, open the app or browser and repeat the request.
+3. Confirm that WePROXA shows the decrypted HTTP method, URL, headers, and body rather than only
+   a `CONNECT` tunnel.
+
+</Steps>
+
+Installing the CA does not automatically opt every host into decryption. WePROXA tunnels hosts
+that are not enabled for SSL interception.
+
+## User CA versus system CA
+
+The steps above install a **user CA**. This is the recommended choice for your own debug build
+because it is explicit, removable, and does not modify the Android system image.
+
+A **system CA** is different. It can be useful when testing an existing app that cannot be
+rebuilt to trust user certificates, but it has important limits:
+
+- Google Play system images are production-style images and do not permit `adb root`.
+- Root-capable AOSP or compatible Google APIs images are required for most system-store
+  workflows.
+- Certificate-store locations and writable-system techniques vary by Android release and image.
+- A system CA still does not defeat an app-specific trust store or certificate pinning.
+- System modifications may disappear after rebooting, updating, or wiping the AVD.
+
+WePROXA does not currently automate Android system-store installation. If your testing requires
+it, use a disposable, root-capable AVD and a version-specific workflow you understand. Android's
+[AVD documentation](https://developer.android.com/studio/run/managing-avds) explains which images
+support root, and its
+[emulator command-line documentation](https://developer.android.com/studio/run/emulator-commandline)
+documents writable system images. Avoid modifying a personal or production device's system
+trust store.
+
+## Certificate pinning
+
+Certificate pinning is separate from Android's user-versus-system CA choice. A pinned app can
+reject WePROXA even when the CA is correctly installed and trusted.
+
+For an app you control, use a debug-only build that disables production pinning or uses Android's
+debug trust configuration. Do not weaken the release build. For an app you do not control,
+WePROXA cannot promise HTTPS decryption; use an authorized test environment and tooling that is
+appropriate for that app.
+
+## Troubleshooting
+
+### `adb` does not list the emulator
+
+- Make sure the AVD is fully booted.
+- Run `adb devices -l` again.
+- If the state is `offline`, restart the AVD and the ADB server.
+- If several devices are listed, add `-s <serial>` to every `adb` command.
+- If `adb` is not found, install Android SDK Platform-Tools or run the copy command from Android
+  Studio's configured SDK environment.
+
+### The certificate is not visible in the file picker
+
+- Confirm that the push command completed successfully.
+- Look in **Downloads** for `weproxa-ca.crt`.
+- Keep a certificate extension such as `.crt` or `.cer`.
+- Export the certificate again if the local CA was regenerated.
+
+### HTTP traffic does not appear
+
+- Confirm that the WePROXA proxy is running.
+- Use `10.0.2.2`, not `127.0.0.1`, as the Android proxy hostname.
+- Confirm that the Android system proxy port matches **Settings** → **Proxy Config**.
+- Disable the separate Emulator Proxy in Android Studio or Extended controls.
+- Check whether the app ignores the Android system proxy.
+
+### HTTPS appears only as `CONNECT`
+
+The route through WePROXA is working, but the host is not enabled for decryption. Add it to
+**SSL Interception Hosts**, then retry the request.
+
+### A browser works but the app reports a certificate error
+
+The user CA is installed, but the app probably does not trust user certificates. Confirm that:
+
+- the manifest references `@xml/network_security_config`;
+- the debug configuration includes `<certificates src="user" />`;
+- the installed APK is actually debuggable;
+- the app is not using a custom trust manager, a separate certificate store, or pinning.
+
+### A Google Play emulator image rejects `adb root`
+
+That is expected. Google Play images are deliberately non-rootable. User-CA installation still
+works, so use a debug build that trusts the user store. Choose a disposable AOSP or compatible
+Google APIs image only when you have an authorized need for system-level testing.
+
+### Traffic stops when WePROXA closes
+
+Android keeps the manual proxy setting. Edit the active Wi-Fi network and set **Proxy** back to
+**None**, or restart WePROXA before continuing.
+
+## Remove the setup
+
+When you finish testing:
+
+1. In the emulator's active Wi-Fi network, set **Proxy** to **None**.
+2. Search Android Settings for **Trusted credentials**, open the **User** certificates, and
+   remove the **WePROXA Root CA**.
+3. Delete `weproxa-ca.crt` from Downloads.
+4. Remove the debug trust override if the project no longer needs it, or keep it confined to
+   debuggable builds.
+
+Wiping the AVD also removes its user-installed certificate and proxy configuration. If you
+regenerate the WePROXA CA later, remove the old Android certificate and repeat the installation;
+the old trust entry cannot validate certificates created by the new CA.

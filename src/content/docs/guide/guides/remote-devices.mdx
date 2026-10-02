@@ -78,6 +78,7 @@ WePROXA ships a temporary local certificate server on port `7676` with a QR code
 
 :::note
 Android 7+ apps ignore user-installed CAs by default. For app traffic you usually need either a debug build that opts in via `networkSecurityConfig`, or a rooted device where the CA can be added to the system store.
+For emulator-specific certificate, debug-app, and proxy instructions, see [Android Emulator](/guide/guides/android-emulator/).
 :::
 
 </TabItem>
@@ -231,7 +232,7 @@ The device row and each nested host row show live request counts from the curren
 
 - **Nothing shows up** — verify the computer's IP is reachable (try `http://<computer-ip>:<port>` in the device's browser). A firewall may be blocking incoming connections.
 - **HTTPS errors on the device** — the CA profile isn't installed or isn't fully trusted. On iOS, check **Certificate Trust Settings**.
-- **App traffic not captured (Android)** — app uses its own CA pinning or ignores user CAs. Use a debug build or run against an emulator. See [iOS Simulator](/guide/guides/ios-simulator/) for simulator-based debugging.
+- **App traffic not captured (Android)** — the app may ignore user CAs, use its own trust store, or pin certificates. For an app you control, use a debug build and follow [Android Emulator](/guide/guides/android-emulator/). Installing the CA alone does not make every Android app trust it.
 - **Certificate QR code won't load** — the local cert server uses a short-lived port. Close the setup panel and click **Show certificate and setup** again to restart it.
 - **Certificate QR code port is already in use** — reopen **Show certificate and setup**. WePROXA automatically falls back to an available port when the default certificate server port is busy.
 - **PAC URL missing** — PAC is only shown while the certificate panel is open and **LAN access** is enabled.

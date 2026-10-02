@@ -29,6 +29,7 @@ The device doesn't trust WePROXA's root CA.
 
 - **On macOS**: open **Settings** → **CA Certificate** and install the WePROXA Root CA, or follow [Certificate Trust](/guide/guides/certificate-trust/) to trust it manually.
 - **On Windows**: open **Settings** → **CA Certificate** and choose **Learn More**, or read [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) before deciding whether to trust a local CA.
+- **On Android Emulator**: install the CA in the Android user store and configure your debug app to trust user CAs. Follow [Android Emulator](/guide/guides/android-emulator/) for the complete certificate and proxy setup.
 - **On a remote device**: see [Remote Devices](/guide/guides/remote-devices/) to install and trust the certificate over QR code.
 - **Firefox**: uses its own certificate store. Enable `security.enterprise_roots.enabled` in `about:config`, or import the CA manually from **Settings** → **Privacy & Security** → **Certificates**.
 
@@ -37,7 +38,7 @@ The device doesn't trust WePROXA's root CA.
 Apps that hard-code certificate fingerprints (pinning) will refuse WePROXA's dynamically generated certificates. This is by design — it's the security feature working as intended. Options:
 
 - Test against a **staging build** that has pinning disabled.
-- Use an **iOS Simulator** or rooted Android device with pinning-bypass tooling.
+- Use an **iOS Simulator** or an authorized Android test environment with suitable pinning-bypass tooling. Installing a user or system CA alone does not bypass app-specific pinning.
 - Work on **non-pinned** endpoints where possible.
 
 ## System Proxy Not Restored After Quitting

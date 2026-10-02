@@ -107,6 +107,7 @@ export default defineConfig({
 									{ label: 'SSL Interception', slug: 'guide/guides/ssl-interception' },
 									{ label: 'HTTPS Debugging', slug: 'guide/guides/https-debugging' },
 									{ label: 'iOS Simulator', slug: 'guide/guides/ios-simulator' },
+									{ label: 'Android Emulator', slug: 'guide/guides/android-emulator' },
 									{ label: 'Remote Devices', slug: 'guide/guides/remote-devices' },
 									{ label: 'MCP Integration', slug: 'guide/guides/mcp-integration' },
 									{ label: 'Agent Skills', slug: 'guide/guides/agent-skills' },
