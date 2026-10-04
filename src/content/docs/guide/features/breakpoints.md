@@ -42,6 +42,8 @@ You can also create a breakpoint by **right-clicking a request** in the request 
 - **Sort rules** by name, creation date, or last updated date
 - **Edit** or **delete** rules at any time
 
+When multiple rules match the same request, only one fires for each phase (request or response): the first in [precedence order](/guide/features/map-local/#rule-precedence). A rule with a higher priority wins. Within the same priority, the oldest rule wins. Sorting the panel does not change which rule fires. Priority is currently set through the MCP `weproxa_rules_setPriority` tool.
+
 :::note
 Free accounts are limited to **2 breakpoint rules**. Upgrade to Pro for unlimited rules.
 :::

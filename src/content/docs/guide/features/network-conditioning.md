@@ -42,7 +42,7 @@ You can also create a rule by **right-clicking a request** in the request list a
 - **Sort rules** by name, creation date, or last updated date
 - **Edit** or **delete** rules at any time
 
-When multiple rules match the same request, the oldest rule (earliest creation date) takes priority.
+When multiple rules match the same request, only one applies: the first in [precedence order](/guide/features/map-local/#rule-precedence). A rule with a higher priority wins. Within the same priority, the oldest rule wins. Sorting the panel does not change which rule applies. Priority is currently set through the MCP `weproxa_rules_setPriority` tool.
 
 :::note
 Free accounts are limited to **3 Network Conditioning rules**. Upgrade to Pro for unlimited rules.

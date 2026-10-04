@@ -57,6 +57,8 @@ Use Appearance settings to keep the app comfortable across all windows:
 2. Go to **Appearance**.
 3. Choose your preferred language, **English** or **French**.
 
+The same section also sets the color **Style** (Colorized, or the Pro-only Blueprint), the **Brightness**, and the **Font Size**. See [Settings → Appearance](/guide/guides/settings/#appearance) for every option.
+
 The language choice is saved automatically and applied across the main window and detached tool windows. It also covers native app chrome: the macOS menu bar, the tray menu, and the titles WePROXA gives its windows. Because that chrome is built before any window content loads, the saved language is restored at launch, so menus and tray entries are already translated on the first frame instead of switching from English a moment later.
 
 ### Theme and Native Window Chrome

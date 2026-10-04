@@ -73,7 +73,7 @@ Every first-match-wins tool — Map Local, Breakpoints, Block List, and Network 
 
 The listings sort by the same key, so **the rule listed first is the rule that will answer**. Set a priority to promote a narrow fixture above a catch-all without recreating either, or use a negative value to demote a catch-all below everything else. See [Rule Precedence](/guide/features/map-local/#rule-precedence) for the details.
 
-Scripting is exempt: every matching script runs, so scripts never compete for precedence.
+Scripting does not pick a winner. Every matching script runs, in this same order, and each script sees the changes made by the scripts before it.
 
 ## Verify a Scenario Actually Answers
 

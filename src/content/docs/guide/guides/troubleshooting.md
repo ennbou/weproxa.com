@@ -135,7 +135,7 @@ Your **license**, **installed certificate**, and **saved requests** are preserve
 
 ## Still Stuck?
 
-You can find your build details and check for updates in **Settings** → **About**. The same panel links Windows users to the macOS installation guide and links users on other platforms to WePROXA in the Microsoft Store.
+You can find your version and build commit in **Settings** → **About**. Include both when you report a problem. WePROXA checks for updates by itself when it starts; see [Updates](/guide/guides/settings/#updates). The About panel links Windows users to the macOS installation guide and links users on other platforms to WePROXA in the Microsoft Store.
 
 ![WePROXA About settings](@assets/generated/screenshots/settings/about.png)
 

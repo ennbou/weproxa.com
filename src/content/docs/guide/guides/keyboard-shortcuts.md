@@ -80,6 +80,16 @@ After a rule saves successfully, the action button briefly changes to a saved co
 | Move selection up / down | `↑` / `↓` |
 | Expand the details panel if collapsed | `Enter` |
 
+## Sidebar Navigation
+
+These keys work on a focused row in the sidebar's Source View:
+
+| Action | Shortcut |
+|---|---|
+| Move to the next / previous row | `↓` / `↑` |
+| Expand / collapse a group | `→` / `←` |
+| Select the row | `Enter` or `Space` |
+
 ## Modifier Clicks
 
 `⌘` (macOS) or `Ctrl` (other platforms) is WePROXA's primary modifier. Holding it selects the *alternate* variant of a click:

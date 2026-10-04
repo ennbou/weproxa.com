@@ -64,7 +64,7 @@ Precedence follows creation time, not the order shown in the panel, so re-sortin
 If an overlapping rule is not producing the response you expect, narrow its URL pattern, add [request match conditions](#request-match-conditions), or give it a higher priority. Deleting and recreating a rule makes it the *newest* and therefore the **lowest** priority of its band.
 
 :::note
-Priority is currently set through the MCP `weproxa_rules_setPriority` tool rather than the rule panel. A priority you set that way is preserved when you edit the rule in the UI. The same precedence order applies to Breakpoint, Block List, and Network Conditioning rules. Scripting is exempt — every matching script runs.
+Priority is currently set through the MCP `weproxa_rules_setPriority` tool rather than the rule panel. A priority you set that way is preserved when you edit the rule in the UI. The same precedence order applies to Breakpoint, Block List, and Network Conditioning rules. Scripting is different: every matching script runs, and precedence order decides which one runs first.
 :::
 
 ### Duplicating Rules

@@ -22,7 +22,11 @@ Instead of blindly decrypting all HTTPS traffic, WePROXA lets you choose exactly
 
 ## Add a Host Rule
 
-There are two ways to enable SSL interception for a host:
+The two most common ways to enable SSL interception for a host are below. You can also:
+
+- Click **Enable SSL** on the banner the details panel shows for an HTTPS request from a host WePROXA is not decrypting.
+- Right-click a host in the sidebar's **Source View** and choose **Enable SSL for \{host\}**.
+- Add the host in the [SSL Manager window](#ssl-manager-window).
 
 <Tabs>
 <TabItem label="Certificate Menu (Toolbar)">
@@ -77,7 +81,7 @@ Use TLS passthrough when an app-wide SSL rule is useful, but certain domains sho
 <Steps>
 
 1. Open **Settings**.
-2. Go to **Proxy Status**.
+2. Go to **Proxy Config**.
 3. Add hosts under **TLS passthrough hosts**, one per line or separated by commas.
 4. Leave the field or press **Cmd/Ctrl + Enter** to save.
 

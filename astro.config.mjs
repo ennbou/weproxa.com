@@ -112,6 +112,7 @@ export default defineConfig({
 									{ label: 'MCP Integration', slug: 'guide/guides/mcp-integration' },
 									{ label: 'Agent Skills', slug: 'guide/guides/agent-skills' },
 									{ label: 'Toolbar & Tray', slug: 'guide/guides/tray-and-toolbar' },
+									{ label: 'Settings', slug: 'guide/guides/settings' },
 									{ label: 'Keyboard Shortcuts', slug: 'guide/guides/keyboard-shortcuts' },
 									{ label: 'Troubleshooting', slug: 'guide/guides/troubleshooting' },
 								],

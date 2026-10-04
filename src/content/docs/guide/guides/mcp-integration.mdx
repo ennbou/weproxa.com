@@ -310,7 +310,7 @@ the effective-rule and tool-state changes, and ask for confirmation before activ
 ```
 
 :::note
-Rule-management tools operate on the selected Workspace. New rules are assigned to its active Scenario. Activating a Workspace or Scenario atomically changes the live effective rules and tool states.
+Rule-management tools operate on the selected Workspace. By default, new rules are assigned to its active Scenario; pass [`assignTo`](#conventions) to choose another destination. Activating a Workspace or Scenario atomically changes the live effective rules and tool states.
 :::
 
 ## Security
@@ -337,6 +337,8 @@ Open **Settings → MCP Server**. The command row names the current state and, o
 **`weproxa-mcp` runs but connects to the wrong app**
 
 The command answers `--version` but the tools act on a different copy of WePROXA, or report that nothing is running. The registered command points at another install — usually after moving the app. **Settings → MCP Server** names the path it resolves to and offers a repair.
+
+The helper finds WePROXA's endpoint in this order: a `--socket <path>` argument, then the `WEPROXA_MCP_SOCKET` environment variable, then the built-in default. A normal install needs neither. If your client's environment sets `WEPROXA_MCP_SOCKET`, or an old configuration still carries `--socket`, remove it and copy a fresh configuration from **AI Connections**. WePROXA writes `--socket` itself only when its endpoint is not at the default path.
 
 **The helper command cannot be launched**
 
@@ -380,7 +382,13 @@ Run the MCP client on the same host and as the same OS user as WePROXA. The priv
 - `urlPattern` values use WePROXA glob syntax such as `**/api/*.json`.
 - An optional `method` limits a rule to one HTTP method; omitting it matches all methods.
 - Add operations return a UUID that can be passed to the corresponding update or remove operation.
-- Rule limits, Scenario limits, validation, active-Workspace ownership, and active-Scenario assignment are enforced by WePROXA.
+- Every `addRule` tool and `weproxa_rules_createBatch` accept `assignTo` to choose where a new rule lands:
+  - `"scenario"` (the default) assigns it to a Scenario. Pass `scenarioId` to name one; omit it to use whichever Scenario is active when the call runs. Naming it is safer when several calls build one Scenario, because something else could switch Scenarios between them.
+  - `"shared"` makes it a Shared Rule, applied on top of every Scenario in the Workspace.
+  - `"ruleLibrary"` stores it in the Rule Library, assigned to nothing. It matches no traffic until you assign it with `weproxa_rules_assign`.
+
+  `scenarioId` is only valid with `"scenario"`; combining it with another destination is rejected rather than ignored.
+- Rule limits, Scenario limits, validation, active-Workspace ownership, and Scenario assignment are enforced by WePROXA.
 - Every `listRules` tool accepts an optional `workspaceId` to inspect a Workspace **without activating it**. Omit it to use the active Workspace.
 - Listings are returned in [precedence order](/guide/features/scenarios/#rule-precedence): the rule listed first is the rule that will answer.
 - `priority`, `externalKey`, and `tags` are deliberately **not** part of the update tools. Those tools replace the whole rule, so they would wipe those fields on every unrelated edit. Use `weproxa_rules_setPriority` and `weproxa_rules_annotate` instead.
@@ -415,7 +423,7 @@ Resend a request and return the response — status, headers, a bounded body, an
 
 Either start from a captured request with `requestId` and edit it (`method`, `url`, `setHeaders` / `removeHeaders`, `body`), or state one outright with `method` and `url`. Anything else is rejected rather than guessed at: a request sent to the wrong place cannot be taken back.
 
-Headers are a **patch**, so you never restate the ones you are not changing and never echo back a redacted value. An unmodified captured body is resent as the bytes that crossed the wire; replacing the body drops the `Content-Encoding` and `Transfer-Encoding` that described the bytes it replaced.
+Headers are a **patch**, so you never restate the ones you are not changing and never echo back a redacted value. A replacement `body` takes the same `{ "data", "encoding" }` object as [`weproxa_breakpoints_resolve`](#weproxa_breakpoints_resolve), with `"base64"` for binary bodies. An unmodified captured body is resent as the bytes that crossed the wire; replacing the body drops the `Content-Encoding` and `Transfer-Encoding` that described the bytes it replaced.
 
 The replay runs through the same executor as the Repeat editor, so it is logged as a new request (its ID is returned), timed, attributed to the original's client, and marked with the **Repeat** tool wherever it came from. A failure that got as far as dialing still returns the ID it was logged under — a failed replay *is* a record in the traffic log, and the one exchange you most need to read back in full.
 
@@ -563,6 +571,7 @@ Entries use the same shape as the single-rule `add` tools, tagged with `tool`, s
 - Pass stale keys in `pruneExternalKeys` to delete their rules and Scenario references in the same transaction. Missing keys are successful no-ops.
 - **Submission order decides precedence** among newly created rules sharing the neutral priority band, so list narrow fixtures before catch-alls.
 - Pass `workspaceId` to author into a Workspace without activating it; omit it to use the active one.
+- Pass `assignTo` (and `scenarioId`) once, at the top level, to choose where every **newly created** rule lands. See [Conventions](#conventions). Rules refreshed by `externalKey` keep the Scenario membership they already have.
 
 #### `weproxa_rules_setPriority`
 
@@ -575,6 +584,8 @@ Set or clear a rule's `externalKey` and free-form `tags`. Omitted fields are lef
 #### `weproxa_rules_assign`
 
 Assign an existing rule to a Scenario or to the Workspace's Shared set, or unassign it. This is how one rule answers traffic in several Scenarios — without it, a baseline fixture has to be duplicated per Scenario. Pass `assigned: false` to remove the reference; removing the last one leaves the rule in the Rule Library, stored but matching nothing.
+
+Name the target with `tool`, `ruleId`, and the same `assignTo` / `scenarioId` pair the add tools take: `"scenario"` (the active one unless `scenarioId` names another) or `"shared"`. `assignTo: "ruleLibrary"` with `assigned: false` removes **every** reference at once. With `assigned: true` it is rejected, since a Rule Library rule is unassigned by definition. Pass `workspaceId` to change a rule in a Workspace you have not activated.
 
 ### Proxy lifecycle
 
@@ -658,6 +669,8 @@ Poll it after arming a rule — a paused request blocks its client until somethi
 Release a paused request or response, optionally rewriting it first.
 
 Headers are a **patch** (`setHeaders` / `removeHeaders`) applied to the paused message, so you never restate the ones you are not changing and never echo back a `[REDACTED]` value that would then go out on the wire. A request hit takes `url`; a response hit takes `statusCode`; both take `body`.
+
+`body` is an object, `{ "data": "…", "encoding": "utf8" }`. `encoding` defaults to `utf8`, where `data` is the body text itself. Use `"base64"` for a body that is not text, such as an image or a protobuf payload.
 
 Naming a field the paused phase cannot apply — `url` on a response, `statusCode` on a request, a status outside 100–599 — is **rejected and leaves the request paused**, rather than being silently dropped. Replacing the body drops the `Content-Encoding` and `Transfer-Encoding` that described the bytes it replaced; WePROXA restates `Content-Length`.
 

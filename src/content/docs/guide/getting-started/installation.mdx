@@ -43,14 +43,33 @@ curl -fsSL https://weproxa.com/i | bash
 
 3. **Launch WePROXA** from your Applications folder or Spotlight.
 
-4. **Trust the certificate** — on first launch, WePROXA will ask to install a root CA certificate. This is required for HTTPS interception. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
+4. **Trust the certificate before you inspect HTTPS.** WePROXA creates its own root CA certificate on first launch, but it does not install it for you. Open **Settings** → **CA Certificate** and click **Install to macOS**. If you turn on SSL interception for a host before the certificate is trusted, WePROXA opens a guided setup prompt instead. See [Certificate Trust](/guide/guides/certificate-trust/) for details.
 
 </Steps>
+
+To keep WePROXA up to date, see [Updates](/guide/guides/settings/#updates).
 
 ## Uninstall
 
 To uninstall WePROXA:
 
-1. Quit WePROXA if it's running.
-2. Drag WePROXA from your Applications folder to the Trash.
-3. Optionally, remove the CA certificate from your Keychain (search for "WePROXA" in Keychain Access).
+1. If you have a Pro license, open **Settings** → **License** and click **Deactivate** first. This frees the activation so you can use the license on another Mac.
+2. Quit WePROXA if it's running. Quitting restores your previous system proxy settings.
+3. Drag WePROXA from your Applications folder to the Trash.
+4. Optionally, remove the CA certificate from your Keychain (search for "WePROXA" in Keychain Access).
+5. If you installed the `weproxa-mcp` command for AI clients, remove it:
+
+   ```sh
+   sudo rm /usr/local/bin/weproxa-mcp
+   ```
+
+6. Optionally, delete WePROXA's data. Dragging the app to the Trash keeps your settings, rules, Workspaces, saved requests, and the CA certificate files. Export any Scenario you want to keep first, then run:
+
+   ```sh
+   rm -rf ~/Library/Application\ Support/com.ennbou.weproxa \
+     ~/Library/Caches/com.ennbou.weproxa \
+     ~/Library/WebKit/com.ennbou.weproxa
+   rm -f ~/Library/Preferences/com.ennbou.weproxa.plist
+   ```
+
+   See [Where WePROXA stores its data](/guide/guides/settings/#where-weproxa-stores-its-data).

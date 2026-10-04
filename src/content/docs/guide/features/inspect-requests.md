@@ -82,7 +82,7 @@ Click on any request to open the details panel with full information:
 
    ![Request details panel](@assets/guide/features/inspect-requests/request_details.png)
 
-The details panel can be positioned as a right sidebar or a bottom panel, and can be collapsed when not needed. The request method and response status are shown as compact color-coded badges at the top of the panel so they're easy to scan at a glance.
+The details panel sits below the request list and can be collapsed when not needed. The request method and response status are shown as compact color-coded badges at the top of the panel so they're easy to scan at a glance.
 
 If the request was captured while a Workspace Scenario was active, the header also shows that Scenario as a capture-time badge. The value stays attached to the request and saved snapshot even after you activate another Scenario.
 
@@ -90,11 +90,13 @@ If the request was captured while a Workspace Scenario was active, the header al
 
 The header above the details tabs includes contextual actions:
 
-- **Save** — store the currently selected live HTTPS request as a persistent snapshot for later inspection
+- **Save** — store the currently selected live HTTPS request as a persistent snapshot for later inspection. The button appears only for HTTPS requests whose host has SSL interception turned on, so plain HTTP requests and undecrypted tunnels cannot be saved from the details panel
 - **Delete** — remove a saved snapshot when you're viewing an item from **Saved Requests**
 - **Download** — save the current response body to your system **Downloads** folder
 
 Saved snapshots are available from the sidebar even after the original live request scrolls out of the session.
+
+When you select an HTTPS request from a host that WePROXA is not decrypting, a banner reads **SSL interception is not enabled for {host}**. Click **Enable SSL** to add that host to your SSL list. On the free tier, once all 5 SSL hosts are in use, the banner offers an upgrade instead. See [SSL Interception](/guide/guides/ssl-interception/).
 
 ### Request Section
 
@@ -135,13 +137,17 @@ A request refused by [Pass-Through containment](/guide/features/pass-through/) i
 Toggle to the source/tree view in the sidebar to see requests organized into sections:
 
 - **All** — Every captured request
-- **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, Scripting, Pass-Through, or Repeat), so you can see exactly what each rule touched. Requests you replayed appear under the **Repeat** group, and requests refused by [Pass-Through containment](/guide/features/pass-through/) under **Pass-Through**. Long lists collapse behind a **Show N more** control
 - **Saved Requests** — Persistent HTTPS request snapshots you explicitly saved from the details panel
+- **Filters** — Your [saved advanced filters](/guide/features/advanced-filtering/#saved-filters) (Pro)
+- **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, Scripting, Pass-Through, or Repeat), so you can see exactly what each rule touched. Requests you replayed appear under the **Repeat** group, and requests refused by [Pass-Through containment](/guide/features/pass-through/) under **Pass-Through**. Long lists collapse behind a **Show N more** control
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)
-- **SSL** — Hosts with SSL interception enabled (toggle via right-click)
+- **SSL Enabled** — Hosts with SSL interception enabled (toggle via right-click)
 - **SSL Enabled Apps** — Apps with SSL interception enabled, grouped as app → host → path
 - **Apps** — Requests grouped by the client application or browser, with detected app icons on macOS and Windows when available
-- **Devices** — Requests from remote devices, grouped by IP address
+- **Remote Devices** — Requests from remote devices, grouped by IP address
+- **Other** — Every remaining host, meaning each host that is neither pinned nor SSL-enabled. Pin a host or enable SSL for it and it moves to that group
+
+You can also move through the tree with the keyboard. See [Sidebar Navigation](/guide/guides/keyboard-shortcuts/#sidebar-navigation).
 
 Each section can be expanded into host and path hierarchies. Saved requests get their own host/path tree, and app-based SSL rules expand as app → host → path so you can isolate one client quickly. A search field at the top filters hosts and app names in real time.
 

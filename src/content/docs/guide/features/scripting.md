@@ -12,7 +12,7 @@ A script rule combines a URL pattern, an optional HTTP method filter, and one or
 - **Request phase** - runs after request breakpoints and before Map Local matching or upstream forwarding.
 - **Response phase** - runs on proxied upstream responses before they are sent back to the client.
 
-If multiple enabled script rules match the same request, WePROXA runs them in creation order. Each rule receives the current request or response state, including changes made by earlier rules.
+If multiple enabled script rules match the same request, WePROXA runs all of them in [precedence order](/guide/features/map-local/#rule-precedence): higher priority first, then the oldest rule first within a priority band. Each rule receives the current request or response state, including changes made by earlier rules.
 
 :::note
 Free accounts are limited to **2 Scripting rules**. Upgrade to Pro for unlimited script rules.
