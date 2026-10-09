@@ -56,6 +56,17 @@ The Explorer and Workspaces shortcuts expand the left panel first if it is colla
 
 Tool shortcuts open the matching tool window. Use the toolbar, tray, or tool panel toggle to enable or disable a tool's rules. JSON Tools and Diff are standalone utilities, so opening them does not change traffic handling.
 
+### Individual Rule Windows
+
+On a focused rule card in Map Local, Breakpoints, Block List, Network Conditioning, or Scripting:
+
+| Action | Shortcut |
+|---|---|
+| Edit inline | `Enter` or `Space` |
+| Open the rule in its own window | `⌘ Enter` / `Ctrl + Enter` |
+
+You can also `⌘`-click / `Ctrl`-click the card. Opening an already-open rule focuses its existing window. See [Detached Rule Editors](/guide/features/workspaces/#detached-rule-editors) for how the editor follows its Workspace.
+
 ## Tool Rule Forms
 
 These shortcuts work while an add/edit form is open in Breakpoints, Block List, Network Conditioning, or Scripting:
@@ -80,6 +91,8 @@ After a rule saves successfully, the action button briefly changes to a saved co
 | Move selection up / down | `↑` / `↓` |
 | Expand the details panel if collapsed | `Enter` |
 
+With a [capture milestone badge](/guide/features/inspect-requests/#capture-milestones) focused, press `Delete` or `Backspace` to remove that milestone. `Enter` or `Space` activates the badge and jumps to its divider.
+
 ## Sidebar Navigation
 
 These keys work on a focused row in the sidebar's Source View:
@@ -97,6 +110,7 @@ These keys work on a focused row in the sidebar's Source View:
 | Click target | Plain click | With `⌘` / `Ctrl` |
 |---|---|---|
 | Content-type chip above the request list | Select only that type | Toggle multi-select |
+| Tool rule card | Edit inline | Open the rule in its own window |
 | Toolbar filter icon | Expand the query builder | Enable or disable the filter without clearing your rules |
 | **Add to Filters** entry in the request context menu | Extend the current query | Replace the current query — see [Advanced Filtering](/guide/features/advanced-filtering/#extend-or-replace) |
 

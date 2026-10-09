@@ -15,7 +15,7 @@ Each Workspace owns reusable rule definitions for these tools:
 - [Network Conditioning](/guide/features/network-conditioning/)
 - [Scripting](/guide/features/scripting/)
 
-Scenarios reference these definitions and store their own tool-level enabled states. Captured requests, saved requests, proxy settings, and SSL interception rules are not Workspace-specific. Switching Workspaces restores that Workspace’s active Scenario without clearing traffic already shown in the request list.
+Scenarios reference these definitions and store their own tool-level enabled states. Captured requests, saved requests, [traffic Sessions](/guide/features/sessions/), proxy settings, and SSL interception rules are not Workspace-specific. Switching Workspaces restores that Workspace’s active Scenario without clearing traffic already shown in the request list.
 
 ## The Workspaces Tab
 
@@ -44,6 +44,8 @@ If you prefer switching from the toolbar, enable **Show workspace and scenario s
 From the **Workspaces** tab you can create, rename, delete, and set the active workspace. Row actions appear when the row is hovered or focused, keeping the list compact without hiding the controls from keyboard users.
 
 - **Create** - Choose **New workspace** at the bottom of the sidebar and enter a name.
+- **Import** - Choose **Import workspace…** to add a portable Workspace file as a new Workspace.
+- **Export** - Use a row's **Export workspace** action to save its Scenarios and rules together (Pro).
 - **Activate** - Apply an inactive workspace and its selected Scenario to live traffic.
 - **Rename** - Edit the name inline without affecting its rules.
 - **Delete** - Confirm the inline delete action to remove a workspace and its saved rules. The last remaining workspace cannot be deleted.
@@ -62,6 +64,14 @@ Selecting a Workspace reveals its Scenarios, Shared Rules, and Rule Library. Sel
 
 Edits are saved immediately. New rules created from an inactive Scenario editor are assigned explicitly to that Scenario. Be aware that editing a definition referenced by the active Scenario or Shared Rules intentionally updates every place that reuses it; rule cards identify that propagation before you edit.
 
+### Detached Rule Editors
+
+Hold `⌘` on macOS or `Ctrl` on Windows while clicking a rule card to open that rule in its own window. With the card focused, `⌘ Enter` or `Ctrl + Enter` does the same. This works for Map Local, Breakpoints, Block List, Network Conditioning, and Scripting. A plain click still opens the inline form.
+
+Opening the same rule again focuses its existing window. Each editor uses that tool's usual form, and closing the form closes the window.
+
+An editor opened from the Workspaces view saves back to the Workspace and Scenario, Shared Rules, or Rule Library you were viewing, including inactive Workspaces. Editors opened from a tool panel follow the active Workspace and close when you switch Workspaces.
+
 ## Sidebar Layout Across Views
 
 The left sidebar keeps one shared width and collapsed state while you move between **Explorer**, a Workspace, a Scenario, **Shared Rules**, and the **Rule Library**. Collapsing it in one view keeps it collapsed in the others; resizing it carries the same width across each view.
@@ -79,6 +89,38 @@ Each rule has a **Copy to workspace** action (the folder-in icon next to the rul
 The rule is added to the destination as an **independent clone** — later edits or deletions in either workspace don't affect the other. For Map Local rules that serve a managed response file, the copy receives its own fresh managed file, so editing the copied response never changes the original.
 
 The action is available only when more than one workspace exists (creating additional workspaces is a **Pro** feature).
+
+## Exporting and Importing a Workspace
+
+A `.weproxa-workspace.json` file carries the whole debugging setup:
+
+- Every Scenario, its rule assignments, tool enabled states, tags, containment settings, and declared SSL prerequisites.
+- Shared Rules and all Rule Library definitions, including rules no Scenario uses yet.
+- Map Local response files embedded in the bundle, plus inline mock responses and scripts.
+
+Captured traffic, saved requests, Sessions, proxy settings, and the machine's SSL interception rules stay on the source machine. Use [HAR export](/guide/features/sessions/#export-as-har) to share traffic.
+
+### Export
+
+1. Open the **Workspaces** tab.
+2. Hover or focus the Workspace row and choose **Export workspace**.
+3. Review the confirmation, click **Export**, and choose a file location.
+
+Mock responses and scripts are exported as stored and can contain sensitive values. Review them before sharing the file. Export requires **Pro**.
+
+### Import
+
+1. Choose **Import workspace…** at the bottom of the Workspaces sidebar.
+2. Select a `.weproxa-workspace.json` file.
+3. Review the Scenario, rule, and embedded-file counts, plus any errors or warnings.
+4. Choose a name and click **Import**.
+5. Inspect the imported setup, then use the Workspace's activation control when you want its rules to handle live traffic.
+
+Import creates a new, independent Workspace with its own rules and managed Map Local files. Importing the same file twice creates two separate Workspaces. The new Workspace is selected for inspection but stays inactive until you activate it.
+
+The preview reports missing HTTPS decryption prerequisites and rules whose tools are disabled. Importing a bundle does not enable global SSL interception; review [SSL rules](/guide/guides/ssl-interception/) before using its HTTPS fixtures.
+
+Import follows the Workspace and rule limits of your license. Since the free tier already includes one Workspace, adding an imported Workspace normally requires **Pro**. To share just one Scenario, use [Scenario bundles](/guide/features/scenarios/) instead.
 
 ## Existing Rules After Upgrading
 

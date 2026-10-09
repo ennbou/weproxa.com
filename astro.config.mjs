@@ -82,6 +82,7 @@ export default defineConfig({
 								label: 'Features',
 								items: [
 									{ label: 'Inspect Requests', slug: 'guide/features/inspect-requests' },
+									{ label: 'Sessions & HAR Export', slug: 'guide/features/sessions' },
 									{ label: 'JSON Tools', slug: 'guide/features/json-tools' },
 									{ label: 'Workspaces', slug: 'guide/features/workspaces' },
 									{ label: 'Scenarios', slug: 'guide/features/scenarios' },

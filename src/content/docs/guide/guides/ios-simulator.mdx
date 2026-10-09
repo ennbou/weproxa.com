@@ -13,7 +13,7 @@ WePROXA can capture HTTP/HTTPS traffic from iOS Simulator, making it easy to deb
 
 1. **Start WePROXA** and ensure the proxy is running.
 
-2. **Install the CA certificate** on the simulator — WePROXA provides a one-click option to install its certificate on the iOS Simulator. Look for the iOS Simulator option in the certificate menu. It installs into **every booted simulator** at once. If one simulator rejects the certificate, the others still get it, and the message names the one that failed.
+2. **Install the CA certificate** on the simulator — open **Settings → CA Certificate** and choose **Install to booted iOS Simulators**. It installs into **every booted simulator** at once. If one simulator rejects the certificate, the others still get it, and the message names successful installs and individual failures. Boot a simulator first; the button reports an error if none are running.
 
 3. **Configure the simulator proxy** — iOS Simulator respects the macOS system proxy settings. When WePROXA's system proxy is enabled, simulator traffic will flow through WePROXA automatically.
 
@@ -26,6 +26,10 @@ WePROXA can capture HTTP/HTTPS traffic from iOS Simulator, making it easy to deb
 Traffic from iOS Simulator appears in the request list alongside regular traffic. You can use the source view or filters to identify simulator requests.
 
 When WePROXA can resolve the Simulator app bundle, the **Apps** source view can show the app's icon next to its traffic. This makes it easier to distinguish multiple Simulator apps while debugging.
+
+Known Apple networking services running inside a Simulator have separate names ending in **Simulator** and a small phone badge on their icon. This keeps, for example, a Simulator service separate from its macOS counterpart in Explorer, app-targeted rules, and SSL interception. Use the exact displayed name when targeting the Simulator service. Simulator app icons are also sized consistently with native app icons.
+
+If a Simulator connection appears as **Not decrypted: certificate rejected**, select it and open the response pane. The Simulator may not trust the CA, or the app may have closed the handshake early. **Learn more** opens the [certificate troubleshooting FAQ](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate).
 
 ## Install the certificate from an AI client
 

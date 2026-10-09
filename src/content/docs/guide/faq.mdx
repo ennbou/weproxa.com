@@ -64,7 +64,7 @@ The WePROXA CA certificate may not be trusted. On macOS, see [Certificate Trust]
 ### Why does an app refuse the WePROXA certificate?
 When SSL decryption is on for an app or a host, WePROXA shows the app its own certificate instead of the website's. If the device does not trust the WePROXA certificate, the app refuses to connect. WePROXA can't see anything the app sends, so the app's requests are missing from the list while other apps still show up.
 
-The request list shows a failed entry for each refused connection. It has the app name, the host, and the label **Not decrypted: certificate rejected**.
+The request list shows a failed entry for each detected refusal. It carries the host, the client name when available, and the label **Not decrypted: certificate rejected**. Open its response pane for an explanation and a **Learn more** link to this page. These entries stay in the traffic log without raising a notification.
 
 To fix it, do one of these:
 
@@ -75,10 +75,10 @@ If the certificate is installed and trusted and the app still refuses it, the ap
 
 WePROXA counts a connection as rejected when the app says it doesn't trust the certificate, or when the app closes the connection right after receiving the certificate. iOS and macOS apps reject a certificate the second way. A connection that closes before WePROXA sent its certificate isn't counted. WePROXA also doesn't add an entry when the website's own certificate is the problem, for example when it is expired, self-signed, or issued for another name. WePROXA passes that problem on to the app on purpose, so the app refuses it just as it would without WePROXA.
 
-An app that quits while it is still connecting closes the connection the same way, so you can also see this entry right after you close an app. If the app's other requests show up normally, it trusts the certificate and you can ignore the entry.
+An app that quits while it is still connecting can close the connection the same way, so a silent close alone cannot prove that the certificate was refused. The response pane describes both possibilities. After that client successfully trusts WePROXA's certificate for the same host during the current run, later silent closes for that pair are ignored; an explicit certificate rejection is still recorded. Regenerating the CA or restarting WePROXA resets that history.
 
 ### The app is slow with many requests
-WePROXA keeps up to 10,000 requests in memory. Use the **Clear** button in the toolbar to remove old requests, or use filters to focus on relevant traffic.
+WePROXA keeps up to 10,000 requests in memory. Use the **Clear** button in the toolbar to remove old requests, or use filters to focus on relevant traffic. [Save or record a Session](/guide/features/sessions/) to keep a run after the live log is cleared or old entries are evicted.
 
 ---
 

@@ -54,7 +54,17 @@ A search bar lets you filter requests across three scopes:
 
 Body-heavy searches run on the backend with a short debounce; everything else filters instantly.
 
-When you're viewing **Saved Requests**, request and response body search is unavailable. That view filters saved snapshots by metadata only.
+When you're viewing **Saved Requests** or a **Session**, request and response body search is unavailable. These views filter stored exchanges by metadata only and show a notice for advanced filters that require the live backend search.
+
+### Capture Milestones
+
+Use **Add milestone** beside the request count at the bottom of the live list to mark the current capture position. A numbered, colored divider separates traffic captured before and after that moment, so you can mark stages such as signing in, submitting a form, or retrying a request.
+
+Adding a milestone keeps your filters and open request in place. Click its numbered badge to jump to the divider; this opens **All** live requests, clears search and content-type filters, disables the Advanced Filter, and returns to capture order. If you already sorted by **ID**, your ascending or descending direction is kept.
+
+Dividers appear when the list is sorted only by **ID**. Under another sort, row colors still identify each traffic segment; choose **Show capture order** to bring back the dividers.
+
+Right-click a badge and choose **Remove milestone N**, or focus it and press `Delete` or `Backspace`. You can keep up to **ten milestones** at once. Removing one leaves the other numbers and colors unchanged. Clearing the full live log or restarting WePROXA removes the milestones. To keep the exchanges themselves, [save a Session](/guide/features/sessions/).
 
 ### Context Menu
 
@@ -64,6 +74,9 @@ Right-click any request to access quick actions. Related actions are grouped int
 - **Copy as cURL** — Copy the request as a `curl` command
 - **Enable / Disable SSL for {host}** — Toggle HTTPS interception for the request's host
 - **Repeat** — Choose **Repeat Now** to re-execute immediately, or **Repeat with Edit...** to modify the request first
+- **Save N Shown Requests as Session...** — Copy the current live view into a [persistent Session](/guide/features/sessions/)
+- **Record Session with This View...** — Record new traffic matching a supported live view
+- **Export N Shown Requests as HAR...** — Export the currently shown live requests, with sensitive-data sanitization enabled by default
 - **Tools** — Open a utility or create a rule from the request:
   - **Add to Diff** — Select requests to compare side by side
   - **Inspect JSON** — Send the response body to the [JSON Tools](/guide/features/json-tools/) workbench
@@ -73,6 +86,8 @@ Right-click any request to access quick actions. Related actions are grouped int
   - **Add Throttle Rule** — Add a network conditioning rule for this URL
 
 The context menu only shows actions that apply to the selected request. Internal lifecycle markers, such as upgraded tunnel handling, are kept out of tool labels so the list focuses on rules you configured.
+
+The Session and HAR actions operate on all currently shown live requests. They also appear when you right-click empty space in the list. See [Start from an App, Host, or Filtered View](/guide/features/sessions/#start-from-an-app-host-or-filtered-view).
 
 On macOS and Windows, WePROXA attributes local traffic to the source application when the operating system exposes that process information. The request list and source sidebar show detected app names and icons where available, with a generic client label used as a fallback.
 
@@ -110,6 +125,8 @@ Large request bodies load on demand so selecting a request stays responsive even
 
 When a request carries multiple `Cookie` headers, the Headers tab keeps them tidy as one combined entry while the Cookies tab breaks them into individual pairs. This is especially useful for HTTP/2 browser traffic, where clients may split cookies across multiple header fields.
 
+The request Cookies table reserves separate widths for names and values. Long names and values wrap within their columns so they remain readable in a narrow details panel.
+
 If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" indicator is shown.
 
 ### Response Section
@@ -132,12 +149,15 @@ When a Map Local rule produced the response, the same line also names it as **An
 
 A request refused by [Pass-Through containment](/guide/features/pass-through/) is marked with the **Pass-Through** tool, keeping it distinct from a Block List rule and from a genuine `403` returned by a real server.
 
+A connection labeled **Not decrypted: certificate rejected** has no decrypted response. Its response pane explains that the app may not trust the WePROXA certificate or may have closed the connection before the handshake finished. Click **Learn more** for [certificate troubleshooting](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate). These failures appear in the log without a notification. Other failed or blocked requests show **No response** instead of **Waiting for response...**.
+
 ## Source View
 
 Toggle to the source/tree view in the sidebar to see requests organized into sections:
 
 - **All** — Every captured request
 - **Saved Requests** — Persistent HTTPS request snapshots you explicitly saved from the details panel
+- **Sessions** — Named collections of stored exchanges, including active recordings; select a session to inspect it or use **+** to create one ([Sessions & HAR Export](/guide/features/sessions/))
 - **Filters** — Your [saved advanced filters](/guide/features/advanced-filtering/#saved-filters) (Pro)
 - **Modified by Tool** — Requests changed by a tool, grouped under the tool that changed them (Map Local, Breakpoints, Block List, Network Conditioning, Scripting, Pass-Through, or Repeat), so you can see exactly what each rule touched. Requests you replayed appear under the **Repeat** group, and requests refused by [Pass-Through containment](/guide/features/pass-through/) under **Pass-Through**. Long lists collapse behind a **Show N more** control
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)

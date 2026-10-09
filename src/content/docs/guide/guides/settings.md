@@ -5,6 +5,8 @@ description: Every section of the WePROXA Settings window, plus updates, deep li
 
 Open Settings with `⌘ ,` on macOS or `Ctrl + ,` on Windows, from the app menu, or from the tray. Settings opens in its own window, and a [`weproxa://` link](#deep-links) can open it on a specific section.
 
+Success and error messages appear in the Settings window where you performed the action, including license activation and configuration changes. Certificate operations also show progress and their result beside the certificate controls.
+
 | Section | What it holds | Read more |
 |---|---|---|
 | **Appearance** | Tray icon, style, brightness, font size, language, toolbar buttons | [Appearance](#appearance) |
@@ -51,14 +53,14 @@ The buttons depend on your platform:
 | **Download certificate** | macOS, Windows | Saves a copy of the CA certificate where you choose |
 | **Open Location** | macOS | Shows the certificate file in Finder |
 | **Install to macOS** | macOS | Installs and trusts the certificate in the System keychain. See [Certificate Trust](/guide/guides/certificate-trust/) |
-| **Install to iOS Simulator** | macOS | Installs the certificate on booted iOS simulators. See [iOS Simulator](/guide/guides/ios-simulator/) |
+| **Install to booted iOS Simulators** | macOS | Installs the certificate into every booted simulator, with feedback naming successful installs and individual failures. See [iOS Simulator](/guide/guides/ios-simulator/) |
 | **Learn More** | Windows | Opens [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) |
 
 **Certificate lifecycle** holds **Generate certificate** (or **Regenerate certificate** when one exists) and **Remove local certificate**. Stop the proxy before you use either one. A regenerated certificate is a new identity, so you must install and trust it again on every device. See [Managing the Certificate Lifecycle](/guide/guides/certificate-trust/#managing-the-certificate-lifecycle).
 
 ## License
 
-Paste a key into **License Key** and click **Activate**. An active license shows its details and two buttons:
+Paste a key into **License Key** and click **Activate**. Successful activation shows a confirmation in Settings and clears the key field; a failed activation shows its error there so you can correct the key and retry. An active license shows its details and two buttons:
 
 - **Revalidate** checks the license again with the license server.
 - **Deactivate** frees this machine's activation, for example before you move the license to another computer.
@@ -73,7 +75,7 @@ About shows your version and the exact build commit next to it. Include both whe
 
 ## Reset
 
-**Reset all settings** returns WePROXA to its factory defaults and restarts the app. Your license, CA certificate, and saved requests stay. Everything else is deleted, including every Workspace rule. See [Reset WePROXA to Defaults](/guide/guides/troubleshooting/#reset-weproxa-to-defaults).
+**Reset all settings** returns WePROXA to its factory defaults and restarts the app. Your license, CA certificate, saved requests, and traffic Sessions stay. Settings, preferences, and Workspace rules are cleared. See [Reset WePROXA to Defaults](/guide/guides/troubleshooting/#reset-weproxa-to-defaults).
 
 ## Updates
 
@@ -107,7 +109,7 @@ For `mcp/connect`, `client` is one of `vscode`, `cursor`, `codex`, `claude-code`
 
 ## Where WePROXA Stores Its Data
 
-WePROXA keeps its settings, rules, Workspaces, saved requests, license file, and CA certificate files in its data folder:
+WePROXA keeps its settings, rules, Workspaces, saved requests, [traffic Sessions](/guide/features/sessions/), license file, and CA certificate files in its data folder. Sessions and their captured bodies are stored in `sessions.db`:
 
 | Platform | Data folder |
 |---|---|

@@ -399,13 +399,19 @@ Run the MCP client on the same host and as the same OS user as WePROXA. The priv
 
 List captured HTTP requests using advanced query filters, bounded pagination, and newest/oldest ordering. Filters can target ordinary request/response fields plus `sessionId`, `scenarioId`, `client`, `answeredByOrigin`, `answeringRuleId`, `answeringRuleKey`, `responseTool`, and `weproxaInternal`. Response bodies are not included.
 
+In the default `full` view, a failed certificate handshake can carry `failure: "certificateRejected"`. The compact view omits this diagnostic; fetch the request for details. A silent early close can have the same label as an explicit refusal, so check [certificate troubleshooting](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate) before treating it as proof that the CA is untrusted.
+
 #### `weproxa_requests_getRequest`
 
 Get one captured request by ID, including headers and a bounded body. Sensitive values are redacted when MCP privacy protection is enabled.
 
+Connections recorded as certificate rejections also carry `failure: "certificateRejected"`. Their method is `CONNECT`, and their headers come from the tunnel-opening request; no decrypted HTTP exchange was received.
+
 #### `weproxa_requests_getResponse`
 
 Get the captured response for a request ID, including headers and a bounded body. Sensitive values are redacted when MCP privacy protection is enabled.
+
+For a recorded certificate rejection, this tool returns an error explaining why no decrypted response exists and points to certificate trust or SSL settings. Treat it as a failed exchange instead of polling for a response that will never arrive.
 
 #### `weproxa_requests_clear`
 
@@ -452,6 +458,8 @@ Permanently remove one saved snapshot by its saved-request ID.
 ### Capture sessions
 
 A capture session tags every request observed while it is open, so several exploration runs can share one traffic log and still be told apart. Sessions live in memory for the lifetime of the app, like the traffic they describe.
+
+For stored captures that survive relaunch or can be exported as HAR, use [Explorer's traffic Sessions](/guide/features/sessions/). The `sessionId` filters below refer to the MCP capture-session labels on live traffic.
 
 #### `weproxa_session_start`
 

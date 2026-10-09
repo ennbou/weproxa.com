@@ -131,7 +131,7 @@ State files are written atomically — to a temporary sibling that is then renam
 
 If WePROXA ends up in a confusing state, you can start fresh. Open **Settings** → **Reset** and choose **Reset all settings**. This clears every setting, preference, and workspace rule — theme, language, layout, proxy config, SSL hosts, MCP server state, breakpoints, Map Local, block list, throttling, and scripts — then restarts the app.
 
-Your **license**, **installed certificate**, and **saved requests** are preserved. The reset cannot be undone, so WePROXA asks you to confirm first.
+Your **license**, **installed certificate**, **saved requests**, and [traffic Sessions](/guide/features/sessions/) are preserved. Active recordings stop when the app restarts. The reset cannot be undone, so WePROXA asks you to confirm first.
 
 ## Still Stuck?
 

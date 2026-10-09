@@ -110,6 +110,8 @@ From the SSL Manager you can:
 
 The SSL Manager uses the same saved SSL rules as the toolbar certificate menu, so changes appear immediately across open windows.
 
+Success and error messages appear inside the SSL Manager window, so you can see the outcome without returning to the main window.
+
 ## Managing SSL Rules
 
 Open the **Certificate Menu** (lock icon in the toolbar) to see all your configured SSL rules. From here you can:
@@ -152,6 +154,8 @@ No matching host or app SSL rule is enabled. Add the host, enable SSL for the cl
 
 ### Certificate errors after enabling SSL
 Make sure the WePROXA Root CA is trusted. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/). On Android Emulator, confirm that the CA is installed in the user store and that the debug app trusts user CAs; see [Android Emulator](/guide/guides/android-emulator/).
+
+If a connection is labeled **Not decrypted: certificate rejected**, open its response pane for the explanation and **Learn more** link. The app may not trust WePROXA's certificate, or it may have closed the handshake early. See [Why does an app refuse the WePROXA certificate?](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate).
 
 ### Upstream server shows a certificate error
 This means WePROXA could not verify the **origin server's** certificate (separate from trusting the WePROXA Root CA). Current versions preserve the origin's trust, hostname, or validity problem so the client shows the warning it would have shown without the proxy. On macOS, verification uses the system trust store — if the server is internal or uses a private CA, add that CA to macOS system trust and try again. Only bypass a warning when you control the server and have verified the certificate another way.
