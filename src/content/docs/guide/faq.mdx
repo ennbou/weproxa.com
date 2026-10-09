@@ -64,10 +64,7 @@ The WePROXA CA certificate may not be trusted. On macOS, see [Certificate Trust]
 ### Why does an app refuse the WePROXA certificate?
 When SSL decryption is on for an app or a host, WePROXA shows the app its own certificate instead of the website's. If the device does not trust the WePROXA certificate, the app refuses to connect. WePROXA can't see anything the app sends, so the app's requests are missing from the list while other apps still show up.
 
-WePROXA tells you when this happens:
-
-- The request list shows a failed entry for each refused connection. It has the app name, the host, and the label **Not decrypted: certificate rejected**.
-- The first time an app refuses the certificate for a host, a notification names the app and the host. You don't see it again for that app and host until you restart WePROXA, or until a connection from that app to that host works again.
+The request list shows a failed entry for each refused connection. It has the app name, the host, and the label **Not decrypted: certificate rejected**.
 
 To fix it, do one of these:
 
@@ -76,9 +73,9 @@ To fix it, do one of these:
 
 If the certificate is installed and trusted and the app still refuses it, the app probably uses certificate pinning. See [What about certificate pinning?](#what-about-certificate-pinning)
 
-WePROXA counts a connection as rejected when the app says it doesn't trust the certificate, or when the app closes the connection right after receiving the certificate. iOS and macOS apps reject a certificate the second way. A connection that closes before WePROXA sent its certificate isn't counted. WePROXA also doesn't warn when the website's own certificate is the problem, for example when it is expired, self-signed, or issued for another name. WePROXA passes that problem on to the app on purpose, so the app refuses it just as it would without WePROXA.
+WePROXA counts a connection as rejected when the app says it doesn't trust the certificate, or when the app closes the connection right after receiving the certificate. iOS and macOS apps reject a certificate the second way. A connection that closes before WePROXA sent its certificate isn't counted. WePROXA also doesn't add an entry when the website's own certificate is the problem, for example when it is expired, self-signed, or issued for another name. WePROXA passes that problem on to the app on purpose, so the app refuses it just as it would without WePROXA.
 
-To turn the notification off, go to **Settings** → **CA Certificate** and turn off **Warn when an app rejects the WePROXA certificate**. Refused connections still show in the request list.
+An app that quits while it is still connecting closes the connection the same way, so you can also see this entry right after you close an app. If the app's other requests show up normally, it trusts the certificate and you can ignore the entry.
 
 ### The app is slow with many requests
 WePROXA keeps up to 10,000 requests in memory. Use the **Clear** button in the toolbar to remove old requests, or use filters to focus on relevant traffic.

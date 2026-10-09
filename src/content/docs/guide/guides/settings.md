@@ -10,7 +10,7 @@ Open Settings with `⌘ ,` on macOS or `Ctrl + ,` on Windows, from the app menu,
 | **Appearance** | Tray icon, style, brightness, font size, language, toolbar buttons | [Appearance](#appearance) |
 | **Proxy Config** | Port, auto-start, terminal setup, TLS passthrough hosts | [Proxy Config](#proxy-config) |
 | **Network health** | Health checks and alerts | [Network Health Monitoring](/guide/features/network-health/) |
-| **CA Certificate** | Certificate details, install, download, rejection warning, regenerate, remove | [CA Certificate](#ca-certificate) |
+| **CA Certificate** | Certificate details, install, download, regenerate, remove | [CA Certificate](#ca-certificate) |
 | **Remote Access** | LAN proxy address, certificate setup page, PAC URL | [Remote Devices](/guide/guides/remote-devices/) |
 | **MCP Server** (Pro) | AI client connections and privacy | [MCP Integration](/guide/guides/mcp-integration/) |
 | **License** | Activate, revalidate, or deactivate a Pro license | [License](#license) |
@@ -53,8 +53,6 @@ The buttons depend on your platform:
 | **Install to macOS** | macOS | Installs and trusts the certificate in the System keychain. See [Certificate Trust](/guide/guides/certificate-trust/) |
 | **Install to iOS Simulator** | macOS | Installs the certificate on booted iOS simulators. See [iOS Simulator](/guide/guides/ios-simulator/) |
 | **Learn More** | Windows | Opens [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) |
-
-**Warn when an app rejects the WePROXA certificate** is on by default. It shows a notification the first time an app or device refuses the certificate for a host, which usually means the certificate is not installed on that device. Turn it off to hide the notification. Refused connections still show in the request list as **Not decrypted: certificate rejected**. See [Why does an app refuse the WePROXA certificate?](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate)
 
 **Certificate lifecycle** holds **Generate certificate** (or **Regenerate certificate** when one exists) and **Remove local certificate**. Stop the proxy before you use either one. A regenerated certificate is a new identity, so you must install and trust it again on every device. See [Managing the Certificate Lifecycle](/guide/guides/certificate-trust/#managing-the-certificate-lifecycle).
 
