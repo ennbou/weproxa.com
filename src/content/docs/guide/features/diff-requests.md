@@ -29,6 +29,8 @@ Added requests appear in a pool at the top of the Diff panel, each showing its m
 
 Use the **swap** button to flip left and right, or the trash icon to clear either side. Detached Diff windows include the same swap and clear controls in their title bar.
 
+Each pooled request is a snapshot taken when you add it, so clearing the request list does not affect your comparison. Adding the same request again refreshes its snapshot, for example after its response arrives. The pool holds up to 50 requests and is emptied when you quit WePROXA.
+
 ![WePROXA Diff window](@assets/generated/screenshots/features/diff/window.png)
 
 ## Content Handling
