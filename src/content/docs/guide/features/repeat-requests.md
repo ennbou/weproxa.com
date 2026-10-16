@@ -26,7 +26,7 @@ To modify a request before resending:
 2. Select **Repeat with Edit...**
 3. A separate editor window opens with the original request pre-filled
 4. Modify the request as needed
-5. Click **Send** to execute
+5. Click **Send** (or press `⌘ Enter` / `Ctrl + Enter`) to execute
 
 ![Repeat with Edit from requests list](@assets/guide/features/repeat-request/repeat_with_edit_from_request.png)
 

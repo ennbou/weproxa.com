@@ -58,7 +58,7 @@ When a breakpoint fires on the **request phase**, an editor window opens with:
 
     ![Breakpoint request editor](@assets/generated/screenshots/features/breakpoints/request-editor.png)
 
-Click **Continue** to send the (modified or unchanged) request, or **Abort** to drop it entirely.
+Click **Continue** (or press `⌘ Enter` / `Ctrl + Enter`) to send the (modified or unchanged) request, or **Abort** to drop it entirely.
 
 ## Editing a Paused Response
 
@@ -71,7 +71,7 @@ When a breakpoint fires on the **response phase**, the editor window shows:
 
     ![Breakpoint response editor](@assets/generated/screenshots/features/breakpoints/response-editor.png)
 
-Click **Continue** to forward the response to the client, or **Abort** to cancel delivery.
+Click **Continue** (or press `⌘ Enter` / `Ctrl + Enter`) to forward the response to the client, or **Abort** to cancel delivery.
 
 ## Timeout
 

@@ -78,6 +78,17 @@ These shortcuts work while an add/edit form is open in Breakpoints, Block List, 
 
 After a rule saves successfully, the action button briefly changes to a saved confirmation so you can keep editing without losing track of the last save.
 
+## Repeat and Breakpoint Editors
+
+These shortcuts work anywhere in a Repeat editor or Breakpoint editor window, including while you type in the body editor:
+
+| Action | Shortcut |
+|---|---|
+| Send the edited request (Repeat editor) | `⌘ Enter` / `Ctrl + Enter` |
+| Continue the paused request or response (Breakpoint editor) | `⌘ Enter` / `Ctrl + Enter` |
+
+The shortcut does nothing while the button is unavailable, for example while a Repeat request is still sending.
+
 ## Settings
 
 | Action | Shortcut |
@@ -117,4 +128,4 @@ These keys work on a focused row in the sidebar's Source View:
 ## Tips
 
 - Most shortcuts also appear in the app menu bar, so you can discover them contextually.
-- Shortcuts are disabled while typing in editors, inputs, or dialogs — so the editor's own find shortcut still opens Monaco's find widget.
+- Shortcuts are disabled while typing in editors, inputs, or dialogs — so the editor's own find shortcut still opens Monaco's find widget. The rule form and Repeat/Breakpoint editor shortcuts above are the exception: they work while you type.
