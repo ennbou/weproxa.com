@@ -17,6 +17,8 @@ The main toolbar includes:
 - **Settings** - open WePROXA settings.
 - **Workspace and scenario switcher** - optional, hidden by default. See [Show the Workspace and Scenario Switcher](#show-the-workspace-and-scenario-switcher).
 
+A tool button's badge shows how many of the tool's rules are enabled out of the total, for example **2/5**. A tool with no rules shows no badge.
+
 Clicking a tool button opens the tool. Holding `Command` on macOS or `Ctrl` on Windows while clicking a toggleable tool button enables or disables that tool without opening it.
 
 When space is tight, the toolbar automatically switches to a compact icon layout while keeping counts and status indicators visible.

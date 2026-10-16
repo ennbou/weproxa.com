@@ -91,7 +91,7 @@ An amber name with a trailing dot means the rules in the builder no longer match
 
 ### Applying and Managing Filters
 
-Click any entry in the **Filters** folder to apply it. Each row shows how many of its rules are active out of the total, and the applied filter stays highlighted while the advanced filter is enabled.
+Click any entry in the **Filters** folder to apply it. Next to its name, each row shows how many of its rules are active out of the total (for example **2/3**). On the right, it shows how many captured requests in the live log match the filter, counted across all sources, and that number updates as traffic arrives. Hover a row to see both numbers spelled out. The applied filter stays highlighted while the advanced filter is enabled.
 
 If the builder holds unsaved rules, WePROXA asks before replacing them so you don't lose work in progress — choose **Discard & Apply** to continue.
 
