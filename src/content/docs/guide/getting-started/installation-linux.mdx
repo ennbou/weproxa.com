@@ -1,0 +1,127 @@
+---
+title: Installation Linux
+description: How to install WePROXA on Linux with one command, or from a .deb or .rpm package.
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+WePROXA 3.11.0 is the first release for Linux. It ships as a `.deb` package for Debian and Ubuntu and an `.rpm` package for Fedora, for both x86_64 and ARM64 computers. Linux support is a preview, so a few features are still missing. See [Known Limitations](#known-limitations).
+
+## System Requirements
+
+- A 64-bit x86_64 or ARM64 computer
+- glibc 2.35 or newer, such as Ubuntu 22.04 or later, Debian 12, or a current Fedora release
+- A graphical desktop. GNOME and KDE Plasma let WePROXA set the system proxy for you
+
+Each release is tested on Ubuntu 22.04, Ubuntu 24.04, Debian 12, and Fedora.
+
+## Install from Terminal
+
+Run this command in a terminal:
+
+```sh
+curl -fsSL https://weproxa.com/i | bash
+```
+
+The script picks the `.deb` or `.rpm` package for your computer and installs it with `apt` or `dnf`. It asks for your password, because it installs a system package. When it is done, it opens WePROXA.
+
+If your system has no `curl`, install it first with `sudo apt install curl`.
+
+Then trust the certificate before you inspect HTTPS, as step 3 of [Install](#install) explains.
+
+To download and install the package yourself, follow the steps below instead.
+
+## Download
+
+<Tabs syncKey="linux-arch">
+  <TabItem label="x86_64">
+    - [Download the .deb package](https://files2.weproxa.com/3.x.x/3.11.0/x86_64/weproxa_3.11.0_amd64.deb) for Debian and Ubuntu
+    - [Download the .rpm package](https://files2.weproxa.com/3.x.x/3.11.0/x86_64/weproxa-3.11.0-1.x86_64.rpm) for Fedora
+  </TabItem>
+  <TabItem label="ARM64">
+    - [Download the .deb package](https://files2.weproxa.com/3.x.x/3.11.0/arm64/weproxa_3.11.0_arm64.deb) for Debian and Ubuntu
+    - [Download the .rpm package](https://files2.weproxa.com/3.x.x/3.11.0/arm64/weproxa-3.11.0-1.aarch64.rpm) for Fedora
+  </TabItem>
+</Tabs>
+
+Run `uname -m` if you are not sure which one you need. `x86_64` means x86_64, and `aarch64` means ARM64.
+
+## Install
+
+<Steps>
+
+1. **Install the package** from the folder you downloaded it to. The package manager also installs the libraries WePROXA needs.
+
+   <Tabs syncKey="linux-distro">
+     <TabItem label="Debian / Ubuntu">
+     ```sh
+     sudo apt install ./weproxa_*.deb
+     ```
+     </TabItem>
+     <TabItem label="Fedora">
+     ```sh
+     sudo dnf install ./weproxa-*.rpm
+     ```
+     </TabItem>
+   </Tabs>
+
+2. **Launch WePROXA** from your desktop's app menu, or run `weproxa` in a terminal.
+
+3. **Trust the certificate before you inspect HTTPS.** WePROXA creates its own root CA certificate on first launch, but it does not install it for you. Open **Settings** → **CA Certificate** and click **Install & Trust**. See [Linux HTTPS Certificate Setup](/guide/guides/linux-https-certificate-setup/) for details, including the browser step.
+
+</Steps>
+
+Both packages recommend `certutil`, and `apt` and `dnf` install recommended packages by default. WePROXA uses `certutil` to add its certificate to Chrome, Chromium, and Firefox.
+
+## Updates
+
+WePROXA checks for a new version each time it starts. When you choose **Install & Restart**, your desktop asks for your password, because the update installs a system package. See [Updates](/guide/guides/settings/#updates).
+
+## Setup Notes
+
+- Start the proxy from the toolbar. On GNOME and KDE Plasma, WePROXA sets the desktop's proxy settings, and restores them when the proxy stops or the app quits.
+- Other desktops have no proxy settings WePROXA can change. Set the proxy in each app you want to capture instead.
+- Command-line tools ignore the desktop's proxy settings. Copy the `export` commands from **Settings** → **Proxy Config** into your shell. See [Terminal Proxy Setup](/guide/getting-started/quick-start/#terminal-proxy-setup).
+- Firefox follows the desktop's proxy settings when it is set to **Use system proxy settings**.
+- The `weproxa-mcp` command for AI clients is installed at `/usr/bin/weproxa-mcp`, so it is on your `PATH` with no extra step. See [MCP Integration](/guide/guides/mcp-integration/).
+
+## Known Limitations
+
+These features are not available on Linux yet:
+
+- **Global shortcut under Wayland.** The [milestone shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) works in an X11 session only. Under Wayland, use **Add Milestone** in the tray menu instead.
+- **Opening a configured terminal.** Linux has no standard way to name your terminal app, so **Settings** → **Proxy Config** offers the commands to copy instead of a button.
+- **One running copy.** Opening a `weproxa://` link starts a second copy of WePROXA instead of passing the link to the one already running.
+- **Network change alerts.** [Network Health](/guide/features/network-health/) cannot detect a change of network yet.
+
+## Uninstall
+
+To uninstall WePROXA on Linux:
+
+1. If you have a Pro license, open **Settings** → **License** and click **Deactivate** first. This frees the activation so you can use the license on another computer.
+2. Quit WePROXA if it is running. Quitting restores your previous proxy settings.
+3. Remove the package:
+
+   <Tabs syncKey="linux-distro">
+     <TabItem label="Debian / Ubuntu">
+     ```sh
+     sudo apt remove weproxa
+     ```
+     </TabItem>
+     <TabItem label="Fedora">
+     ```sh
+     sudo dnf remove weproxa
+     ```
+     </TabItem>
+   </Tabs>
+
+   This also removes the `weproxa-mcp` command.
+
+4. If you trusted the WePROXA Root CA, remove it from the system store and your browsers. See [Removing the Certificate](/guide/guides/linux-https-certificate-setup/#removing-the-certificate).
+5. Optionally, delete WePROXA's data. Removing the package keeps your settings, rules, Workspaces, saved requests, and the CA certificate files. Export any Scenario you want to keep first, then run:
+
+   ```sh
+   rm -rf ~/.local/share/com.ennbou.weproxa ~/.cache/com.ennbou.weproxa
+   ```
+
+   See [Where WePROXA stores its data](/guide/guides/settings/#where-weproxa-stores-its-data).

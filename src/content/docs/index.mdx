@@ -1,9 +1,9 @@
 ---
 title: WePROXA — HTTP/HTTPS Proxy Debugger
-description: A powerful HTTP/HTTPS proxy debugger for macOS and Windows. Inspect, modify, and replay network requests with an intuitive interface.
+description: A powerful HTTP/HTTPS proxy debugger for macOS, Windows, and Linux. Inspect, modify, and replay network requests with an intuitive interface.
 template: splash
 hero:
-  tagline: A powerful HTTP/HTTPS proxy debugger for macOS and Windows. Inspect, modify, and replay network requests with an intuitive native interface.
+  tagline: A powerful HTTP/HTTPS proxy debugger for macOS, Windows, and Linux. Inspect, modify, and replay network requests with an intuitive native interface.
   image:
     file: ../../assets/weproxa-hero.png
   actions:
@@ -39,11 +39,20 @@ import { Card, CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/comp
 
   See [Installation Windows](/guide/getting-started/installation-windows/) for the Microsoft Store option.
   </TabItem>
+
+  <TabItem label="Linux">
+
+  ```sh
+  curl -fsSL https://weproxa.com/i | bash
+  ```
+
+  See [Installation Linux](/guide/getting-started/installation-linux/) to download the `.deb` or `.rpm` package yourself.
+  </TabItem>
 </Tabs>
 
 ## Why WePROXA?
 
-WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React, and Rust — designed for speed, clarity, and developer experience. Whether you're debugging API calls, testing mobile apps, or building integrations, WePROXA gives you full visibility into your HTTP traffic.
+WePROXA is a **native proxy debugger for macOS, Windows, and Linux** built with Tauri, React, and Rust — designed for speed, clarity, and developer experience. Whether you're debugging API calls, testing mobile apps, or building integrations, WePROXA gives you full visibility into your HTTP traffic.
 
 <CardGrid stagger>
   <Card title="Inspect Requests" icon="magnifier">
@@ -65,7 +74,7 @@ WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React
     Easily repeat any captured request with modifications to test different scenarios and edge cases.
   </Card>
   <Card title="HTTPS Support" icon="approve-check">
-    Full SSL/TLS interception with automatic certificate generation, macOS Keychain trust management, and Windows certificate trust guidance.
+    Full SSL/TLS interception with automatic certificate generation, one-step certificate trust on macOS and Linux, and certificate trust guidance on Windows.
   </Card>
   <Card title="Map Local Files" icon="document">
     Replace remote resources with local files for rapid development and testing without modifying your server.
@@ -98,6 +107,11 @@ WePROXA is a **native macOS and Windows proxy debugger** built with Tauri, React
     title="Installation Windows"
     description="Install WePROXA with WinGet or from the Microsoft Store."
     href="/guide/getting-started/installation-windows/"
+  />
+  <LinkCard
+    title="Installation Linux"
+    description="Install the .deb or .rpm package on Ubuntu, Debian, or Fedora."
+    href="/guide/getting-started/installation-linux/"
   />
   <LinkCard
     title="Quick Start"

@@ -7,6 +7,8 @@ import { Steps } from '@astrojs/starlight/components';
 
 To intercept HTTPS traffic on macOS, WePROXA generates a local root Certificate Authority (CA) and trusts it in macOS Keychain. This lets WePROXA decrypt, inspect, and re-encrypt HTTPS traffic for the hosts or apps you explicitly enable.
 
+This page covers macOS. For the other platforms, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) and [Linux HTTPS Certificate Setup](/guide/guides/linux-https-certificate-setup/).
+
 ## Setup Process
 
 When WePROXA starts, it automatically generates a root CA certificate unique to your machine. To intercept HTTPS traffic, you must install and trust this certificate.

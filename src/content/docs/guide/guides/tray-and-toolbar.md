@@ -19,7 +19,7 @@ The main toolbar includes:
 
 A tool button's badge shows how many of the tool's rules are enabled out of the total, for example **2/5**. A tool with no rules shows no badge.
 
-Clicking a tool button opens the tool. Holding `Command` on macOS or `Ctrl` on Windows while clicking a toggleable tool button enables or disables that tool without opening it.
+Clicking a tool button opens the tool. Holding `Command` on macOS or `Ctrl` on Windows and Linux while clicking a toggleable tool button enables or disables that tool without opening it.
 
 When space is tight, the toolbar automatically switches to a compact icon layout while keeping counts and status indicators visible.
 
@@ -70,6 +70,8 @@ The theme selector applies to more than the app's own interface. On macOS the wi
 - **Light** or **Dark** pins the native window chrome to your choice across the main window and every detached tool, Settings, SSL Manager, Repeater, and Breakpoint window.
 - **System** removes the override and hands the windows back to macOS, so they follow your System Settings appearance again.
 
+On Linux, the same choice also sets the light or dark style of native dialogs, such as file pickers, so they match the window that opens them. **System** follows your desktop's setting.
+
 The selected mode is saved between launches and applied before a window is shown, so windows never appear briefly in the wrong theme at startup.
 
 The macOS traffic lights also stay vertically centered in the title bar as you change the UI font size with `⌘ +` and `⌘ -`.
@@ -86,15 +88,17 @@ WePROXA follows platform conventions for top-level app controls:
 
 - **macOS** — the app uses the macOS menu bar, native window controls, and macOS keyboard shortcuts such as `⌘ P`.
 - **Windows** — the app uses themed Windows chrome with standard minimize, maximize, and close controls. Its custom menu exposes platform-appropriate app, edit, view, tool, window, help, Workspace, and Scenario actions with `Ctrl` shortcuts. The same integrated header is used by detached windows.
+- **Linux** — the app draws one header in its own colors, with the app icon, the menus, and round window controls like other GNOME apps. The desktop still draws the window frame, so shadows, resize edges, and edge snapping work as usual. The **File** menu ends with **Quit**, and there is no Window menu, as in most GNOME and KDE apps.
 
-Some actions only appear on the platform where they apply. For example, macOS certificate installation targets Keychain, while Windows shows a Learn More link for HTTPS certificate trust information.
+Some actions only appear on the platform where they apply. For example, macOS certificate installation targets Keychain, Linux offers **Install & Trust** for the system and browser stores, and Windows shows a Learn More link for HTTPS certificate trust information.
 
 ## Tray Menu
 
-The tray menu works even when the main window is closed or hidden. On macOS it appears in the menu bar; on Windows it appears in the notification area when enabled. Use it to:
+The tray menu works even when the main window is closed or hidden. On macOS it appears in the menu bar; on Windows it appears in the notification area when enabled; on Linux it appears in the system tray. Stock GNOME shows tray icons only with an AppIndicator extension, which Ubuntu includes. Use it to:
 
 - Show the main WePROXA window.
 - Start or stop the proxy.
+- Add a [capture milestone](/guide/features/inspect-requests/#capture-milestones). While the [global shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) is active, the menu shows it next to **Add Milestone**.
 - Open any tool window.
 - Toggle Map Local, Breakpoints, Block List, Network Conditioning, and Scripting.
 - Switch the active workspace or acceptance-criteria setup from the **Workspaces** submenu, which groups **Switch Workspace** and **Switch Scenario**.

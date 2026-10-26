@@ -90,4 +90,6 @@ Turning the option off includes captured credentials and bodies. Sanitization ap
 
 ## Sessions in AI Workflows
 
-[MCP capture sessions](/guide/guides/mcp-integration/#capture-sessions) label requests in the live log for grouping exploration runs. Use **Explorer → Sessions** to keep a capture after relaunch or export it as HAR.
+AI clients connected through MCP can create, record, read, and export these sessions with the [traffic session tools](/guide/guides/mcp-integration/#traffic-sessions). A session an agent creates appears in **Explorer → Sessions** at once, and a request the agent just triggered is already in the session when it lists it.
+
+Do not confuse them with [MCP capture sessions](/guide/guides/mcp-integration/#capture-sessions), which only label requests in the live log for grouping exploration runs. Capture sessions keep nothing once the live log is cleared.

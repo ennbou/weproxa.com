@@ -8,7 +8,7 @@ WePROXA is a native macOS and Windows proxy debugger for inspecting, interceptin
 
 ## 🚀 Install from Terminal
 
-On macOS, download and install the latest WePROXA release in one command:
+On macOS and Linux, download and install the latest WePROXA release in one command:
 
 ```sh
 curl -fsSL https://weproxa.com/i | bash

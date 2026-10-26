@@ -75,6 +75,7 @@ export default defineConfig({
 								items: [
 									{ label: 'Installation macOS', slug: 'guide/getting-started/installation' },
 									{ label: 'Installation Windows', slug: 'guide/getting-started/installation-windows' },
+									{ label: 'Installation Linux', slug: 'guide/getting-started/installation-linux' },
 									{ label: 'Quick Start', slug: 'guide/getting-started/quick-start' },
 								],
 							},
@@ -105,6 +106,7 @@ export default defineConfig({
 								items: [
 									{ label: 'Certificate Trust', slug: 'guide/guides/certificate-trust' },
 									{ label: 'Windows HTTPS Certificate Setup', slug: 'guide/guides/windows-https-certificate-setup' },
+									{ label: 'Linux HTTPS Certificate Setup', slug: 'guide/guides/linux-https-certificate-setup' },
 									{ label: 'SSL Interception', slug: 'guide/guides/ssl-interception' },
 									{ label: 'HTTPS Debugging', slug: 'guide/guides/https-debugging' },
 									{ label: 'iOS Simulator', slug: 'guide/guides/ios-simulator' },

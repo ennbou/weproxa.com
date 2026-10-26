@@ -108,6 +108,8 @@ Deleting a saved filter does not change the filter currently shown in the reques
 
 Saved filters are **global**. They are not owned by a Workspace or Scenario, so the same filter stays available when you switch between them. A saved filter narrows whatever you are currently viewing — it combines with the selected Explorer source rather than replacing it.
 
+AI clients connected through [MCP](/guide/guides/mcp-integration/#saved-filters) can list, create, update, and remove saved filters too. A filter an agent saves appears in the **Filters** folder at once.
+
 Press `⌘ ⇧ F` (macOS) or `Ctrl + Shift + F` (Windows/Linux) to show or hide the advanced filter panel while you work.
 
 ## Saved Requests Limitations
@@ -168,6 +170,8 @@ Different field types support different operators:
 
 ### Date operators
 `Equals` · `Before` · `After` · `Between`
+
+Dates and times you enter are in your computer's local time zone.
 
 ## How Filtering Works
 

@@ -25,7 +25,7 @@ Monitoring is off by default. Your selected checks and notification preferences 
 | **Network route changes** | Reports changes to the default IPv4 interface or gateway, including some VPN transitions. A route change is informational and does not necessarily mean capture failed. |
 | **Internet connectivity warnings** | Opt-in direct TCP checks to Cloudflare and Google endpoints on port 443. No HTTP payload, captured request, proxy rule, or Pass-Through policy is involved. |
 
-The settings screen hides checks that the current platform cannot perform. System proxy conflict checks are available on macOS and Windows; default-route change detection is currently available on macOS.
+The settings screen hides checks that the current platform cannot perform. System proxy conflict checks are available on macOS, Windows, and Linux; default-route change detection is currently available on macOS.
 
 :::note
 Internet connectivity warnings test direct reachability, not every DNS, TLS, VPN, captive-portal, firewall, or upstream-server failure. A network that blocks the test endpoints can produce a warning even when other destinations remain reachable.

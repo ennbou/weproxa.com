@@ -61,6 +61,32 @@ Get up and running with WePROXA in just a few steps.
 
     </Steps>
   </TabItem>
+
+  <TabItem label="Linux">
+    <Steps>
+
+    1. **Launch WePROXA** from your desktop's app menu.
+
+       ![WePROXA startup screen](@assets/generated/screenshots/getting-started/launch_weproxa.png)
+
+    2. **Start the proxy** by clicking the play button in the toolbar or pressing `Ctrl + P`. On GNOME and KDE Plasma, WePROXA sets the desktop's proxy settings automatically. On other desktops, set the proxy in each app you want to capture.
+
+       ![WePROXA with requests](@assets/guide/getting-started/start_with_request.png)
+
+    3. **(Optional) Enable remote capture**: stop the proxy, click the **Remote capture / LAN access** device button, then start the proxy again. Leave this off when you only need traffic from this computer.
+
+    4. **(Optional) Auto-start on launch**: enable **Auto-start proxy on launch** in **Settings** → **Proxy Config**. For remote capture, also enable **Auto-enable LAN access on launch** in **Settings** → **Remote Access**. WePROXA saves these choices and restores them after your settings finish loading on the next launch.
+
+    5. **Install the CA certificate**: to inspect HTTPS traffic, go to **Settings** → **CA Certificate** and click **Install & Trust**. WePROXA adds it to the system store and to Chrome, Chromium, and Firefox. See [Linux HTTPS Certificate Setup](/guide/guides/linux-https-certificate-setup/) for details.
+
+    6. **Enable SSL for a host**: click the **lock icon** in the toolbar and add the hosts you want to inspect (e.g., `api.example.com` or `*.example.com`). Alternatively, right-click any request and select **Enable SSL**. See [SSL Interception](/guide/guides/ssl-interception/) for details.
+
+    7. **Browse the web**: open your browser or app and make some requests. They'll appear in the request list in real time.
+
+    8. **Inspect a request**: click on any request in the list to see its full details: headers, body, timing, and more.
+
+    </Steps>
+  </TabItem>
 </Tabs>
 
 ## Find Your Way Around
@@ -111,6 +137,16 @@ Most browsers use the system proxy once you enable it in WePROXA. Some terminal 
     set HTTP_PROXY=http://127.0.0.1:4545
     set HTTPS_PROXY=http://127.0.0.1:4545
     set ALL_PROXY=http://127.0.0.1:4545
+    ```
+
+  </TabItem>
+  <TabItem label="Linux">
+
+    Command-line tools ignore the desktop's proxy settings. In **Settings** → **Proxy Config**, copy the export commands for your current port into the shell you want to capture from:
+
+    ```sh
+    export http_proxy='http://127.0.0.1:4545'
+    export https_proxy='http://127.0.0.1:4545'
     ```
 
   </TabItem>

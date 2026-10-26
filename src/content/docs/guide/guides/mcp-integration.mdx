@@ -10,15 +10,15 @@ import McpConfigGenerator from '../../../../components/McpConfigGenerator.astro'
 
 ## Overview
 
-WePROXA runs a **local MCP server over stdio** that lets compatible AI tools inspect captured traffic and operate WePROXA’s debugging features. The client launches the bundled `weproxa-mcp` helper and exchanges MCP messages through its standard input and output; the helper relays them to the running app over an OS-protected Unix socket on macOS or named pipe on Windows.
+WePROXA runs a **local MCP server over stdio** that lets compatible AI tools inspect captured traffic and operate WePROXA’s debugging features. The client launches the bundled `weproxa-mcp` helper and exchanges MCP messages through its standard input and output; the helper relays them to the running app over an OS-protected Unix socket on macOS and Linux or named pipe on Windows.
 
 The server:
 
 - has no TCP port, URL, or bearer token to configure;
 - accepts local connections through an endpoint restricted to the current OS user;
-- ships the helper command with the app on macOS and Windows;
+- ships the helper command with the app on macOS, Windows, and Linux;
 - reports the WePROXA server name and version during the MCP handshake;
-- exposes captured-traffic, saved-request, capture-session, request-replay, Workspace, Scenario, bundle, proxy, rule-management, paused-breakpoint, containment, certificate, SSL-host, and tool-state capabilities.
+- exposes captured-traffic, saved-request, capture-session, traffic-session, saved-filter, request-replay, Workspace, Scenario, bundle, proxy, rule-management, paused-breakpoint, containment, certificate, SSL-host, and tool-state capabilities.
 
 :::note
 Starting the MCP server is a **Pro** feature. Free accounts can view its settings but cannot start the server.
@@ -62,7 +62,7 @@ The plugin's MCP entry is `"command": "weproxa-mcp"` — a bare command name wit
 
 <Steps>
 
-1. **WePROXA runs on the same macOS or Windows host** as your AI client. This transport is local; a cloud agent, remote SSH host, Linux container, or WSL environment cannot reach it.
+1. **WePROXA runs on the same macOS, Windows, or Linux host** as your AI client. This transport is local; a cloud agent, remote SSH host, Linux container, or WSL environment cannot reach it.
 2. **The `weproxa-mcp` command is registered** — see [Register the command](#register-the-command) below.
 3. **The MCP server is running** in **Settings → MCP Server**, with an active Pro license.
 4. **Verify before you install the plugin.** Open a new terminal and run:
@@ -86,6 +86,7 @@ Installing the plugin without the command still appears to work. The plugin inst
 
 - **macOS:** move the app out of the DMG into Applications, launch it, and accept **Install command**. macOS requests administrator permission to create `/usr/local/bin/weproxa-mcp`, a link to the helper inside the app. Retry, or repair a moved-app link, from the same panel. The command-line installer also registers it.
 - **Windows:** standalone installers register the install directory on PATH. Microsoft Store installs provide the `weproxa-mcp.exe` execution alias; turn it on in Windows app execution alias settings if it is disabled.
+- **Linux:** the `.deb` and `.rpm` packages install `/usr/bin/weproxa-mcp`, which is already on PATH. There is nothing to register.
 
 Fully quit and reopen your AI client afterwards — a running process keeps the PATH it started with, so restarting the MCP server alone is not enough. A desktop client's PATH can also differ from a terminal's. These setup actions require an app build with command-registration support; older builds and development builds use the manual absolute-path configuration instead.
 
@@ -332,7 +333,7 @@ Rule-management tools operate on the selected Workspace. By default, new rules a
 
 The client reports `spawn weproxa-mcp ENOENT`, `command not found`, or `is not recognized as an internal or external command`, and no `weproxa_*` tools appear. The command is not registered on the PATH that client was launched with.
 
-Open **Settings → MCP Server**. The command row names the current state and, on macOS, offers **Install / repair**. On Windows, re-run the installer or turn on the execution alias. Then fully quit and reopen the client. If you cannot register the command, use the [manual absolute-path configuration](#configure-an-mcp-client-manually), which needs nothing on PATH.
+Open **Settings → MCP Server**. The command row names the current state and, on macOS, offers **Install / repair**. On Windows, re-run the installer or turn on the execution alias. On Linux, reinstall the package. Then fully quit and reopen the client. If you cannot register the command, use the [manual absolute-path configuration](#configure-an-mcp-client-manually), which needs nothing on PATH.
 
 **`weproxa-mcp` runs but connects to the wrong app**
 
@@ -476,6 +477,95 @@ Return a session's summary **without** closing it. Defaults to the open session.
 Both summary tools accept the same advanced `filter` shape as `weproxa_requests_list`. Scope a machine-wide capture by client, Scenario, host, or another stable field before treating its totals as the app under test.
 
 Summaries report the request count, duration, an overlapping per-tool breakdown, `answeredByOriginCount`, and `weproxaInternalCount`. `answeredByOriginCount` is the false-pass signal: in a fully mocked run it should be zero. `weproxaInternalCount` is reported separately and excluded from every other total because WePROXA's certificate service is not application traffic. [Pass-Through](#pass-through-containment) denials are counted under `passthrough`.
+
+### Traffic sessions
+
+Traffic sessions are the named, persistent request collections in [Explorer → Sessions](/guide/features/sessions/). They survive a cleared traffic log and a relaunch, and they export as HAR. They are not the [capture sessions](#capture-sessions) above, which only tag live requests. That is why these tools are named `weproxa_trafficSessions_*` and take `trafficSessionId`.
+
+These tools change the same sessions the app shows, so open WePROXA windows update right away.
+
+#### `weproxa_trafficSessions_list`
+
+List traffic sessions, newest first, with each one's scope, request count, and recording state. Accepts `view`.
+
+#### `weproxa_trafficSessions_create`
+
+Create a session. `scope` says what it collects:
+
+- `{ "kind": "all" }` collects every captured request.
+- `{ "kind": "app", "name": "Safari" }` collects requests from one app, by the exact name captured requests report as `client`.
+- `{ "kind": "host", "host": "api.example.com" }` collects requests to one host, ignoring case. A port or path is rejected.
+- `{ "kind": "query", "query": { … } }` collects the requests an advanced filter selects, in the `weproxa_requests_list` filter shape. A recording checks each exchange again when it completes, so a condition on the status code works.
+- `{ "kind": "selection" }` holds exactly the requests named in `requestIds`.
+
+`capture` is `existing` to copy the matching requests captured so far, `new` to record from now on, or `existingAndNew` for both. `requestIds` copies those captured requests instead of everything the scope selects. It is required by `selection` and rejected with `new`. IDs the traffic log no longer holds are skipped.
+
+`stopAfterSecs` (1 to 86,400) ends a recording on its own. A recording also stops when the session reaches 25,000 requests or WePROXA quits. At most five sessions record at once.
+
+#### `weproxa_trafficSessions_rename`
+
+Rename a session. Names are at most 120 characters.
+
+#### `weproxa_trafficSessions_delete`
+
+Permanently delete a session and every request it holds. A running recording stops first.
+
+#### `weproxa_trafficSessions_startRecording`
+
+Record into an existing session again, with the scope it was created with. `includeExisting` also copies the matching requests captured earlier, and `replace` empties the session first. `stopAfterSecs` works as it does on create. A `selection` session cannot record, because no rule says what else belongs in it.
+
+#### `weproxa_trafficSessions_stopRecording`
+
+Stop a recording after writing everything it captured, and return the session with its final request count. A session that is not recording is returned unchanged.
+
+#### `weproxa_trafficSessions_listRequests`
+
+List the requests a session holds, without bodies. Takes `limit` (1 to 200, default 50), `offset`, `order` (`newestFirst` or `oldestFirst`), and `view`. A running recording writes what it captured before the page is read, so a request you just triggered is listed.
+
+Each entry has its own ID, which is not the captured request ID: an entry outlives the traffic log it was copied from. Pass the entry ID to the two tools below.
+
+#### `weproxa_trafficSessions_getRequest`
+
+Read one entry's request with its headers and a bounded body. `bodySizeLimit` takes 0 to 1,048,576 bytes and defaults to 65,536. Pass 0 to leave the body out. Sensitive values are redacted when **Hide sensitive data** is on.
+
+#### `weproxa_trafficSessions_getResponse`
+
+Read one entry's response with its headers, a bounded body, tool markers, and the Map Local rule that answered it. Takes the same `bodySizeLimit` and applies the same redaction.
+
+#### `weproxa_trafficSessions_exportHar`
+
+Write a session to a HAR 1.2 file and return the path and entry count. `path` must be absolute and end in `.har`, and its folder must already exist. An existing file at that path is replaced. The file includes what a running recording has captured so far, and a failed export never leaves a partial file.
+
+`sanitize` defaults to `true` and redacts the file the same way the traffic tools redact their output. It can be `false` only while **Hide sensitive data** is off. Otherwise an unsanitized file would hand the agent the values that setting hides.
+
+When **Hide sensitive data** is on, the values in a session's `query` scope are redacted in every result too. People copy tokens from traffic into filters, so a scope can hold one.
+
+### Saved filters
+
+Saved filters are the entries in the **Filters** folder of the Explorer sidebar. See [Saved Filters](/guide/features/advanced-filtering/#saved-filters). A filter an agent saves appears there at once.
+
+#### `weproxa_savedFilters_list`
+
+List saved filters with their queries. Each query has the shape `weproxa_requests_list` takes as `filter`, so an agent can pass it there to apply one. Accepts `view`.
+
+#### `weproxa_savedFilters_create`
+
+Save a named filter. Names are unique, ignoring case, and at most 100 characters. The query must be one the request list can run and show in its query builder:
+
+- **Fields:** only the request list's fields. `sessionId`, `scenarioId`, `answeredByOrigin`, `answeringRuleId`, `answeringRuleKey`, `responseTool`, and `weproxaInternal` are rejected. Use them with `weproxa_requests_list` instead.
+- **Operators and values:** each field takes only its own operators. `method`, `protocol`, `statusCode`, and `contentType` take only the values the list offers, for example `statusCode` `"404"` or `"4xx"` with `equals`, `notEquals`, `in`, or `notIn`.
+- **Regular expressions:** a pattern must mean the same thing in JavaScript, so inline flags such as `(?i)` and classes such as `\p{L}` are rejected.
+- **Shape:** at least one condition, a unique `id` on every condition and group, at most 100 conditions and groups, and at most 8 levels of nesting.
+
+A rejected query names the condition at fault. A query that contains `[REDACTED]` is refused, because saving it would store the marker in place of the real value.
+
+#### `weproxa_savedFilters_update`
+
+Replace a filter's name and query. The same rules apply as on create.
+
+#### `weproxa_savedFilters_remove`
+
+Permanently remove a saved filter by its ID.
 
 ### Workspaces
 

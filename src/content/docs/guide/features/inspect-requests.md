@@ -20,7 +20,7 @@ The default layout opens with the source sidebar visible and the **URL** column 
 - **Query** — The URL query string
 - **Remote Address** — Resolved IP address and port of the server
 - **HTTP Version** — Negotiated protocol (HTTP/1.1, HTTP/2.0, etc.)
-- **Client** — The application or browser that made the request, shown with its app icon on macOS and Windows when one is available (a generic glyph is used as a fallback)
+- **Client** — The application or browser that made the request, shown with its app icon on macOS, Windows, and Linux when one is available (a generic glyph is used as a fallback)
 - **Request Size** — Request body size
 - **Response Size** — Response body size, or tunnel byte totals after an upgraded connection closes
 - **Time** — Timestamp of the request (HH:MM:SS)
@@ -60,6 +60,8 @@ When you're viewing **Saved Requests** or a **Session**, request and response bo
 
 Use **Add milestone** beside the request count at the bottom of the live list to mark the current capture position. A numbered, colored divider separates traffic captured before and after that moment, so you can mark stages such as signing in, submitting a form, or retrying a request.
 
+You can also add a milestone while another app is in front, with the [global shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) (`⌥ ⇧ ⌘ M` on macOS, `Ctrl + Alt + Shift + M` on Windows and Linux) or **Add Milestone** in the tray menu. A notification confirms the milestone when the main window is not in front, and tells you when all ten milestones are in use.
+
 Adding a milestone keeps your filters and open request in place. Click its numbered badge to jump to the divider; this opens **All** live requests, clears search and content-type filters, disables the Advanced Filter, and returns to capture order. If you already sorted by **ID**, your ascending or descending direction is kept.
 
 Dividers appear when the list is sorted only by **ID**. Under another sort, row colors still identify each traffic segment; choose **Show capture order** to bring back the dividers.
@@ -89,7 +91,9 @@ The context menu only shows actions that apply to the selected request. Internal
 
 The Session and HAR actions operate on all currently shown live requests. They also appear when you right-click empty space in the list. See [Start from an App, Host, or Filtered View](/guide/features/sessions/#start-from-an-app-host-or-filtered-view).
 
-On macOS and Windows, WePROXA attributes local traffic to the source application when the operating system exposes that process information. The request list and source sidebar show detected app names and icons where available, with a generic client label used as a fallback.
+On macOS, Windows, and Linux, WePROXA attributes local traffic to the source application when the operating system exposes that process information. The request list and source sidebar show detected app names and icons where available, with a generic client label used as a fallback.
+
+On Linux, WePROXA takes the app's name and icon from its desktop entry, including apps installed as a Snap. A program you start from a terminal is named after the program itself, not after the terminal.
 
 ## Request Details
 
@@ -163,7 +167,7 @@ Toggle to the source/tree view in the sidebar to see requests organized into sec
 - **Pinned** — Manually pinned hosts for quick access (pin/unpin via right-click)
 - **SSL Enabled** — Hosts with SSL interception enabled (toggle via right-click)
 - **SSL Enabled Apps** — Apps with SSL interception enabled, grouped as app → host → path
-- **Apps** — Requests grouped by the client application or browser, with detected app icons on macOS and Windows when available
+- **Apps** — Requests grouped by the client application or browser, with detected app icons on macOS, Windows, and Linux when available
 - **Remote Devices** — Requests from remote devices, grouped by IP address
 - **Other** — Every remaining host, meaning each host that is neither pinned nor SSL-enabled. Pin a host or enable SSL for it and it moves to that group
 

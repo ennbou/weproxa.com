@@ -3,9 +3,9 @@ title: Keyboard Shortcuts
 description: Full list of keyboard shortcuts available in WePROXA.
 ---
 
-WePROXA ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS and `Ctrl` on Windows unless noted.
+WePROXA ships with keyboard shortcuts for every common action so you can drive the app without leaving the keyboard. Shortcuts use `⌘` on macOS and `Ctrl` on Windows and Linux unless noted.
 
-The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcuts. This guide also includes tool and editor shortcuts that are not shown in that screen.
+The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcuts and lets you change the [global shortcut](#global-shortcut). This guide also includes tool and editor shortcuts that are not shown in that screen.
 
 ![WePROXA Keyboard Shortcuts settings](@assets/generated/screenshots/settings/shortcuts.png)
 
@@ -17,6 +17,23 @@ The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcu
 | Clear captured requests | `⌘ K` / `Ctrl + K` |
 | Focus the search / filter input | `⌘ F` / `Ctrl + F` |
 | Show / hide the advanced filter panel | `⌘ ⇧ F` / `Ctrl + Shift + F` |
+
+## Global Shortcut
+
+The global shortcut adds a [capture milestone](/guide/features/inspect-requests/#capture-milestones) while another app is in front, for example while you test in a browser.
+
+| Action | Default shortcut |
+|---|---|
+| Add a milestone from any app | `⌥ ⇧ ⌘ M` / `Ctrl + Alt + Shift + M` |
+
+The shortcut is on by default. To change it, open **Settings** → **Keyboard Shortcuts**, find **Global shortcut**, and click the current combination. Press the new one, or press `Esc` to cancel. **Reset to default** brings back the original combination. Turn off **Add milestone from any app** to release the combination for other apps.
+
+- A global shortcut needs at least two modifier keys, so it cannot take over a common shortcut such as `⌘ C`. Media keys cannot be used.
+- If another app already uses the combination, WePROXA keeps your current shortcut and asks you to choose a different one.
+- While you record a new shortcut, do not press the current one. The system sends it to WePROXA as a new milestone, so the recorder never sees it.
+- A notification confirms each milestone you add while the main window is not in front. If all ten milestones are in use, a notification tells you instead.
+- The tray menu shows the shortcut next to **Add Milestone**, which adds a milestone the same way.
+- On Linux, the global shortcut works in X11 sessions only. Under Wayland, use **Add Milestone** in the tray menu.
 
 ## Appearance
 
@@ -33,6 +50,8 @@ The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcu
 | Toggle the details panel | `⌘ J` / `Ctrl + J` |
 | Show the left panel on the Explorer tab | `⌘ ⇧ E` / `Ctrl + Shift + E` |
 | Show the left panel on the Workspaces tab | `⌘ ⇧ W` / `Ctrl + Shift + W` |
+| Toggle full screen (Linux) | `F11` |
+| Quit WePROXA (Linux) | `Ctrl + Q` |
 
 The Explorer and Workspaces shortcuts expand the left panel first if it is collapsed, so they always land on the tab you asked for.
 

@@ -1,0 +1,146 @@
+---
+title: Linux HTTPS Certificate Setup
+description: How WePROXA trusts its HTTPS certificate on Linux, in the system store and in each browser, and how to remove it later.
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+WePROXA captures plain HTTP traffic without any certificate. To show the contents of HTTPS traffic, it needs a local root Certificate Authority (CA) that your apps trust. WePROXA generates this CA on first launch. It never installs it until you ask.
+
+Linux has no single trust store. Command-line tools and most apps read the system store. Chrome, Chromium, and Firefox each keep a certificate store of their own. WePROXA installs the certificate in both places.
+
+## Install & Trust
+
+<Steps>
+
+1. Open WePROXA and go to **Settings** → **CA Certificate**.
+2. Click **Install & Trust**.
+3. Enter your password in the dialog your desktop shows. WePROXA adds the certificate to the system store and rebuilds the system's certificate bundle.
+4. WePROXA then adds the certificate to every Chrome, Chromium, and Firefox profile it finds. This step needs `certutil` and no password.
+5. Restart your browsers so they load the new certificate.
+
+</Steps>
+
+If you install `certutil` later, or open a browser for the first time after the install, click **Install & Trust** again. When the system store already trusts the certificate, WePROXA skips the password step and only adds it to the browsers.
+
+The password dialog comes from your desktop's polkit agent (the system service that asks for an administrator password). WePROXA waits up to three minutes for an answer. If you started WePROXA from a terminal in a session with no graphical polkit agent, the install fails instead of waiting. Use the [manual steps](#manual-trust) in that case.
+
+### Where the Certificate Goes
+
+WePROXA writes the certificate to your distribution's folder for extra CAs, under the name `com.ennbou.weproxa.crt`:
+
+| Distribution | Folder | Refresh command |
+|---|---|---|
+| Debian, Ubuntu | `/usr/local/share/ca-certificates` | `update-ca-certificates` |
+| Fedora, RHEL | `/etc/pki/ca-trust/source/anchors` | `update-ca-trust extract` |
+| Arch Linux | `/etc/ca-certificates/trust-source/anchors` | `update-ca-trust extract` |
+| openSUSE | `/etc/pki/trust/anchors` | `update-ca-certificates` |
+
+It adds the certificate to these browser stores when they exist:
+
+- Chrome and Chromium, including the Chromium Snap and the Chrome and Chromium Flatpaks
+- Every Firefox profile, including Firefox from Snap and Flatpak
+
+### Install certutil
+
+`certutil` is part of the NSS tools. The WePROXA packages recommend it, so it is usually installed already. If it is missing, Settings shows the command for your system:
+
+<Tabs syncKey="linux-distro">
+  <TabItem label="Debian / Ubuntu">
+  ```sh
+  sudo apt install libnss3-tools
+  ```
+  </TabItem>
+  <TabItem label="Fedora">
+  ```sh
+  sudo dnf install nss-tools
+  ```
+  </TabItem>
+  <TabItem label="Arch Linux">
+  ```sh
+  sudo pacman -S nss
+  ```
+  </TabItem>
+  <TabItem label="openSUSE">
+  ```sh
+  sudo zypper install mozilla-nss-tools
+  ```
+  </TabItem>
+</Tabs>
+
+## Trust Status
+
+**Settings** → **CA Certificate** shows two statuses:
+
+- **System trust store** is **Installed & trusted** when the system's certificate bundle includes the WePROXA CA.
+- **Browsers** lists each browser store WePROXA found, with one of three states: **Trusted**, **Not trusted yet**, or **Needs certutil** when WePROXA cannot check it.
+
+WePROXA treats the setup as complete only when the system store and every browser store trust the certificate. If SSL interception is on while a browser does not trust it, WePROXA warns you, because HTTPS sites show a security error in that browser.
+
+The status always reads the distribution's own bundle file. Tools that set `SSL_CERT_FILE` to a different bundle, as conda, Nix, and some development shells do, need the certificate added to that bundle too.
+
+## Manual Trust
+
+The **Install it by hand** box in **Settings** → **CA Certificate** shows commands with your certificate's real path already filled in. Use it when **Install & Trust** cannot reach a store, or when you prefer to do it yourself.
+
+- **System store on Debian and Ubuntu:** copy the certificate to `/usr/local/share/ca-certificates/` with a `.crt` name, then run `sudo update-ca-certificates`.
+- **System store on Fedora and Arch Linux:** run `sudo trust anchor --store` with the certificate path.
+- **Chrome and Chromium:** open **Settings** → **Privacy and security** → **Security** → **Manage certificates**, then import the file as a trusted certificate authority.
+- **Firefox:** open **Settings** → **Privacy & Security** → **Certificates** → **View Certificates** → **Authorities** → **Import**, then tick **Trust this CA to identify websites**.
+
+A Firefox profile protected by a primary password cannot be changed by **Install & Trust**. Import the certificate in that profile by hand.
+
+## Keep It Safe
+
+- Only trust the certificate on computers you own or administer.
+- Never share the CA private key or WePROXA's data folder.
+- Remove the certificate when you no longer need HTTPS inspection.
+
+Anyone with a trusted CA certificate and its private key can impersonate HTTPS sites on systems that trust it. WePROXA keeps both on your computer and never uploads them.
+
+## Removing the Certificate
+
+**Remove local certificate** in **Settings** → **CA Certificate** deletes WePROXA's own copy of the CA. It does not remove the copies in the system store or your browsers. To remove those:
+
+<Steps>
+
+1. Remove the certificate from the system store and rebuild the bundle:
+
+   <Tabs syncKey="linux-distro">
+     <TabItem label="Debian / Ubuntu">
+     ```sh
+     sudo rm /usr/local/share/ca-certificates/com.ennbou.weproxa.crt
+     sudo update-ca-certificates --fresh
+     ```
+     </TabItem>
+     <TabItem label="Fedora">
+     ```sh
+     sudo rm /etc/pki/ca-trust/source/anchors/com.ennbou.weproxa.crt
+     sudo update-ca-trust extract
+     ```
+     </TabItem>
+     <TabItem label="Arch Linux">
+     ```sh
+     sudo rm /etc/ca-certificates/trust-source/anchors/com.ennbou.weproxa.crt
+     sudo update-ca-trust extract
+     ```
+     </TabItem>
+     <TabItem label="openSUSE">
+     ```sh
+     sudo rm /etc/pki/trust/anchors/com.ennbou.weproxa.crt
+     sudo update-ca-certificates
+     ```
+     </TabItem>
+   </Tabs>
+
+   If you added the certificate by hand, remove the file you copied instead, or run `sudo trust anchor --remove` with the same certificate file.
+
+2. In Chrome or Chromium, open **Manage certificates**, find the **WePROXA Root CA** under the trusted authorities, and delete it.
+
+3. In Firefox, open **View Certificates** → **Authorities**, select the **WePROXA Root CA**, and click **Delete or Distrust**. Repeat this in each profile.
+
+4. Restart the browsers and apps that used the certificate.
+
+</Steps>
+
+The certificate's full name includes the date it was generated, your computer's hostname, and a short serial suffix. See [Recognizing Your WePROXA CA](/guide/guides/certificate-trust/#recognizing-your-weproxa-ca).
