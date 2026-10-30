@@ -2,10 +2,10 @@
 title: Privacy Policy
 description: WePROXA privacy policy — how we handle your data.
 tableOfContents: false
-lastUpdated: 2026-07-13
+lastUpdated: 2026-10-30
 ---
 
-**Effective Date: July 13, 2026**
+**Effective Date: October 30, 2026**
 
 ## Overview
 
@@ -27,7 +27,7 @@ We have **no access** to your intercepted traffic or local configuration.
 
 We use [PostHog](https://posthog.com) to collect anonymous usage statistics on our website (weproxa.com). Data is processed in the European Union. Data collected includes:
 
-- Page views, page duration, and referrer URLs
+- Page views, page duration, and referrer URLs, including campaign tags in a page's address (a pricing link opened from the desktop app names the app screen it was opened from)
 - Clicks and other interactions with page elements
 - Browser type, device type, and operating system
 - Country and region (derived from your IP address, which is not stored with the event)
@@ -61,7 +61,8 @@ Desktop analytics may include:
 
 - A randomly generated anonymous app-install identifier and session identifier.
 - App version, operating-system platform, locale, and license tier.
-- Coarse event properties such as the tool or action type, counts, durations, enabled state, and categorized success or failure reason.
+- Approximate location (country and region), which PostHog derives from your IP address. Neither the IP address nor anything more precise than the region, such as the city, is stored with the event.
+- Coarse event properties such as the tool or action type, the app window it happened in, counts, durations, enabled state, and categorized success or failure reason.
 
 WePROXA does not identify people or accounts in PostHog and does not create person profiles. Automatic page views, autocapture, session recording, surveys, and performance capture are disabled in the desktop app. Raw errors are reduced to coarse categories before analytics events are sent.
 
