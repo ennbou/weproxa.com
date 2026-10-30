@@ -36,8 +36,11 @@ export default defineConfig({
 			logo: {
 				src: '/public/favicon.svg',
 			},
-			favicon: '/favicon.svg',
+			favicon: '/favicon.png',
 			head: [
+				// Small tab-size fallback next to the PNG `favicon`; `sizes` lets browsers pick by size.
+				{ tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
+				{ tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
 				{ tag: 'meta', attrs: { property: 'og:site_name', content: 'WePROXA' } },
 				{ tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
 				{ tag: 'meta', attrs: { property: 'og:image', content: 'https://weproxa.com/og-image.jpeg' } },
