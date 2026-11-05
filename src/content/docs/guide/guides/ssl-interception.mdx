@@ -102,7 +102,7 @@ For longer rule lists, open the standalone **SSL Manager** window from the certi
 From the SSL Manager you can:
 
 - Add host rules such as `api.example.com` or `*.example.com`.
-- Add app rules by application name or bundle identifier.
+- Add app rules by the app's name. Set **Rule type** to **App**, then type in **App name**. WePROXA suggests the apps it has seen, with their icons.
 - Search across configured hosts and apps.
 - Filter the list to **All**, **Host**, or **App** rules.
 - Toggle or remove individual rules.
@@ -126,6 +126,21 @@ To disable SSL for a host via the context menu, right-click a request from that 
 To disable an app rule, right-click the app again in the **Apps** source view and choose **Disable SSL for \{app\}**.
 
 The Certificate Menu labels each rule as **Host** or **App**, and all SSL rules persist automatically between sessions.
+
+### One Rule per Host or App
+
+WePROXA keeps one rule for each host or app. If you add a host or app that is already in the list, WePROXA does not add a second rule. It turns the existing rule on, if it was off, and shows **\{target\} is already in the list and enabled.** It does not use one of your free-tier SSL rules.
+
+WePROXA compares rules the way it matches traffic:
+
+- **Hosts** ignore case, spaces around the name, and a trailing dot. `API.Example.com.` is the same rule as `api.example.com`.
+- **App names** ignore spaces around the name, but case counts. `Safari` and `safari` are two different rules.
+
+You cannot change a rule to a host or app that another rule already has, and you cannot save a rule with an empty host or app name. In both cases, WePROXA shows why.
+
+`*.example.com` and `example.com` stay two rules, because the wildcard also covers subdomains.
+
+If an older version saved the same host twice, WePROXA merges the copies when it starts. It keeps the oldest rule, and turns it on if any copy was on, so the same traffic is still decrypted.
 
 ## Where SSL Rules Appear in the Sidebar
 

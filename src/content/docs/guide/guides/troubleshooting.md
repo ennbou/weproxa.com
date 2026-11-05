@@ -32,6 +32,13 @@ The device doesn't trust WePROXA's root CA.
 - **On Android Emulator**: install the CA in the Android user store and configure your debug app to trust user CAs. Follow [Android Emulator](/guide/guides/android-emulator/) for the complete certificate and proxy setup.
 - **On a remote device**: see [Remote Devices](/guide/guides/remote-devices/) to install and trust the certificate over QR code.
 - **Firefox**: uses its own certificate store. Enable `security.enterprise_roots.enabled` in `about:config`, or import the CA manually from **Settings** → **Privacy & Security** → **Certificates**.
+- **In a CI job**: point the job's tools at the run's CA with `weproxa-cli env`. See [Point Your Tools at the Run](/guide/guides/headless-cli/#point-your-tools-at-the-run).
+
+If the device trusts the CA but still shows an error:
+
+- **The error says the certificate is not valid yet.** The device's clock is more than two days behind. Set the correct date and time on the device.
+- **The client connects to an IP address.** Update WePROXA. From 3.12.0, certificates for an IP address name it in the entry clients check for addresses. See [The Certificates WePROXA Makes](/guide/guides/https-debugging/#the-certificates-weproxa-makes).
+- **The client is Python 3.13 or later.** Update WePROXA. Older versions made certificates that Python's strict default checks refuse.
 
 ## Some Apps Still Reject the Certificate (Certificate Pinning)
 
@@ -68,6 +75,12 @@ WePROXA bounds long-lived CONNECT, WebSocket, and upgraded tunnels from the proc
 Close unused browser tabs, WebSockets, emulators, or devices that are holding tunnels open, then let the client retry. Repeated overload warnings are rate-limited, so one warning can represent several refusals during the same busy interval.
 
 A `504 Gateway Timeout` instead means DNS resolution, a direct TCP connection, or a parent-proxy dial exceeded its bounded deadline. Check the destination hostname, network reachability, VPN, and parent proxy. The timeout closes the pending dial so stalled upstreams do not permanently consume tunnel capacity.
+
+Some networks have DNS servers that never answer IPv6 (AAAA) lookups. Before 3.12.0, WePROXA waited for both the IPv4 and the IPv6 answer, so every request on such a network could end in a `504` while `curl` worked. From 3.12.0, WePROXA starts connecting as soon as one answer arrives. If you see `504` errors on such a network, update WePROXA. A parent proxy whose own host name has this problem can still time out.
+
+## Stopping the Proxy Takes a Few Seconds
+
+When you stop the proxy, idle connections close at once, and requests in progress get a short time to finish. Before 3.12.0, the idle connections that browsers keep open made every stop wait for that whole deadline. If a stop still takes a few seconds, a long download, a streaming response, or a slow upstream server was still open. WePROXA closes it when the deadline ends.
 
 ## Remote Device Can't Reach This Computer
 

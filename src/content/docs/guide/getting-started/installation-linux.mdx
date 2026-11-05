@@ -35,12 +35,12 @@ To download and install the package yourself, follow the steps below instead.
 
 <Tabs syncKey="linux-arch">
   <TabItem label="x86_64">
-    - [Download the .deb package](https://files2.weproxa.com/3.x.x/3.11.0/x86_64/weproxa_3.11.0_amd64.deb) for Debian and Ubuntu
-    - [Download the .rpm package](https://files2.weproxa.com/3.x.x/3.11.0/x86_64/weproxa-3.11.0-1.x86_64.rpm) for Fedora
+    - [Download the .deb package](https://files2.weproxa.com/3.x.x/3.12.0/x86_64/weproxa_3.12.0_amd64.deb) for Debian and Ubuntu
+    - [Download the .rpm package](https://files2.weproxa.com/3.x.x/3.12.0/x86_64/weproxa-3.12.0-1.x86_64.rpm) for Fedora
   </TabItem>
   <TabItem label="ARM64">
-    - [Download the .deb package](https://files2.weproxa.com/3.x.x/3.11.0/arm64/weproxa_3.11.0_arm64.deb) for Debian and Ubuntu
-    - [Download the .rpm package](https://files2.weproxa.com/3.x.x/3.11.0/arm64/weproxa-3.11.0-1.aarch64.rpm) for Fedora
+    - [Download the .deb package](https://files2.weproxa.com/3.x.x/3.12.0/arm64/weproxa_3.12.0_arm64.deb) for Debian and Ubuntu
+    - [Download the .rpm package](https://files2.weproxa.com/3.x.x/3.12.0/arm64/weproxa-3.12.0-1.aarch64.rpm) for Fedora
   </TabItem>
 </Tabs>
 
@@ -85,13 +85,22 @@ WePROXA checks for a new version each time it starts. When you choose **Install 
 - Firefox follows the desktop's proxy settings when it is set to **Use system proxy settings**.
 - The `weproxa-mcp` command for AI clients is installed at `/usr/bin/weproxa-mcp`, so it is on your `PATH` with no extra step. See [MCP Integration](/guide/guides/mcp-integration/).
 
+## For CI Jobs and Scripts
+
+To run the proxy without a window, for example on a CI runner or a server with no desktop, install `weproxa-cli` instead:
+
+```sh
+curl -fsSL https://weproxa.com/cli | bash
+```
+
+It needs no graphical desktop and no system package. See [Headless CLI](/guide/guides/headless-cli/).
+
 ## Known Limitations
 
 These features are not available on Linux yet:
 
-- **Global shortcut under Wayland.** The [milestone shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) works in an X11 session only. Under Wayland, use **Add Milestone** in the tray menu instead.
+- **Global shortcut under Wayland.** The [marker shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) works in an X11 session only. Under Wayland, use **Add Marker** in the tray menu instead.
 - **Opening a configured terminal.** Linux has no standard way to name your terminal app, so **Settings** → **Proxy Config** offers the commands to copy instead of a button.
-- **One running copy.** Opening a `weproxa://` link starts a second copy of WePROXA instead of passing the link to the one already running.
 - **Network change alerts.** [Network Health](/guide/features/network-health/) cannot detect a change of network yet.
 
 ## Uninstall

@@ -20,20 +20,20 @@ The **Settings** → **Keyboard Shortcuts** screen lists the most common shortcu
 
 ## Global Shortcut
 
-The global shortcut adds a [capture milestone](/guide/features/inspect-requests/#capture-milestones) while another app is in front, for example while you test in a browser.
+The global shortcut adds a [capture marker](/guide/features/inspect-requests/#capture-markers) while another app is in front, for example while you test in a browser.
 
 | Action | Default shortcut |
 |---|---|
-| Add a milestone from any app | `⌥ ⇧ ⌘ M` / `Ctrl + Alt + Shift + M` |
+| Add a marker from any app | `⌥ ⇧ ⌘ M` / `Ctrl + Alt + Shift + M` |
 
-The shortcut is on by default. To change it, open **Settings** → **Keyboard Shortcuts**, find **Global shortcut**, and click the current combination. Press the new one, or press `Esc` to cancel. **Reset to default** brings back the original combination. Turn off **Add milestone from any app** to release the combination for other apps.
+The shortcut is on by default. To change it, open **Settings** → **Keyboard Shortcuts**, find **Global shortcut**, and click the current combination. Press the new one, or press `Esc` to cancel. **Reset to default** brings back the original combination. Turn off **Add marker from any app** to release the combination for other apps.
 
 - A global shortcut needs at least two modifier keys, so it cannot take over a common shortcut such as `⌘ C`. Media keys cannot be used.
 - If another app already uses the combination, WePROXA keeps your current shortcut and asks you to choose a different one.
-- While you record a new shortcut, do not press the current one. The system sends it to WePROXA as a new milestone, so the recorder never sees it.
-- A notification confirms each milestone you add while the main window is not in front. If all ten milestones are in use, a notification tells you instead.
-- The tray menu shows the shortcut next to **Add Milestone**, which adds a milestone the same way.
-- On Linux, the global shortcut works in X11 sessions only. Under Wayland, use **Add Milestone** in the tray menu.
+- While you record a new shortcut, do not press the current one. The system sends it to WePROXA as a new marker, so the recorder never sees it.
+- A notification confirms each marker you add while the main window is not in front. If all ten markers are in use, a notification tells you instead.
+- The tray menu shows the shortcut next to **Add Marker**, which adds a marker the same way.
+- On Linux, the global shortcut works in X11 sessions only. Under Wayland, use **Add Marker** in the tray menu.
 
 ## Appearance
 
@@ -121,7 +121,7 @@ The shortcut does nothing while the button is unavailable, for example while a R
 | Move selection up / down | `↑` / `↓` |
 | Expand the details panel if collapsed | `Enter` |
 
-With a [capture milestone badge](/guide/features/inspect-requests/#capture-milestones) focused, press `Delete` or `Backspace` to remove that milestone. `Enter` or `Space` activates the badge and jumps to its divider.
+With a [capture marker badge](/guide/features/inspect-requests/#capture-markers) focused, press `Delete` or `Backspace` to remove that marker. `Enter` or `Space` activates the badge and jumps to its divider.
 
 ## Sidebar Navigation
 

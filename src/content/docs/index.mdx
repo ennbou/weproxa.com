@@ -91,6 +91,9 @@ WePROXA is a **native proxy debugger for macOS, Windows, and Linux** built with 
   <Card title="Diff Requests" icon="random">
     Compare any two captured requests side by side — headers and bodies, request and response — to pinpoint what changed.
   </Card>
+  <Card title="Run in CI" icon="seti:shell">
+    Run the proxy without a window with `weproxa-cli`. Serve your Scenarios to tests, save a HAR file and a report, and fail the job when a request was not mocked.
+  </Card>
 </CardGrid>
 
 ---
@@ -147,6 +150,11 @@ WePROXA is a **native proxy debugger for macOS, Windows, and Linux** built with 
     title="Scripting"
     description="Modify matching requests and responses automatically."
     href="/guide/features/scripting/"
+  />
+  <LinkCard
+    title="Headless CLI"
+    description="Run WePROXA in CI jobs and scripts, with reports and checks that fail the job."
+    href="/guide/guides/headless-cli/"
   />
   <LinkCard
     title="Remote Devices"

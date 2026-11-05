@@ -1,0 +1,445 @@
+---
+title: Headless CLI
+description: Run the WePROXA proxy without a window in CI jobs and scripts, with your Scenarios, HAR files, reports, and checks.
+---
+
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+`weproxa-cli` runs the WePROXA proxy without a window. Use it in CI jobs and scripts to serve the same [Scenarios](/guide/features/scenarios/) you build in the app, record the traffic, and fail the job when a check finds a problem.
+
+A run uses the same proxy, rules, and certificates as the app. It differs in a few ways:
+
+- It never changes the system proxy. You point each tool at it, or let [`weproxa-cli env`](#point-your-tools-at-the-run) do it.
+- It needs no license. Every feature is available.
+- It starts with no saved state. Each run imports the Scenario or Workspace you give it.
+- Command-line flags apply to the run only. They never change your saved settings.
+
+`weproxa-cli` is available for macOS and Linux. Windows does not have a release yet.
+
+## Install
+
+Run this command:
+
+```sh
+curl -fsSL https://weproxa.com/cli | bash
+```
+
+The script installs two programs:
+
+- `weproxa-cli`, the command line.
+- `weproxa-mcp`, the helper an AI client starts to [connect to a run](#let-an-ai-agent-drive-the-run).
+
+It puts them in `/usr/local/bin`. When it cannot write there, it asks for your password. Without `sudo`, it uses `~/.local/bin`. The script checks the download's SHA-256 checksum and starts the new `weproxa-cli` before it installs anything.
+
+Two environment variables change what it does:
+
+| Variable | Effect |
+|---|---|
+| `WEPROXA_CLI_VERSION` | Installs this version instead of the newest one |
+| `WEPROXA_CLI_INSTALL_DIR` | Installs to this folder instead of `/usr/local/bin` |
+
+In a CI job, pin the version, so every run gets the same files:
+
+```sh
+curl -fsSL https://weproxa.com/cli | WEPROXA_CLI_VERSION=3.12.0 bash
+```
+
+On macOS, if the WePROXA app already installed its `weproxa-mcp` command, the script leaves that command in place. The app keeps it up to date.
+
+## Start a Run
+
+Export a Scenario from the app, commit it next to your code, and start a run with it:
+
+```sh
+weproxa-cli headless \
+  --scenario fixtures/checkout.weproxa-scenario.json \
+  --ssl-host api.example.com
+```
+
+When the proxy listens and the rules are active, the run prints one JSON line, the **ready line**, to standard output:
+
+```json
+{"format":"weproxa.ready","version":1,"appVersion":"3.12.0","pid":41237,"port":4545,"proxyUrl":"http://127.0.0.1:4545","caCert":"/tmp/weproxa-Xk2b9q/certs/weproxy-ca.crt","caSpkiSha256":"jK9...=","mcpSocket":null}
+```
+
+Logs go to standard error, so standard output holds only this line. Wait for it before you send traffic: a request sent earlier could miss a rule.
+
+| Field | Meaning |
+|---|---|
+| `pid` | The run's process ID |
+| `port` | The port the proxy listens on |
+| `proxyUrl` | The proxy address to give your tools |
+| `caCert` | The CA certificate file clients must trust for decrypted hosts |
+| `caSpkiSha256` | The SHA-256 hash of the CA's public key, in base64, for [Chrome](#browsers) |
+| `mcpSocket` | The MCP address with [`--mcp`](#let-an-ai-agent-drive-the-run), otherwise `null` |
+
+New fields may appear in later versions. Read the fields you need and ignore the rest.
+
+### Flags for the Proxy
+
+| Flag | Effect |
+|---|---|
+| `--port <PORT>` | The port to listen on. The default is `4545`. `0` picks a free port, which the ready line names |
+| `--allow-lan` | Accept clients from other computers, not only from this one |
+| `--log-level <LEVEL>` | `error`, `warn`, `info`, `debug`, or `trace`. Overrides `RUST_LOG` |
+
+### Rules
+
+Give the run one bundle:
+
+- `--scenario <FILE>` imports a [Scenario bundle](/guide/features/scenarios/#share-a-portable-scenario) into the default Workspace and activates it.
+- `--workspace <FILE>` imports a [Workspace bundle](/guide/features/workspaces/#exporting-and-importing-a-workspace) (`.weproxa-workspace.json`) and activates its Scenario.
+
+You cannot pass both. The run reads the bundle before it starts. A bad file stops the run before the proxy opens.
+
+If the Scenario declares [containment](/guide/features/pass-through/#carrying-containment-in-a-scenario), the run turns it on. So a Scenario that seals the proxy in the app seals it in CI too.
+
+`--ssl-host <HOST>` decrypts a host's HTTPS traffic, so rules can match it. Repeat the flag for each host. `*.example.com` covers subdomains. If the Scenario [declares SSL hosts](/guide/features/scenarios/#declared-ssl-prerequisites) that the run does not decrypt, the run logs a warning that names them.
+
+[Breakpoints](/guide/features/breakpoints/) need `--mcp`. Without it, nothing could release a paused request, so the run turns breakpoints off and logs a warning.
+
+### Data Directory
+
+By default, each run makes a new temporary data directory and deletes it when it stops. The run's CA lives there too, so each run has a new CA.
+
+`--data-dir <DIR>` uses a folder you choose and keeps it. Two rules apply:
+
+- Only one WePROXA process can use a data directory. The run refuses a folder that the app or another run uses, and exits with code `3`.
+- Each run imports its bundle again. A folder you reuse across runs keeps growing.
+
+## Run in the Background
+
+A CI job usually starts the run, runs its tests, and then stops the run. Use `--ready-file <FILE>` so the job knows when the run is ready. The run writes the ready line to that file as well. The file appears only once the run takes traffic, and the run deletes it when it starts to stop. You can also set `WEPROXA_READY_FILE`, which `headless` and `env` both read.
+
+```sh
+weproxa-cli headless --scenario checkout.weproxa-scenario.json \
+  --ready-file "$RUNNER_TEMP/weproxa.ready" &
+run=$!
+
+vars="$(weproxa-cli env --ready-file "$RUNNER_TEMP/weproxa.ready" --format sh)"
+eval "$vars"
+npm test
+
+kill -TERM "$run"
+wait "$run"
+```
+
+`weproxa-cli env` waits for the ready file, so the tests start only once the rules are active. The variables are saved first and then passed to `eval`, so a failed `env` stops a script that runs with `set -e`. `eval "$(...)"` alone would hide the failure.
+
+## Point Your Tools at the Run
+
+`weproxa-cli env` reads the ready file and prints the environment variables that send your tools through the run:
+
+| Variable | Value |
+|---|---|
+| `HTTPS_PROXY`, `https_proxy`, `HTTP_PROXY`, `http_proxy` | The proxy address. Some tools read only one case, so both are set |
+| `NO_PROXY`, `no_proxy` | Every host already in either variable |
+| `NODE_USE_ENV_PROXY` | `1`. Without it, Node's built-in `fetch` ignores the proxy variables |
+| `NODE_EXTRA_CA_CERTS` | The run's CA. Node adds it to the roots it trusts |
+| `SSL_CERT_FILE`, `REQUESTS_CA_BUNDLE`, `CURL_CA_BUNDLE`, `GIT_SSL_CAINFO` | A bundle of the run's CA and the roots this computer trusts |
+| `WEPROXA_CA_SPKI_SHA256` | The CA's key hash, for [Chrome](#browsers) |
+
+The four bundle variables *replace* the roots a tool trusts. That is why they name a bundle and not the CA alone. With the CA alone, every host the run does not decrypt would fail. `env` writes the bundle next to the run's CA, so a temporary data directory deletes it too. If `SSL_CERT_FILE` or `SSL_CERT_DIR` is already set, for example by conda or Nix, the bundle uses those roots.
+
+To keep a host off the proxy, set `NO_PROXY` before `env` runs. `env` keeps every host it finds.
+
+`env` takes these flags:
+
+| Flag | Effect |
+|---|---|
+| `--ready-file <FILE>` | The run's ready file. It is required unless `WEPROXA_READY_FILE` is set |
+| `--format dotenv` | `NAME=value` lines, for `$GITHUB_ENV`, a GitLab dotenv report, or `docker run --env-file`. This is the default |
+| `--format sh` | `export NAME='value'` lines, for `eval` in a shell |
+| `--timeout <SECONDS>` | How long to wait for the ready file. The default is `60` |
+
+`env` prints nothing unless it can print every variable. It exits with `1` when no ready file appears in time, or when it finds no trusted roots to bundle.
+
+### Set the Variables for Later Steps
+
+In GitHub Actions, add the variables to `$GITHUB_ENV`, and every later step uses them:
+
+```sh
+weproxa-cli env --ready-file "$RUNNER_TEMP/weproxa.ready" >> "$GITHUB_ENV"
+```
+
+:::caution
+Lines in `$GITHUB_ENV` stay set for every later step, including post-steps of actions. After the run stops, they name a closed port and, with a temporary data directory, a deleted CA. Tools such as `curl` and `git` then fail. If any step runs after the run stops, use the `eval` form in the steps that need the run instead.
+:::
+
+### Browsers
+
+Chrome and Chromium ignore the proxy variables. Start them with these flags:
+
+```text
+--proxy-server=$HTTPS_PROXY
+--proxy-bypass-list=<-loopback>
+--ignore-certificate-errors-spki-list=$WEPROXA_CA_SPKI_SHA256
+```
+
+- `--proxy-bypass-list=<-loopback>` sends `localhost` through the proxy too. Chrome otherwise never proxies it.
+- `--ignore-certificate-errors-spki-list` trusts the run's CA by its key and nothing else. Real certificate errors still show, unlike Playwright's `ignoreHTTPSErrors`. Chrome reads this flag only with `--user-data-dir`, which Playwright and Puppeteer always pass.
+
+In `playwright.config.ts`:
+
+```ts
+use: {
+  launchOptions: {
+    args: [
+      `--proxy-server=${process.env.HTTPS_PROXY}`,
+      '--proxy-bypass-list=<-loopback>',
+      `--ignore-certificate-errors-spki-list=${process.env.WEPROXA_CA_SPKI_SHA256}`,
+    ],
+  },
+},
+```
+
+## Use a CA You Keep
+
+Without other flags, each run with a temporary data directory makes a new CA. That works for tools you point at `env`'s variables. But an iOS Simulator, an Android build, or a container image must trust the CA ahead of time, and a new CA on every run means trusting it again on every run.
+
+Make a CA once, trust it where you build the clients, and pass it to each run:
+
+<Steps>
+
+1. Create the CA:
+
+   ```sh
+   weproxa-cli ca create --cert weproxa-ca.pem --key weproxa-ca.key \
+     --only-hosts api.example.com
+   ```
+
+2. Trust `weproxa-ca.pem` where you build the clients: an image, a simulator snapshot, or an Android debug build.
+
+3. Store the key in a CI secret, not in the repository.
+
+4. Start each run with the CA:
+
+   ```sh
+   weproxa-cli headless --ca-cert weproxa-ca.pem --ca-key weproxa-ca.key \
+     --scenario checkout.weproxa-scenario.json --ssl-host api.example.com
+   ```
+
+</Steps>
+
+`ca create` takes these flags:
+
+| Flag | Effect |
+|---|---|
+| `--cert <FILE>` | Where to write the certificate (PEM). The file must not exist yet |
+| `--key <FILE>` | Where to write the private key (PEM). The file must not exist yet. On macOS and Linux, only you can read it |
+| `--only-hosts <HOST>` | Lets the CA sign only for this host and its subdomains. Repeat the flag, or separate hosts with commas |
+| `--days <DAYS>` | How many days the CA is valid. The default is `3650` |
+
+`ca create` never replaces a file, because machines may already trust the certificate in it. It prints the certificate's key hash, which Chrome's flag takes.
+
+:::caution
+Anyone who has the key can read the HTTPS traffic of every machine that trusts the certificate. Use `--only-hosts` so a leaked key works only for the hosts you test. A run copies the key into its data directory, and a run that is killed leaves that copy behind.
+:::
+
+`--only-hosts` uses X.509 name constraints (rules inside the certificate that limit the hosts it can sign for). A CA made this way cannot sign for an IP address. Wildcards such as `*.example.com` are refused: `example.com` already covers its subdomains. When a run decrypts a host that the CA cannot sign for, it logs a warning for that host, because clients will refuse the certificate there.
+
+`--ca-cert` replaces the CA of a `--data-dir` too. The run refuses a CA it cannot use, before the proxy starts.
+
+## Stop a Run
+
+Send `SIGINT`, `SIGTERM`, or `SIGHUP`. Pressing `Ctrl + C` sends `SIGINT`. When a run stops, it:
+
+1. Stops taking new connections and lets open requests finish.
+2. Stops the MCP server, if `--mcp` started one.
+3. Writes the HAR file.
+4. Judges the checks and writes the report.
+5. Deletes a temporary data directory.
+
+A second signal quits at once, without this cleanup, with exit code `130`. A signal that arrives while the run starts lets the start finish, then stops the run without a ready line.
+
+:::tip
+A shell script that starts a command in the background can set it to ignore `SIGINT`. Stop a background run with `kill -TERM`.
+:::
+
+## HAR Files and Reports
+
+| Flag | Effect |
+|---|---|
+| `--har <FILE>` | Writes every request of the run to a HAR file when the run stops |
+| `--report <FILE>` | Writes a JSON report when the run stops |
+| `--no-sanitize` | Keeps credentials in the HAR file and in the report's URLs |
+
+The HAR file holds every request of the run, even past the 10,000 requests the live log keeps, up to 25,000 requests. If a run goes past that limit, it still writes the requests it recorded, logs why it stopped recording, and exits with code `4`. Both files are made to be shared, so they are sanitized by default, the same way as a [HAR export from the app](/guide/features/sessions/). Credentials are redacted. The HAR file leaves out any body that cannot be checked. `--no-sanitize` keeps them.
+
+The report says what the run's rules and clients did:
+
+```json
+{
+  "format": "weproxa.report",
+  "version": 1,
+  "appVersion": "3.12.0",
+  "startedAt": "2026-11-05T10:12:03Z",
+  "endedAt": "2026-11-05T10:14:41Z",
+  "traffic": {
+    "complete": true,
+    "requests": 128,
+    "blocked": 2,
+    "failed": 0,
+    "responses": { "1xx": 0, "2xx": 120, "3xx": 4, "4xx": 2, "5xx": 0 }
+  },
+  "scenario": {
+    "workspaceId": "…",
+    "scenarioId": "…",
+    "scenarioName": "Checkout",
+    "containment": "denyUnmatched"
+  },
+  "rules": [
+    { "tool": "mapLocal", "id": "…", "name": "Cart page 1", "live": true, "hits": 3 }
+  ],
+  "shadowedRules": [],
+  "containmentDenials": { "total": 2, "omitted": 0, "entries": [] },
+  "certificateRejections": {
+    "alerts": { "total": 0, "omitted": 0, "entries": [] },
+    "silentCloses": { "total": 0, "omitted": 0, "entries": [] }
+  },
+  "checks": [
+    { "check": "unmatched", "enforced": true, "passed": false, "message": "…" }
+  ]
+}
+```
+
+- `traffic` counts the run's requests. `complete` is `false` when the recording stopped early. `blocked` counts requests a Block rule or containment refused. `failed` counts requests that got no response although no rule refused them.
+- `rules` lists every rule of the active Scenario with its hit count. `live` is `false` for a disabled rule, or a rule under a tool that is off.
+- `containmentDenials` and `certificateRejections` list each distinct request or client once, with a count. Long lists stop at a fixed size and count the rest in `omitted`.
+- `checks` lists all four checks, each with `enforced`, so the report looks the same whichever flags you set.
+
+New fields may appear in later versions. Ignore the fields you do not know.
+
+## Fail a Run on a Check
+
+Each `--fail-on-*` flag makes the run exit with code `5` when its check fails. The run judges the checks after open requests finish, so every request has met the rules.
+
+| Flag | Fails when |
+|---|---|
+| `--fail-on-unmatched` | [Containment](/guide/features/pass-through/) refused a request. Under `denyUnmatched`, that is a request no Map Local rule answered. Under `denyAll`, it is any request to a host off the allow-list |
+| `--fail-on-unused-rules` | A live rule of the active Scenario never matched |
+| `--fail-on-shadowed-rules` | A rule can never match, because an earlier rule always answers first. See [Verify a Scenario Actually Answers](/guide/features/scenarios/#verify-a-scenario-actually-answers) |
+| `--fail-on-cert-rejection` | A client refused WePROXA's certificate with a TLS alert |
+
+Standard error and the report say which check failed and why.
+
+- `--fail-on-unmatched` can fail only while containment is on. If the Scenario declares none, the run warns when it starts.
+- Some clients, including every Apple app, refuse a certificate by closing the connection without an alert. A client that gives up for another reason closes the same way. So a close without an alert is logged as a warning and does not fail the run.
+
+## Exit Codes
+
+| Code | Meaning |
+|---|---|
+| `0` | Stopped by a signal and wrote every file it was asked for |
+| `1` | Could not start: an input, the import, the proxy port, or MCP failed |
+| `2` | The command line is invalid |
+| `3` | Another WePROXA process is using the data directory |
+| `4` | An output is missing or incomplete, for example a HAR file that could not be written |
+| `5` | A `--fail-on-*` check failed. This code wins over `4` |
+| `130` | A second signal quit at once, without cleanup |
+
+A code never changes its meaning in later versions, so scripts can depend on it.
+
+## Let an AI Agent Drive the Run
+
+`--mcp` starts the [MCP server](/guide/guides/mcp-integration/) inside the run. The ready line's `mcpSocket` field names its address. An MCP client connects with the `weproxa-mcp` helper that the install script puts beside `weproxa-cli`:
+
+```json
+{
+  "command": "weproxa-mcp",
+  "args": ["--socket", "<mcpSocket from the ready line>"]
+}
+```
+
+The agent can then use the same tools it uses with the app: read traffic, change rules, and release paused [breakpoints](/guide/features/breakpoints/). The MCP server starts after the import and before the proxy opens, so an agent cannot change the rules while they load. It stops before the run judges its checks.
+
+## Update the CLI
+
+```sh
+weproxa-cli update
+```
+
+`update` replaces `weproxa-cli`, and the `weproxa-mcp` beside it, with the newest release of the same major version. It checks nothing on its own: it runs only when you type it. A CI job that pins a version always gets the same files.
+
+| Command | Effect |
+|---|---|
+| `weproxa-cli update` | Installs the newest release of this major version |
+| `weproxa-cli update --check` | Only says whether a newer release exists. Changes nothing |
+
+Before it replaces anything, `update` checks that:
+
+- the download matches its SHA-256 checksum,
+- the download carries WePROXA's signature, for this exact version and platform, and
+- the new programs start on this computer.
+
+If any check fails, the installed release stays as it was.
+
+- If you cannot write to the folder that holds `weproxa-cli`, run `sudo weproxa-cli update`.
+- On macOS, a `weproxa-mcp` that the WePROXA app installed is left in place. The app keeps it up to date.
+
+### New Major Versions
+
+`update` never installs a new major version, such as 4.0.0 after 3.12.0. A new major version may change flags that your scripts use. `update` tells you when one exists. Install it with the install script:
+
+```sh
+curl -fsSL https://weproxa.com/cli | bash
+```
+
+## Example: GitHub Actions
+
+This job serves a Scenario to the tests, records the run, and fails when a request was not mocked or a rule was never used:
+
+```yaml
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install weproxa-cli
+        run: curl -fsSL https://weproxa.com/cli | WEPROXA_CLI_VERSION=3.12.0 bash
+
+      - name: Run the tests through WePROXA
+        run: |
+          ready="$RUNNER_TEMP/weproxa.ready"
+          weproxa-cli headless \
+            --scenario fixtures/checkout.weproxa-scenario.json \
+            --ssl-host api.example.com \
+            --ready-file "$ready" \
+            --har "$RUNNER_TEMP/weproxa.har" \
+            --report "$RUNNER_TEMP/weproxa-report.json" \
+            --fail-on-unmatched \
+            --fail-on-unused-rules &
+          run=$!
+
+          vars="$(weproxa-cli env --ready-file "$ready" --format sh)"
+          eval "$vars"
+          tests=0
+          npm test || tests=$?
+
+          kill -TERM "$run"
+          proxy=0
+          wait "$run" || proxy=$?
+          [ "$tests" -eq 0 ] && [ "$proxy" -eq 0 ]
+
+      - name: Keep the HAR file and the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weproxa
+          path: |
+            ${{ runner.temp }}/weproxa.har
+            ${{ runner.temp }}/weproxa-report.json
+```
+
+## Command Reference
+
+Run `weproxa-cli <command> --help` for the full list of flags.
+
+| Command | What it does |
+|---|---|
+| `weproxa-cli headless` | Runs the proxy until it gets a stop signal |
+| `weproxa-cli env` | Prints the variables that send a job's tools through a run |
+| `weproxa-cli ca create` | Creates a CA to keep, for `--ca-cert` and `--ca-key` |
+| `weproxa-cli update` | Updates `weproxa-cli` within its major version |
+| `weproxa-cli --version` | Prints the version |

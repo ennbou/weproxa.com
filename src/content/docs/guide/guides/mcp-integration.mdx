@@ -24,6 +24,8 @@ The server:
 Starting the MCP server is a **Pro** feature. Free accounts can view its settings but cannot start the server.
 :::
 
+To give an agent a proxy in a CI job, with no app and no window, start [`weproxa-cli headless --mcp`](/guide/guides/headless-cli/#let-an-ai-agent-drive-the-run). It serves the same tools.
+
 MCP tools can both **read data** and **change WePROXA state**. Review an AI client’s proposed tool calls before approving actions that start or stop the proxy, activate a Workspace or Scenario, or change rules.
 
 <span id="enabling-the-mcp-server"></span>
@@ -365,6 +367,10 @@ Open WePROXA manually and go to **Settings → MCP Server**. Clicking a handoff 
 
 Trust the project where required, confirm the configuration is in that client’s exact workspace location, and check that a higher-precedence user or local entry is not shadowing it.
 
+**The client rejects WePROXA's tools, or some of their parameters**
+
+Some clients accept only a subset of JSON Schema (the format that describes each tool's parameters). Gemini, for example, allows one type per parameter. Before 3.12.0, WePROXA described optional parameters in a form those clients refused, so they dropped the tool or ignored the parameter's limits. From 3.12.0, every tool uses a form these clients accept. Update WePROXA, then reconnect the client so it reads the tools again. In VS Code, run **MCP: Reset Cached Tools**.
+
 **A remote or containerized client cannot connect**
 
 Run the MCP client on the same host and as the same OS user as WePROXA. The private socket or named pipe is deliberately not exposed over TCP; do not bridge it through a public tunnel.
@@ -378,6 +384,7 @@ Run the MCP client on the same host and as the same OS user as WePROXA. The priv
 - Tool names start with `weproxa_` and parameters use `camelCase`.
 - Tool results default to one text JSON content block. Every call accepts `responseShape: "text" | "structured" | "both"` when a client needs structured content or both representations.
 - Tool catalogs omit output schemas to keep discovery small. Pass `includeOutputSchema: true` on a call to receive that tool's output schema with the result.
+- Input schemas give each parameter one `type`. An optional parameter is written as an `anyOf` of its type and `null`, never as a list of types, so clients that accept only an OpenAPI-style subset of JSON Schema, such as Gemini, load every tool. Parameters that take any JSON value list all six JSON types.
 - Supported listing tools accept `view: "full" | "compact"`. `full` is the backward-compatible default; `compact` keeps only identifying fields so a client can select one record before fetching details.
 - Responses include a success or state result; validation failures include an error message.
 - `urlPattern` values use WePROXA glob syntax such as `**/api/*.json`.

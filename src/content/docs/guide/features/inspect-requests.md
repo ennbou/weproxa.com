@@ -54,19 +54,32 @@ A search bar lets you filter requests across three scopes:
 
 Body-heavy searches run on the backend with a short debounce; everything else filters instantly.
 
+Backend searches and [advanced filters](/guide/features/advanced-filtering/) run in the background, so you can keep scrolling and selecting requests while they work. The list tells you what is happening:
+
+- **Filtering requests...** shows while a search or filter runs.
+- **No requests match the current filters or selection** shows when the search finishes with no results. Change the filter or the sidebar selection to see more.
+- **This filter could not be applied. Check its rules and try again.** shows when an advanced filter cannot run, for example because of an invalid rule.
+- **Header and body search failed, so only matches in other fields are shown.** shows when the header and body part of a search fails. The list still shows matches in the other fields.
+
+New requests that arrive while a filter is active are checked against it too, so the results stay current with live traffic.
+
 When you're viewing **Saved Requests** or a **Session**, request and response body search is unavailable. These views filter stored exchanges by metadata only and show a notice for advanced filters that require the live backend search.
 
-### Capture Milestones
+<span id="capture-milestones"></span>
 
-Use **Add milestone** beside the request count at the bottom of the live list to mark the current capture position. A numbered, colored divider separates traffic captured before and after that moment, so you can mark stages such as signing in, submitting a form, or retrying a request.
+### Capture Markers
 
-You can also add a milestone while another app is in front, with the [global shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) (`⌥ ⇧ ⌘ M` on macOS, `Ctrl + Alt + Shift + M` on Windows and Linux) or **Add Milestone** in the tray menu. A notification confirms the milestone when the main window is not in front, and tells you when all ten milestones are in use.
+Markers were called milestones before WePROXA 3.12.0.
 
-Adding a milestone keeps your filters and open request in place. Click its numbered badge to jump to the divider; this opens **All** live requests, clears search and content-type filters, disables the Advanced Filter, and returns to capture order. If you already sorted by **ID**, your ascending or descending direction is kept.
+Use **Add marker** beside the request count at the bottom of the live list to mark the current capture position. A numbered, colored divider separates traffic captured before and after that moment, so you can mark stages such as signing in, submitting a form, or retrying a request.
+
+You can also add a marker while another app is in front, with the [global shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) (`⌥ ⇧ ⌘ M` on macOS, `Ctrl + Alt + Shift + M` on Windows and Linux) or **Add Marker** in the tray menu. A notification confirms the marker when the main window is not in front, and tells you when all ten markers are in use.
+
+Adding a marker keeps your filters and open request in place. Click its numbered badge to jump to the divider; this opens **All** live requests, clears search and content-type filters, disables the Advanced Filter, and returns to capture order. If you already sorted by **ID**, your ascending or descending direction is kept.
 
 Dividers appear when the list is sorted only by **ID**. Under another sort, row colors still identify each traffic segment; choose **Show capture order** to bring back the dividers.
 
-Right-click a badge and choose **Remove milestone N**, or focus it and press `Delete` or `Backspace`. You can keep up to **ten milestones** at once. Removing one leaves the other numbers and colors unchanged. Clearing the full live log or restarting WePROXA removes the milestones. To keep the exchanges themselves, [save a Session](/guide/features/sessions/).
+Right-click a badge and choose **Remove marker N**, or focus it and press `Delete` or `Backspace`. You can keep up to **ten markers** at once. Removing one leaves the other numbers and colors unchanged. Clearing the full live log or restarting WePROXA removes the markers. To keep the exchanges themselves, [save a Session](/guide/features/sessions/).
 
 ### Context Menu
 
@@ -102,6 +115,18 @@ Click on any request to open the details panel with full information:
    ![Request details panel](@assets/guide/features/inspect-requests/request_details.png)
 
 The details panel sits below the request list and can be collapsed when not needed. The request method and response status are shown as compact color-coded badges at the top of the panel so they're easy to scan at a glance.
+
+### Hide the Request or Response Pane
+
+The details panel shows the request and the response in two panes, with a separator between them. The panes sit side by side when the panel is at the bottom, and one above the other when it is on the right. You can hide either pane to give the other one the whole panel:
+
+- **With the mouse.** Move the pointer over the separator. A small button appears on each side of it. Click **Hide request** or **Hide response**.
+- **By dragging.** Drag the separator all the way to one edge.
+- **With the keyboard.** Focus the separator and press `Home` or `End` to hide one pane, or `Enter` to hide the request pane.
+
+To bring a hidden pane back, click **Show request** or **Show response** on the separator, or focus the separator and press `Enter`. The pane returns at the size it had before.
+
+WePROXA remembers the layout between launches. The panel keeps a separate layout for each position, so hiding a pane with the panel at the bottom does not change the layout with the panel on the right.
 
 If the request was captured while a Workspace Scenario was active, the header also shows that Scenario as a capture-time badge. The value stays attached to the request and saved snapshot even after you activate another Scenario.
 

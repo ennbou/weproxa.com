@@ -71,7 +71,7 @@ The duration picker offers intervals from **30 seconds** through **2 hours**, pl
 
 A recording stops when its timer ends, the session fills, WePROXA cannot save an entry, or you quit the app. WePROXA reports timer completion, a full session, or a write failure in the app. Stored entries remain available after relaunch; start **Record Again...** to collect more traffic.
 
-Clearing the live log or switching Workspaces leaves sessions available. A recording keeps its scope until stopped. [Resetting settings](/guide/guides/troubleshooting/#reset-weproxa-to-defaults) also preserves stored sessions, but the resulting restart ends active recordings. Sessions preserve HTTP exchanges and captured bodies; WebSocket frame histories and [capture milestones](/guide/features/inspect-requests/#capture-milestones) belong to the live log.
+Clearing the live log or switching Workspaces leaves sessions available. A recording keeps its scope until stopped. [Resetting settings](/guide/guides/troubleshooting/#reset-weproxa-to-defaults) also preserves stored sessions, but the resulting restart ends active recordings. Sessions preserve HTTP exchanges and captured bodies; WebSocket frame histories and [capture markers](/guide/features/inspect-requests/#capture-markers) belong to the live log.
 
 ## Export as HAR
 

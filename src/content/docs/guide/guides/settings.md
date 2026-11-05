@@ -16,7 +16,7 @@ Success and error messages appear in the Settings window where you performed the
 | **Remote Access** | LAN proxy address, certificate setup page, PAC URL | [Remote Devices](/guide/guides/remote-devices/) |
 | **MCP Server** (Pro) | AI client connections and privacy | [MCP Integration](/guide/guides/mcp-integration/) |
 | **License** | Activate, revalidate, or deactivate a Pro license | [License](#license) |
-| **Keyboard Shortcuts** | The most common shortcuts and the global milestone shortcut | [Keyboard Shortcuts](/guide/guides/keyboard-shortcuts/) |
+| **Keyboard Shortcuts** | The most common shortcuts and the global marker shortcut | [Keyboard Shortcuts](/guide/guides/keyboard-shortcuts/) |
 | **About** | Version, build, and links | [About](#about) |
 | **Reset** | Factory reset | [Reset](#reset) |
 
@@ -44,7 +44,7 @@ Success and error messages appear in the Settings window where you performed the
 
 ![WePROXA CA Certificate settings](@assets/generated/screenshots/settings/certificate.png)
 
-The top of the section shows the **Certificate Path** with a copy button, and the dates the certificate was generated and stays valid until. On macOS it also shows the **Trust status**. On Linux it shows the **System trust store** status and the status of each browser's certificate store. See [Trust Status on Linux](/guide/guides/linux-https-certificate-setup/#trust-status).
+The top of the section shows the **Certificate Path** with a copy button, and the **Valid from** and **Valid until** dates. **Valid from** is two days before WePROXA made the certificate, so a phone, VM, or container whose clock runs a little behind still accepts it. On macOS it also shows the **Trust status**. On Linux it shows the **System trust store** status and the status of each browser's certificate store. See [Trust Status on Linux](/guide/guides/linux-https-certificate-setup/#trust-status).
 
 The buttons depend on your platform:
 
@@ -65,6 +65,23 @@ Paste a key into **License Key** and click **Activate**. Successful activation s
 
 - **Revalidate** checks the license again with the license server.
 - **Deactivate** frees this machine's activation, for example before you move the license to another computer.
+
+### When Activation Fails
+
+The error message says what went wrong and what to do next:
+
+| Message | What to do |
+|---|---|
+| Could not reach the license server. Check your internet connection and try again. | Check your connection, VPN, or firewall, then click **Activate** again |
+| This license key was not found. Check that you entered it correctly. | Copy the key again from your purchase email, with no extra spaces |
+| This license key has reached its activation limit. Deactivate it on another device, then try again. | Open **Settings** → **License** on the computer that uses the license now and click **Deactivate**. Then activate it here |
+| This license key has expired. | Renew the license. See [Pricing](/pricing/) |
+| This license key has been disabled. | The key can no longer be activated. Use a key that is still active. See [Pricing](/pricing/) |
+| The license server is not available right now. Try again in a few minutes. | Wait a few minutes. The server is busy or down, and your key is fine |
+| This license key is not a WePROXA key. | Check that you pasted the key for WePROXA, not one for another product |
+| The license server sent a reply WePROXA could not read. Try again later. | Try again later. If it keeps happening, check whether a proxy or firewall changes the reply |
+
+Any other refusal shows the license server's own message.
 
 See [What license details does WePROXA show?](/guide/faq/#what-license-details-does-weproxa-show) and [Pricing](/pricing/).
 
@@ -94,7 +111,7 @@ On Windows, the Microsoft Store installs updates. See [Installation Windows](/gu
 
 ## Deep Links
 
-WePROXA registers the `weproxa://` URL scheme. Open one of these links in a browser, a chat message, or a terminal (`open 'weproxa://settings/license'` on macOS, `xdg-open 'weproxa://settings/license'` on Linux), and WePROXA comes to the front and acts on it. If WePROXA is not running, the link starts it first. On Linux, a link currently starts a second copy of WePROXA even when one is already running.
+WePROXA registers the `weproxa://` URL scheme. Open one of these links in a browser, a chat message, or a terminal (`open 'weproxa://settings/license'` on macOS, `xdg-open 'weproxa://settings/license'` on Linux), and WePROXA comes to the front and acts on it. If WePROXA is not running, the link starts it first. If it is already running, the running copy handles the link and no second copy starts. See [Opening WePROXA Again](/guide/guides/tray-and-toolbar/#opening-weproxa-again).
 
 | Link | What it does |
 |---|---|

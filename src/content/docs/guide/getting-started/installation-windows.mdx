@@ -53,6 +53,8 @@ WinGet downloads and installs WePROXA from the Microsoft Store.
 - Some command-line tools need `HTTP_PROXY` and `HTTPS_PROXY` environment variables even when the Windows system proxy is enabled. See [Quick Start](/guide/getting-started/quick-start/#terminal-proxy-setup) for shell examples.
 - Firefox and some developer tools may use their own proxy or certificate store. Configure them to use system settings before testing HTTPS interception.
 - For capturing traffic from phones and other computers on your network, the Microsoft Store package declares its own firewall rules so Windows pre-authorizes inbound connections to the proxy and certificate server on private and public networks. You should not need to add a Windows Defender Firewall rule by hand. See [Remote Devices](/guide/guides/remote-devices/).
+- Opening WePROXA again while it runs brings the running copy to the front instead of starting a second one. See [Opening WePROXA Again](/guide/guides/tray-and-toolbar/#opening-weproxa-again).
+- The [Headless CLI](/guide/guides/headless-cli/) for CI jobs is available for macOS and Linux. Windows does not have a release yet.
 
 ## Uninstall
 

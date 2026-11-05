@@ -22,14 +22,14 @@ curl -fsSL https://weproxa.com/i | bash
 
 <Tabs>
   <TabItem label="Apple Silicon (M1+)">
-    [Download WePROXA for Apple Silicon](https://files.weproxa.com/3.x.x/3.11.0/arm64/WePROXA_3.11.0_aarch64.dmg)
+    [Download WePROXA for Apple Silicon](https://files.weproxa.com/3.x.x/3.12.0/arm64/WePROXA_3.12.0_aarch64.dmg)
   </TabItem>
   <TabItem label="Universal (Apple Silicon & Intel)">
-    [Download WePROXA](https://files.weproxa.com/3.x.x/3.11.0/WePROXA_3.11.0_universal.dmg)
+    [Download WePROXA](https://files.weproxa.com/3.x.x/3.12.0/WePROXA_3.12.0_universal.dmg)
   </TabItem>
 
   <TabItem label="Intel">
-    [Download WePROXA for Intel](https://files.weproxa.com/3.x.x/3.11.0/x86_64/WePROXA_3.11.0_x64.dmg)
+    [Download WePROXA for Intel](https://files.weproxa.com/3.x.x/3.12.0/x86_64/WePROXA_3.12.0_x64.dmg)
   </TabItem>
 </Tabs>
 
@@ -48,6 +48,16 @@ curl -fsSL https://weproxa.com/i | bash
 </Steps>
 
 To keep WePROXA up to date, see [Updates](/guide/guides/settings/#updates).
+
+## For CI Jobs and Scripts
+
+To run the proxy without a window, for example in a CI job, install `weproxa-cli`:
+
+```sh
+curl -fsSL https://weproxa.com/cli | bash
+```
+
+It runs your Scenarios, records HAR files, and fails a job when a check finds a problem. It does not need the app. See [Headless CLI](/guide/guides/headless-cli/).
 
 ## Uninstall
 

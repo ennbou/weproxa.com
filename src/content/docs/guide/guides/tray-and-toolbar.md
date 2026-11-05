@@ -98,7 +98,7 @@ The tray menu works even when the main window is closed or hidden. On macOS it a
 
 - Show the main WePROXA window.
 - Start or stop the proxy.
-- Add a [capture milestone](/guide/features/inspect-requests/#capture-milestones). While the [global shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) is active, the menu shows it next to **Add Milestone**.
+- Add a [capture marker](/guide/features/inspect-requests/#capture-markers). While the [global shortcut](/guide/guides/keyboard-shortcuts/#global-shortcut) is active, the menu shows it next to **Add Marker**.
 - Open any tool window.
 - Toggle Map Local, Breakpoints, Block List, Network Conditioning, and Scripting.
 - Switch the active workspace or acceptance-criteria setup from the **Workspaces** submenu, which groups **Switch Workspace** and **Switch Scenario**.
@@ -118,6 +118,14 @@ If you prefer a cleaner menu bar, you can hide the tray icon:
 3. Toggle **Show tray icon**.
 
 The setting is saved between launches. If you hide the tray icon, you can still use the app menu and toolbar from the main window.
+
+## Opening WePROXA Again
+
+Only one copy of WePROXA runs at a time. If WePROXA is already running and you open it again, from the Start menu, the app launcher, a terminal, or a `weproxa://` [deep link](/guide/guides/settings/#deep-links), the running copy comes to the front instead of a second copy starting. A deep link is handed to the running copy, which acts on it.
+
+If you closed the main window and WePROXA kept running in the tray, opening WePROXA again brings the main window back.
+
+macOS has always worked this way. From WePROXA 3.12.0, Windows and Linux do too.
 
 ## Tips
 

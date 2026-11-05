@@ -17,6 +17,19 @@ When HTTPS interception is enabled:
 
 This is fully transparent — your app sees valid HTTPS responses as long as the WePROXA CA is trusted.
 
+## The Certificates WePROXA Makes
+
+WePROXA signs a certificate for each host it decrypts. These certificates follow the rules that strict TLS clients check:
+
+- **IP addresses work.** When a client connects to an IP address, such as `https://192.168.1.20/`, the certificate names that address in an IP address entry. Clients match an IP address only against such an entry. Add the address as an SSL host to decrypt it.
+- **A small clock difference is fine.** Every certificate, the CA included, is valid from two days before WePROXA made it. A phone, a VM restored from a snapshot, or a container whose clock runs behind still accepts it.
+- **Host certificates are renewed early.** A host certificate lasts one day. WePROXA makes a new one after twelve hours, so a long session never reaches the expiry date.
+- **Strict clients accept them.** Python 3.13 and later check certificates strictly by default. WePROXA's certificates include the fields those checks require.
+- **Host certificates cannot sign.** Each host certificate can only identify a server.
+- **The CA cannot make other CAs.** A CA made by WePROXA 3.12.0 or later can sign host certificates but no further CA, so a stolen key can do less harm. A CA made by an older version keeps working as before. [Regenerate it](/guide/guides/certificate-trust/#managing-the-certificate-lifecycle) to get this limit.
+
+Very long host names still work. A host name longer than 64 characters is left out of the certificate's common name (an older name field with a length limit), and the certificate names the host in its alternative name entry, which is what clients check.
+
 ## HTTP/2 and WebSockets
 
 Modern browsers and APIs often negotiate HTTP/2 over TLS. WePROXA advertises HTTP/2 and HTTP/1.1 to HTTPS clients, records the negotiated protocol in the request list, and uses HTTP/2 upstream connections when the origin supports them.
@@ -47,6 +60,12 @@ HTTPS requests appear in the request list just like HTTP requests. You can:
 
 ### Certificate errors in browser
 Make sure the WePROXA CA certificate is trusted in your operating system's certificate store. On macOS, see [Certificate Trust](/guide/guides/certificate-trust/). On Windows, see [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/).
+
+### Certificate errors for an IP address
+WePROXA certificates for an IP address name that address in an IP address entry, which every client accepts. If a client still refuses the certificate, check that the address is in your SSL hosts and that the client trusts the WePROXA CA. A CA made with `weproxa-cli ca create --only-hosts` can never sign for an IP address. See [Use a CA You Keep](/guide/guides/headless-cli/#use-a-ca-you-keep).
+
+### Certificate is not valid yet
+The device's clock is probably more than two days behind. Set the date and time on the device, or turn on automatic time, then try again.
 
 ### TLS root compatibility
 WePROXA includes fallback trust roots for newer Microsoft TLS roots, so upstream sites that rely on those roots continue to connect even before every platform trust store has caught up.
