@@ -3,7 +3,7 @@ title: MCP Integration
 description: Connect WePROXA securely to Copilot, Cursor, Codex, Claude Code, JetBrains, and other MCP clients.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
 import McpConfigGenerator from '../../../../components/McpConfigGenerator.astro';
 
 <span id="what-is-mcp"></span>
@@ -329,6 +329,207 @@ Rule-management tools operate on the selected Workspace. By default, new rules a
 
 ## Troubleshooting
 
+When WePROXA's tools do not show up in VS Code or another MCP client, work through the checks below in order. Each check rules out one cause. Stop at the first one that fails and fix it.
+
+### Check the connection step by step
+
+<Steps>
+
+1. **WePROXA is running and its MCP server is started.** Open **Settings → MCP Server**. The server must be running, and it needs an active Pro license.
+
+2. **The command is registered for this copy of WePROXA.** On the same page, the **weproxa-mcp command** row must say **Installed**. Any other label names the problem:
+
+   - **Not installed**: no command is registered. See [Register the command](#register-the-command).
+   - **Another install**: the command belongs to another copy of WePROXA. Choose **Repair command**.
+   - **Name taken**: another file holds the name, usually a copy that the `weproxa-cli` installer put there. WePROXA does not replace it. See [Remove an old command and install a new one](#remove-an-old-command-and-install-a-new-one).
+   - **App not installed**: WePROXA runs from the disk image. Move it to Applications, open it from there, then choose **Install command**.
+
+3. **The command starts in a terminal.** Open a new terminal and run:
+
+   ```sh
+   weproxa-mcp --version
+   ```
+
+   It prints a line such as `weproxa-mcp 3.12.0`. If the shell cannot find the command, go back to step 2.
+
+4. **There is only one `weproxa-mcp` command.** See [Find every weproxa-mcp command](#find-every-weproxa-mcp-command). The client runs the first one on its `PATH`, which may not be the one you just installed.
+
+5. **The helper version matches the app version.** See [Compare the versions](#compare-the-versions).
+
+6. **The helper reaches the app.** Run `weproxa-mcp` with no arguments in a terminal:
+
+   - If it prints nothing and waits, it is connected. Press Ctrl+D (Ctrl+Z, then Enter, on Windows) to close it.
+   - If it prints `waiting for WePROXA to start its MCP server...` and then `WePROXA is not running, or its MCP server is stopped`, the app is not serving MCP. Go back to step 1.
+   - If it prints `could not connect to WePROXA at <path>`, a `--socket` argument or the `WEPROXA_MCP_SOCKET` variable points it at the wrong place. See [`weproxa-mcp` runs but connects to the wrong app](#weproxa-mcp-runs-but-connects-to-the-wrong-app).
+
+7. **The client starts the command again.** Fully quit the client and open it again. Reloading a window or restarting the MCP server is not enough, because a running client keeps the `PATH` it started with.
+
+8. **The client's own log shows no error.** In VS Code, run **MCP: List Servers**, select WePROXA, and choose **Show Output**. In Claude Code, run `claude mcp list`. For other clients, see [Verify the connection](#verify-the-connection).
+
+</Steps>
+
+If every check passes in a terminal but the client still cannot start the command, the client was given a different `PATH` than your terminal. This happens most with desktop apps opened from the Dock or the Start menu. Use the [manual absolute-path configuration](#configure-an-mcp-client-manually), which does not depend on `PATH`.
+
+### Find every `weproxa-mcp` command
+
+Two copies of the command can exist side by side, for example the app's and one from the `weproxa-cli` installer. The client runs whichever comes first on its `PATH`. List them all, with where each one points and its version:
+
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+    ```sh
+    which -a weproxa-mcp
+    for cmd in $(which -a weproxa-mcp); do ls -l "$cmd"; "$cmd" --version; done
+    ```
+  </TabItem>
+  <TabItem label="Windows">
+    ```powershell
+    where.exe weproxa-mcp
+    Get-Command weproxa-mcp -All | ForEach-Object { $_.Source; & $_.Source --version }
+    ```
+  </TabItem>
+  <TabItem label="Linux">
+    ```sh
+    which -a weproxa-mcp
+    for cmd in $(which -a weproxa-mcp); do ls -l "$cmd"; "$cmd" --version; done
+    ```
+  </TabItem>
+</Tabs>
+
+On macOS and Linux, `ls -l` shows `->` and a target when the command is a link.
+
+These are the places a `weproxa-mcp` command comes from:
+
+| Path | Put there by |
+|------|--------------|
+| `/usr/local/bin/weproxa-mcp` as a link to `…/WePROXA.app/Contents/MacOS/weproxa-mcp` | The macOS app, through **Install command** |
+| `/usr/local/bin/weproxa-mcp` as a regular file | The [`weproxa-cli` installer](/guide/guides/headless-cli/) |
+| `~/.local/bin/weproxa-mcp` | The `weproxa-cli` installer, when it could not use `sudo` |
+| `/usr/bin/weproxa-mcp` | The Linux `.deb` or `.rpm` package |
+| The WePROXA install folder | The Windows installer |
+| `%LOCALAPPDATA%\Microsoft\WindowsApps\weproxa-mcp.exe` | The Microsoft Store app's execution alias |
+
+Two copies are not always a problem. The app's helper and the `weproxa-cli` copy do the same job and connect to any WePROXA run. Problems start when the first copy is old, or belongs to a WePROXA app that is no longer installed. The simplest setup keeps one copy.
+
+### Compare the versions
+
+The helper inside the app always has the app's version. If `weproxa-mcp --version` prints a different number, the client is not running this app's helper.
+
+Find the app's version in **Settings → About**, or from a terminal:
+
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+    ```sh
+    defaults read /Applications/WePROXA.app/Contents/Info.plist CFBundleShortVersionString
+    weproxa-mcp --version
+    ```
+  </TabItem>
+  <TabItem label="Windows">
+    Open **Settings → About** in WePROXA, then run:
+
+    ```powershell
+    weproxa-mcp --version
+    ```
+  </TabItem>
+  <TabItem label="Linux">
+    ```sh
+    dpkg-query -W -f='${Version}\n' weproxa   # Debian, Ubuntu
+    rpm -q --qf '%{VERSION}\n' weproxa        # Fedora, RHEL
+    weproxa-mcp --version
+    ```
+  </TabItem>
+</Tabs>
+
+If you also use the CLI, run `weproxa-cli --version`. The `weproxa-mcp` copy the CLI installed has the same version as the CLI.
+
+When the versions differ, look at the path the helper runs from (see [Find every weproxa-mcp command](#find-every-weproxa-mcp-command)):
+
+- A `weproxa-cli` copy: update the CLI with `weproxa-cli update`, or remove that copy as shown below.
+- A link to another `WePROXA.app`: choose **Repair command** in **Settings → MCP Server**.
+- Anything else: remove it as shown below.
+
+### Remove an old command and install a new one
+
+The commands below take every path from `which -a`, so they also find copies in folders the table does not name. Each one shows the file with `ls -l` and asks before deleting it. Answer `y` only for a `weproxa-mcp` command you want to remove.
+
+<Tabs syncKey="os">
+  <TabItem label="macOS">
+    <Steps>
+
+    1. Quit your AI client.
+    2. Remove every `weproxa-mcp` command on your `PATH`. `sudo` is used only for a folder you cannot write to. Removing a link deletes only the link, never the app it points to.
+
+       ```sh
+       for cmd in $(which -a weproxa-mcp); do
+         ls -l "$cmd"
+         if [ -w "$(dirname "$cmd")" ]; then rm -i "$cmd"; else sudo rm -i "$cmd"; fi
+       done
+       ```
+
+    3. Open WePROXA from Applications. Go to **Settings → MCP Server** and choose **Install command**. macOS asks for an administrator password.
+    4. Check that one command is left, that it points into `/Applications/WePROXA.app`, and that its version matches the app:
+
+       ```sh
+       which -a weproxa-mcp
+       ls -l "$(command -v weproxa-mcp)"
+       weproxa-mcp --version
+       ```
+
+    5. Open your AI client again.
+
+    </Steps>
+
+    The app's helper also serves `weproxa-cli headless --mcp` runs. The `weproxa-cli` installer and `weproxa-cli update` leave the app's link in place, so this fix stays after a CLI update.
+  </TabItem>
+  <TabItem label="Windows">
+    <Steps>
+
+    1. Quit your AI client.
+    2. If `where.exe` listed both an install folder and `WindowsApps`, you have the installer build and the Microsoft Store build. Keep one. Uninstall the other in **Settings → Apps → Installed apps**.
+    3. If you keep the Store build, turn on its `weproxa-mcp.exe` alias in **Settings → Apps → Advanced app settings → App execution aliases**.
+    4. If you keep the installer build and the command is still missing or old, run the latest WePROXA installer again.
+    5. Open a new terminal and check that one command is left and that its version matches the app:
+
+       ```powershell
+       where.exe weproxa-mcp
+       weproxa-mcp --version
+       ```
+
+    6. Open your AI client again.
+
+    </Steps>
+  </TabItem>
+  <TabItem label="Linux">
+    <Steps>
+
+    1. Quit your AI client.
+    2. The package owns `/usr/bin/weproxa-mcp`. Do not delete it by hand. To replace an old one, install the latest package, as in [Install on Linux](/guide/getting-started/installation-linux/).
+    3. A `weproxa-cli` copy, usually in `/usr/local/bin` or `~/.local/bin`, comes before `/usr/bin` on `PATH`. Either update it to the same version with `weproxa-cli update` (add `sudo` when the CLI is in a system folder), or remove it. This removes every copy on your `PATH` except the package's, and asks before each one:
+
+       ```sh
+       for cmd in $(which -a weproxa-mcp); do
+         [ "$(readlink -f "$cmd")" = /usr/bin/weproxa-mcp ] && continue
+         ls -l "$cmd"
+         if [ -w "$(dirname "$cmd")" ]; then rm -i "$cmd"; else sudo rm -i "$cmd"; fi
+       done
+       ```
+
+       `weproxa-cli update` puts a removed copy back next to `weproxa-cli`. That copy has the CLI's version, so it is fine to keep it when the CLI is up to date.
+
+    4. Check that the first command on `PATH` has the app's version:
+
+       ```sh
+       which -a weproxa-mcp
+       weproxa-mcp --version
+       ```
+
+    5. Open your AI client again.
+
+    </Steps>
+  </TabItem>
+</Tabs>
+
+### Common problems
+
 <span id="command-not-found"></span>
 
 **The client cannot find `weproxa-mcp`**
@@ -336,6 +537,8 @@ Rule-management tools operate on the selected Workspace. By default, new rules a
 The client reports `spawn weproxa-mcp ENOENT`, `command not found`, or `is not recognized as an internal or external command`, and no `weproxa_*` tools appear. The command is not registered on the PATH that client was launched with.
 
 Open **Settings → MCP Server**. The command row names the current state and, on macOS, offers **Install / repair**. On Windows, re-run the installer or turn on the execution alias. On Linux, reinstall the package. Then fully quit and reopen the client. If you cannot register the command, use the [manual absolute-path configuration](#configure-an-mcp-client-manually), which needs nothing on PATH.
+
+<span id="weproxa-mcp-runs-but-connects-to-the-wrong-app"></span>
 
 **`weproxa-mcp` runs but connects to the wrong app**
 

@@ -107,6 +107,8 @@ On macOS, verification uses the system trust store. Add a private or internal CA
 - **Stale client command** — moving or replacing the app can invalidate an older machine-specific helper path. Start the server, then copy a fresh stdio configuration from **Settings → MCP Server → AI Connections**.
 - **Old HTTP configuration** — remove `url`, `headers`, and bearer-token settings left from versions before 3.8.0. The current transport launches the local helper command and uses no TCP port or token.
 
+If the server runs but VS Code or another client shows no WePROXA tools, follow [Check the connection step by step](/guide/guides/mcp-integration/#check-the-connection-step-by-step). It also shows how to find duplicate `weproxa-mcp` commands, compare their versions with the app, and replace an old one.
+
 ## Map Local Rule Doesn't Fire
 
 - The rule is disabled. Toggle it on.
