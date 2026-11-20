@@ -608,7 +608,7 @@ Run the MCP client on the same host and as the same OS user as WePROXA. The priv
 
 #### `weproxa_requests_list`
 
-List captured HTTP requests using advanced query filters, bounded pagination, and newest/oldest ordering. Filters can target ordinary request/response fields plus `sessionId`, `scenarioId`, `client`, `answeredByOrigin`, `answeringRuleId`, `answeringRuleKey`, `responseTool`, and `weproxaInternal`. Response bodies are not included.
+List captured HTTP requests using advanced query filters, bounded pagination, and newest/oldest ordering. Filters can target ordinary request/response fields plus `sessionId`, `scenarioId`, `client`, `simulatorId` (the UDID of an iOS Simulator, as the `simulator.id` of a captured request reports it), `answeredByOrigin`, `answeringRuleId`, `answeringRuleKey`, `responseTool`, and `weproxaInternal`. A replay keeps the `client` and `simulatorId` of the request it resends, so it matches both; its `requestTools` holds `repeat`. Response bodies are not included.
 
 In the default `full` view, a failed certificate handshake can carry `failure: "certificateRejected"`. The compact view omits this diagnostic; fetch the request for details. A silent early close can have the same label as an explicit refusal, so check [certificate troubleshooting](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate) before treating it as proof that the CA is untrusted.
 
@@ -762,7 +762,7 @@ List saved filters with their queries. Each query has the shape `weproxa_request
 
 Save a named filter. Names are unique, ignoring case, and at most 100 characters. The query must be one the request list can run and show in its query builder:
 
-- **Fields:** only the request list's fields. `sessionId`, `scenarioId`, `answeredByOrigin`, `answeringRuleId`, `answeringRuleKey`, `responseTool`, and `weproxaInternal` are rejected. Use them with `weproxa_requests_list` instead.
+- **Fields:** only the request list's fields. `sessionId`, `scenarioId`, `simulatorId`, `answeredByOrigin`, `answeringRuleId`, `answeringRuleKey`, `responseTool`, and `weproxaInternal` are rejected. Use them with `weproxa_requests_list` instead.
 - **Operators and values:** each field takes only its own operators. `method`, `protocol`, `statusCode`, and `contentType` take only the values the list offers, for example `statusCode` `"404"` or `"4xx"` with `equals`, `notEquals`, `in`, or `notIn`.
 - **Regular expressions:** a pattern must mean the same thing in JavaScript, so inline flags such as `(?i)` and classes such as `\p{L}` are rejected.
 - **Shape:** at least one condition, a unique `id` on every condition and group, at most 100 conditions and groups, and at most 8 levels of nesting.
