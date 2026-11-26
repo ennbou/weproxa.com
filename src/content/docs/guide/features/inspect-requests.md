@@ -21,6 +21,7 @@ The default layout opens with the source sidebar visible and the **URL** column 
 - **Remote Address** — Resolved IP address and port of the server
 - **HTTP Version** — Negotiated protocol (HTTP/1.1, HTTP/2.0, etc.)
 - **Client** — The application or browser that made the request, shown with its app icon on macOS, Windows, and Linux when one is available (a generic glyph is used as a fallback)
+- **Simulator** — The iOS Simulator device that sent the request, with its OS. Hidden by default. Empty for requests from outside a Simulator. See [iOS Simulator](/guide/guides/ios-simulator/#viewing-simulator-traffic)
 - **Request Size** — Request body size
 - **Response Size** — Response body size, or tunnel byte totals after an upgraded connection closes
 - **Time** — Timestamp of the request (HH:MM:SS)
@@ -158,6 +159,8 @@ The request Cookies table reserves separate widths for names and values. Long na
 
 If a tool modified the request (e.g., Breakpoint, Block List), a "Modified By" indicator is shown.
 
+If the request came from an iOS Simulator, a **Simulator** line under the request tabs names the device and its OS. Hover over it to see the device's UDID (unique device ID).
+
 ### Response Section
 
 - **Headers** — All response headers in a key-value table (count shown in the tab label)
@@ -193,8 +196,21 @@ Toggle to the source/tree view in the sidebar to see requests organized into sec
 - **SSL Enabled** — Hosts with SSL interception enabled (toggle via right-click)
 - **SSL Enabled Apps** — Apps with SSL interception enabled, grouped as app → host → path
 - **Apps** — Requests grouped by the client application or browser, with detected app icons on macOS, Windows, and Linux when available
+- **Simulators** — Requests from iOS Simulators, grouped as device → host → path. See [iOS Simulator](/guide/guides/ios-simulator/#viewing-simulator-traffic)
 - **Remote Devices** — Requests from remote devices, grouped by IP address
 - **Other** — Every remaining host, meaning each host that is neither pinned nor SSL-enabled. Pin a host or enable SSL for it and it moves to that group
+
+### Show or Hide Groups
+
+To hide groups you do not use, click the **Show or hide groups** button next to the Explorer filter field. A menu lists every group with a checkbox. Clear a checkbox to hide that group, and check it to show the group again. The menu stays open, so you can change several groups at once. **Show all groups** shows every group again.
+
+- **All** is always shown and cannot be hidden.
+- When groups are hidden, the button's tooltip says how many.
+- If you hide the group that holds the selected row, the list goes back to **All**.
+- If a session records while **Sessions** is hidden, the button shows a red recording dot.
+- When you open a session from the message that appears after you create or stop a recording, **Sessions** is shown again.
+
+WePROXA remembers which groups you hid between launches.
 
 You can also move through the tree with the keyboard. See [Sidebar Navigation](/guide/guides/keyboard-shortcuts/#sidebar-navigation).
 

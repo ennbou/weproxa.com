@@ -76,8 +76,52 @@ The **Certificate lifecycle** controls in **Settings** → **CA Certificate** le
 - **Remove local certificate** — permanently delete WePROXA's local CA certificate and private key.
 
 :::caution
-Stop the proxy before regenerating or removing the certificate. Regenerating creates a brand-new CA identity, so any copies already installed in Keychain or on other devices keep pointing at the old certificate until you remove and reinstall them there.
+Stop the proxy before you change the CA certificate. Regenerating creates a brand-new CA identity, so any copies already installed in Keychain or on other devices keep pointing at the old certificate until you remove and reinstall them there.
 :::
+
+## Use Your Own CA
+
+WePROXA can sign intercepted hosts with a CA (certificate authority) you already have, instead of its own. Use this when an app trusts only a specific CA. Examples are a company test CA, the CA an Android app's network security config trusts, or a CA an iOS app pins. When WePROXA signs with that CA, the app accepts the certificates WePROXA serves, so you can inspect its HTTPS traffic.
+
+To import a CA:
+
+<Steps>
+
+1. Stop the proxy.
+2. Open **Settings** → **CA Certificate** and click **Import CA…**.
+3. Under **Certificate**, choose the CA certificate file.
+4. Under **Private key**, choose the CA's private key file. Skip this step if the certificate file also holds the key.
+5. Click **Import**.
+
+</Steps>
+
+WePROXA accepts:
+
+- Certificates in PEM or DER format (`.pem`, `.crt`, `.cer`, `.der`).
+- A private key in its own file or in the same PEM file as the certificate, as mitmproxy writes it.
+- Private keys in PKCS #8, PKCS #1 (`BEGIN RSA PRIVATE KEY`), or SEC 1 (`BEGIN EC PRIVATE KEY`) format: RSA keys of at least 2048 bits, ECDSA P-256 and P-384 keys, and Ed25519 keys.
+- A bundle of several certificates. WePROXA uses the one that belongs to the key.
+
+WePROXA refuses PKCS #12 files (`.p12`, `.pfx`) and encrypted keys. The error message shows the `openssl` command that converts the file. For example:
+
+```bash
+openssl pkcs12 -in ca.p12 -nodes -out ca.pem
+```
+
+WePROXA checks the CA before it saves anything. It refuses a certificate that is not a CA, that may not sign certificates or TLS servers, that has expired or is not valid yet, or that does not match the private key. It also refuses a CA whose name it cannot copy exactly into the certificates it signs. The usual cause is a name that repeats an attribute, such as several `DC` parts.
+
+:::caution
+WePROXA keeps a copy of the imported private key in its data folder. Anyone who has this key can read the HTTPS traffic of every device that trusts this CA.
+:::
+
+While an imported CA signs, **Settings** → **CA Certificate** shows its **Name** with an **Imported** badge and its **SHA-256 fingerprint**. If the CA has name constraints, **Signs only for** lists the hosts it may sign for. Every place that installs, downloads, or reports on the CA uses the imported one: **Install to macOS**, **Install to booted iOS Simulators**, the certificate download, the [remote device setup page](/guide/guides/remote-devices/), and the MCP certificate tools. The devices and apps you inspect must trust the imported CA.
+
+WePROXA keeps its own CA while the imported one is in use. **Certificate lifecycle** then shows two buttons:
+
+- **Stop using imported CA** deletes WePROXA's copy of the imported CA and its key, and WePROXA signs with its own CA again. The files you imported are not changed. Devices that already trust WePROXA's CA need no new install.
+- **Import another CA…** replaces the imported CA with another one.
+
+Stop the proxy before you use either one. An imported CA stays after [Reset all settings](/guide/guides/settings/#reset). To use your own CA in a headless run, see [Headless CLI](/guide/guides/headless-cli/#use-a-ca-you-keep).
 
 ## Removing the Certificate
 

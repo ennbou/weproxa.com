@@ -23,13 +23,22 @@ WePROXA can capture HTTP/HTTPS traffic from iOS Simulator, making it easy to deb
 
 ## Viewing Simulator Traffic
 
-Traffic from iOS Simulator appears in the request list alongside regular traffic. You can use the source view or filters to identify simulator requests.
+Traffic from iOS Simulator appears in the request list alongside regular traffic.
+
+The **Simulators** group in Explorer lists each Simulator device that sent traffic. Expand a device to see its hosts, and a host to see its paths. Select a device, host, or path to show only its requests. WePROXA reads the device from the process that made the request, so two Simulators that run the same app stay apart. Each row shows the device's name and its OS. When two devices share both, the row also shows the start of each device's UDID (unique device ID). Hover over a row to see the full UDID, which is the value `xcrun simctl` takes.
+
+Two more places show the device:
+
+- The **Simulator** column in the request list. It is hidden by default. Show it from the column visibility picker.
+- The **Simulator** line under the request tabs in the details panel.
+
+A request you [replay](/guide/features/repeat-requests/) is listed under the same Simulator as the original request. To keep a Simulator's traffic, select it in Explorer and use **Record Session with This View...** from the request list. See [Sessions](/guide/features/sessions/#start-from-an-app-host-or-filtered-view). AI clients can filter captured traffic by Simulator with `simulatorId`. See [MCP Integration](/guide/guides/mcp-integration/).
 
 When WePROXA can resolve the Simulator app bundle, the **Apps** source view can show the app's icon next to its traffic. This makes it easier to distinguish multiple Simulator apps while debugging.
 
 Known Apple networking services running inside a Simulator have separate names ending in **Simulator** and a small phone badge on their icon. This keeps, for example, a Simulator service separate from its macOS counterpart in Explorer, app-targeted rules, and SSL interception. Use the exact displayed name when targeting the Simulator service. Simulator app icons are also sized consistently with native app icons.
 
-If a Simulator connection appears as **Not decrypted: certificate rejected**, select it and open the response pane. The Simulator may not trust the CA, or the app may have closed the handshake early. **Learn more** opens the [certificate troubleshooting FAQ](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate).
+If a Simulator connection appears as **Not decrypted: certificate rejected**, select it and open the response pane. The Simulator may not trust the CA, or the app may have closed the handshake early. WePROXA tracks certificate trust per Simulator device, so a Simulator that trusts the CA does not hide a refusal from another Simulator that runs the same app. **Learn more** opens the [certificate troubleshooting FAQ](/guide/faq/#why-does-an-app-refuse-the-weproxa-certificate).
 
 ## Install the certificate from an AI client
 

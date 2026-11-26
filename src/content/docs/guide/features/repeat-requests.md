@@ -16,7 +16,7 @@ To instantly replay a request without changes:
 
 ![Repeat Now from requests list](@assets/guide/features/repeat-request/repeat_now_from_request.png)
 
-The request is resent immediately with the original method, URL, headers, and body. The repeated request appears in the main request list alongside your other captured traffic.
+The request is resent immediately with the original method, URL, headers, and body. The repeated request appears in the main request list alongside your other captured traffic. It keeps the client of the original request. A request first sent from an iOS Simulator is listed under the same Simulator in Explorer and in the **Simulator** column.
 
 ## Repeat with Editing
 

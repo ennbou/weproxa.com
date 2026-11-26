@@ -12,7 +12,7 @@ Success and error messages appear in the Settings window where you performed the
 | **Appearance** | Tray icon, style, brightness, font size, language, toolbar buttons | [Appearance](#appearance) |
 | **Proxy Config** | Port, auto-start, terminal setup, TLS passthrough hosts | [Proxy Config](#proxy-config) |
 | **Network health** | Health checks and alerts | [Network Health Monitoring](/guide/features/network-health/) |
-| **CA Certificate** | Certificate details, install, download, regenerate, remove | [CA Certificate](#ca-certificate) |
+| **CA Certificate** | Certificate details, install, download, regenerate, remove, import your own CA | [CA Certificate](#ca-certificate) |
 | **Remote Access** | LAN proxy address, certificate setup page, PAC URL | [Remote Devices](/guide/guides/remote-devices/) |
 | **MCP Server** (Pro) | AI client connections and privacy | [MCP Integration](/guide/guides/mcp-integration/) |
 | **License** | Activate, revalidate, or deactivate a Pro license | [License](#license) |
@@ -57,7 +57,9 @@ The buttons depend on your platform:
 | **Install & Trust** | Linux | Adds the certificate to the system store, then to Chrome, Chromium, and Firefox when `certutil` is installed. See [Linux HTTPS Certificate Setup](/guide/guides/linux-https-certificate-setup/) |
 | **Learn More** | Windows | Opens [Windows HTTPS Certificate Setup](/guide/guides/windows-https-certificate-setup/) |
 
-**Certificate lifecycle** holds **Generate certificate** (or **Regenerate certificate** when one exists) and **Remove local certificate**. Stop the proxy before you use either one. A regenerated certificate is a new identity, so you must install and trust it again on every device. See [Managing the Certificate Lifecycle](/guide/guides/certificate-trust/#managing-the-certificate-lifecycle).
+**Certificate lifecycle** holds **Generate certificate** (or **Regenerate certificate** when one exists) and **Remove local certificate**. It also holds **Import CA…**. Stop the proxy before you use any of them. A regenerated certificate is a new identity, so you must install and trust it again on every device. See [Managing the Certificate Lifecycle](/guide/guides/certificate-trust/#managing-the-certificate-lifecycle).
+
+**Import CA…** makes WePROXA sign with a CA you already have, for apps that trust only that CA. While an imported CA signs, the section shows its name with an **Imported** badge and its SHA-256 fingerprint, and **Certificate lifecycle** holds **Stop using imported CA** and **Import another CA…** instead. WePROXA keeps its own CA, so stopping the imported one needs no new install on your devices. See [Use Your Own CA](/guide/guides/certificate-trust/#use-your-own-ca).
 
 ## License
 
@@ -97,15 +99,37 @@ About shows your version and the exact build commit next to it. Include both whe
 
 ## Updates
 
-On macOS and Linux, WePROXA checks for a new version each time it starts. When one is available, an **Update Available** dialog shows the new version, its release date, and its release notes.
+On macOS and Linux, WePROXA checks for a new version each time it starts. If the check fails, for example because you are offline, WePROXA checks again when the connection comes back, or ten minutes later. When a new version is available, an **Update Available** dialog shows the new version, its release date, and its release notes.
 
-- **Install & Restart** downloads and installs the update, then restarts WePROXA.
-- **Later** closes the dialog. WePROXA asks again the next time it starts.
+- **Update Now** starts the download.
+- **Later** closes the dialog. The [toolbar update button](/guide/guides/tray-and-toolbar/#update-button) stays, so you can start the update from there.
 - A required update has no **Later** button. Install it to keep using WePROXA.
 
-If the download or install fails, the dialog shows an error and the button lets you try again.
+### While the Update Downloads
 
-On Linux, an update installs a system package, so your desktop asks for your password during **Install & Restart**.
+The update downloads in the background. The dialog shows how much has downloaded so far.
+
+- **Continue in Background** closes the dialog. The download keeps running, and the toolbar button shows its progress.
+- **Cancel Download** stops the download.
+
+If the connection drops, the dialog shows **Download Paused**. WePROXA resumes the download where it stopped when the connection comes back. It does not start over. **Retry Now** tries again at once.
+
+When the download finishes, WePROXA checks the update's signature before it installs anything. An update that fails this check is not installed.
+
+### Restart to Finish
+
+When the update is installed, the dialog shows **Update Ready**:
+
+- **Restart Now** restarts WePROXA on the new version.
+- **Keep Working** closes the dialog. The new version starts the next time you open WePROXA.
+
+If you closed the dialog, a message tells you when the update is ready, with a **Restart Now** button. A required update restarts WePROXA on its own when it is ready.
+
+On Linux, an update installs a system package, so your desktop asks for your password while the update installs. If you cancel the password prompt, **Try Again** asks again without downloading the update again.
+
+### When an Update Fails
+
+The dialog shows **Update Failed** with the reason: the download failed, the signature check failed, the password prompt was cancelled, or the install failed. **Try Again** starts the update again. If you closed the dialog, a message tells you that the update failed, with a **Details** button that opens the dialog.
 
 On Windows, the Microsoft Store installs updates. See [Installation Windows](/guide/getting-started/installation-windows/).
 

@@ -238,7 +238,13 @@ Anyone who has the key can read the HTTPS traffic of every machine that trusts t
 
 `--only-hosts` uses X.509 name constraints (rules inside the certificate that limit the hosts it can sign for). A CA made this way cannot sign for an IP address. Wildcards such as `*.example.com` are refused: `example.com` already covers its subdomains. When a run decrypts a host that the CA cannot sign for, it logs a warning for that host, because clients will refuse the certificate there.
 
-`--ca-cert` replaces the CA of a `--data-dir` too. The run refuses a CA it cannot use, before the proxy starts.
+`--ca-cert` takes any CA you already have, not only one from `ca create`. It reads the same files as [Import CA… in the app](/guide/guides/certificate-trust/#use-your-own-ca): PEM or DER, with the private key in the same file or in `--ca-key`. Leave out `--ca-key` when the certificate file holds the key:
+
+```sh
+weproxa-cli headless --ca-cert company-ca.pem --ssl-host api.example.com
+```
+
+With a `--data-dir`, the run imports the CA into that directory. Later runs on the same directory keep signing with it, and the CA WePROXA made for the directory stays beside it. The run refuses a CA it cannot use, before the proxy starts.
 
 ## Stop a Run
 

@@ -15,6 +15,7 @@ The main toolbar includes:
 - **Tool buttons** - open Map Local, Breakpoints, Block List, Network Conditioning, Scripting, Diff, and [JSON Tools](/guide/features/json-tools/).
 - **Certificate menu** - manage SSL host and app rules and open certificate setup.
 - **Settings** - open WePROXA settings.
+- **Update** - shows only while there is an update to act on: available, downloading, ready, or failed. See [Update Button](#update-button).
 - **Workspace and scenario switcher** - optional, hidden by default. See [Show the Workspace and Scenario Switcher](#show-the-workspace-and-scenario-switcher).
 
 A tool button's badge shows how many of the tool's rules are enabled out of the total, for example **2/5**. A tool with no rules shows no badge.
@@ -22,6 +23,21 @@ A tool button's badge shows how many of the tool's rules are enabled out of the 
 Clicking a tool button opens the tool. Holding `Command` on macOS or `Ctrl` on Windows and Linux while clicking a toggleable tool button enables or disables that tool without opening it.
 
 When space is tight, the toolbar automatically switches to a compact icon layout while keeping counts and status indicators visible.
+
+## Update Button
+
+On macOS and Linux, the toolbar shows an update button while there is an update to act on. Click it to open the update dialog. Hover over it to see what it shows:
+
+| State | What the button shows |
+|---|---|
+| Available | A download icon with a dot. The tooltip names the new version |
+| Downloading | A ring that fills as the download progresses, and the percentage in the tooltip. A spinner when the size is unknown |
+| Paused | A crossed-out Wi-Fi icon when the connection is lost, or a crossed-out cloud when the update server does not respond |
+| Installing | A spinner |
+| Ready | A restart icon with a dot. Restart WePROXA to use the new version |
+| Failed | A warning triangle. Open the dialog to see why and try again |
+
+The button disappears again after WePROXA restarts on the new version. See [Updates](/guide/guides/settings/#updates).
 
 ## Detached Window Behavior
 

@@ -39,7 +39,7 @@ To keep the current live request-list view:
 
 These list actions apply to all requests currently shown, including rows outside the visible scroll area. Right-clicking one row does not narrow the session to that row.
 
-Recordable views can combine app, host, path, or device selections with URL search, content-type filters, and Advanced Filters. The scope is captured when the session is created; changing the live view later does not change what that session records.
+Recordable views can combine app, host, path, remote device, or [iOS Simulator](/guide/guides/ios-simulator/#viewing-simulator-traffic) selections with URL search, content-type filters, and Advanced Filters. The scope is captured when the session is created; changing the live view later does not change what that session records.
 
 A request or response search cannot be used for recording. Views whose membership changes with SSL settings or tool activity also cannot be recorded. You can still save their displayed requests as a **Picked requests** snapshot; the dialog explains why recording is unavailable. Use a URL search, app, host, or supported Advanced Filter when you need a recording.
 
